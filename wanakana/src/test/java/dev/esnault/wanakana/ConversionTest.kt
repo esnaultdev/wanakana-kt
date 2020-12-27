@@ -202,32 +202,5 @@ describe('character conversions', () => {
       expect(toKatakana('aiueo')).toBe(toKatakana('AIUEO')));
     it('Case DOES matter for toKana()', () => expect(toKana('aiueo')).not.toBe(toKana('AIUEO')));
   });
-
-  describe('N edge cases', () => {
-    it('Solo N', () => expect(toKana('n')).toBe('ん'));
-    it('double N', () => expect(toKana('onn')).toBe('おんん'));
-    it('N followed by N* syllable', () => expect(toKana('onna')).toBe('おんな'));
-    it('Triple N', () => expect(toKana('nnn')).toBe('んんん'));
-    it('Triple N followed by N* syllable', () => expect(toKana('onnna')).toBe('おんんな'));
-    it('Quadruple N', () => expect(toKana('nnnn')).toBe('んんんん'));
-    it('nya -> にゃ', () => expect(toKana('nyan')).toBe('にゃん'));
-    it('nnya -> んにゃ', () => expect(toKana('nnyann')).toBe('んにゃんん'));
-    it('nnnya -> んにゃ', () => expect(toKana('nnnyannn')).toBe('んんにゃんんん'));
-    it("n'ya -> んや", () => expect(toKana("n'ya")).toBe('んや'));
-    it("kin'ya -> きんや", () => expect(toKana("kin'ya")).toBe('きんや'));
-    it("shin'ya -> しんや", () => expect(toKana("shin'ya")).toBe('しんや'));
-    it('kinyou -> きにょう', () => expect(toKana('kinyou')).toBe('きにょう'));
-    it("kin'you -> きんよう", () => expect(toKana("kin'you")).toBe('きんよう'));
-    it("kin'yu -> きんゆ", () => expect(toKana("kin'yu")).toBe('きんゆ'));
-    it('Properly add space after "n[space]"', () =>
-      expect(toKana('ichiban warui')).toBe('いちばん わるい'));
-  });
-
-  describe('Bogus 4 character sequences', () => {
-    it('Non bogus sequences work', () => expect(toKana('chya')).toBe('ちゃ'));
-    it('Bogus sequences do not work', () => expect(toKana('chyx')).toBe('chyx'));
-    it('Bogus sequences do not work', () => expect(toKana('shyp')).toBe('shyp'));
-    it('Bogus sequences do not work', () => expect(toKana('ltsb')).toBe('ltsb'));
-  });
 });
  */

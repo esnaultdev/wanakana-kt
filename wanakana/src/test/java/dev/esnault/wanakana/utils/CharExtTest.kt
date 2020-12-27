@@ -16,6 +16,14 @@ class CharExtTest {
     }
 
     @Test
+    fun isKatakana() {
+        assertTrue('ナ'.isKatakana())
+        assertFalse('は'.isKatakana())
+        assertFalse('n'.isKatakana())
+        assertFalse('!'.isKatakana())
+    }
+
+    @Test
     fun isLongDash() {
         assertTrue('ー'.isLongDash())
         assertFalse('-'.isLongDash())

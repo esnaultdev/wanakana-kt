@@ -19,6 +19,11 @@ fun Char.isLongDash() = this.toInt() == Constants.PROLONGED_SOUND_MARK
 fun Char.isHiragana() = this.toInt() in Constants.HIRAGANA_CHARS
 
 /**
+ * Returns `true` if this is [Katakana](https://en.wikipedia.org/wiki/Katakana).
+ */
+fun Char.isKatakana() = this.toInt() in Constants.KATAKANA_CHARS
+
+/**
  * Returns `true` is this is an English uppercase letter.
  */
 fun Char.isEnglishUpperCase() = this.toInt() in Constants.LATIN_UPPERCASE
