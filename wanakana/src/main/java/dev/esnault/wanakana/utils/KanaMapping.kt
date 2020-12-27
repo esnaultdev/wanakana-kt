@@ -23,31 +23,48 @@ private data class State(
         private set
 
     /**
-     * The portion of the original [String] that should be used as a default if there is no mapping.
+     * The original [String] of the current descent.
+     * Note that, except at the ending, the last char should be dropped when used as a default
+     * value. This is due to our update of the [subTree] that happens before cancelling the current
+     * chunk.
      */
-    var default: String = ""
-        private set
+    private var original: String = ""
+
+    /**
+     * The `value` of the previous node, if any.
+     */
+    private var previousValue: String? = null
 
     fun nextSubTree(nextChar: Char) {
-        default += nextChar
-
-        val subTree = this.subTree
-        if (subTree is MappingTree.Branch) {
-            this.subTree = subTree[nextChar]
+        original += nextChar
+        when (val subTree = this.subTree) {
+            is MappingTree.Branch -> {
+                this.subTree = subTree[nextChar]
+                previousValue = subTree.value
+            }
+            is MappingTree.Leaf -> {
+                this.subTree = null
+                previousValue = subTree.value
+            }
+            null -> previousValue = null
         }
     }
 
     fun isAtTreeEnd(): Boolean = subTree == null || subTree is MappingTree.Leaf
 
-    fun getTreeEndValue(): String = when (val subTree = subTree) {
-        null -> default
-        is MappingTree.Leaf -> subTree.value
-        is MappingTree.Branch -> subTree.value ?: default
+    fun getCurrentValue(isEnding: Boolean): String {
+        fun original(isEnding: Boolean) = if (!isEnding) original.dropLast(1) else original
+        return when (val subTree = subTree) {
+            null -> previousValue ?: original(isEnding)
+            is MappingTree.Leaf -> subTree.value
+            is MappingTree.Branch -> subTree.value ?: previousValue ?: original(isEnding)
+        }
     }
 
     fun reset() {
         subTree = tree
-        default = ""
+        original = ""
+        previousValue = null
     }
 }
 
@@ -86,7 +103,7 @@ private fun parse(
         if (state.convertEnding || state.isAtTreeEnd()) {
             // nothing more to consume, just commit the last chunk and return it
             // so as to not have an empty element at the end of the result
-            val kana: String = state.getTreeEndValue()
+            val kana: String = state.getCurrentValue(true)
             return listOf(KanaToken(lastCursor, currentCursor, kana))
         }
 
@@ -96,7 +113,7 @@ private fun parse(
     }
 
     if (state.isAtTreeEnd()) {
-        val kana = state.getTreeEndValue()
+        val kana = state.getCurrentValue(false)
         val kanaToken = KanaToken(lastCursor, currentCursor, kana)
         return listOf(kanaToken) + newChunk(state, remaining, currentCursor)
     }
@@ -104,7 +121,7 @@ private fun parse(
     state.nextSubTree(remaining[0])
     val nextSubTree = state.subTree
     if (nextSubTree == null) {
-        val kanaToken = KanaToken(lastCursor, currentCursor, state.default)
+        val kanaToken = KanaToken(lastCursor, currentCursor, state.getCurrentValue(false))
         return listOf(kanaToken) + newChunk(state, remaining, currentCursor)
     }
     // continue current branch

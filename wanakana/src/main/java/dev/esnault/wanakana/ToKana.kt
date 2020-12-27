@@ -4,6 +4,7 @@ import dev.esnault.wanakana.utils.KanaToken
 import dev.esnault.wanakana.utils.MappingTree
 import dev.esnault.wanakana.utils.applyMapping
 import dev.esnault.wanakana.utils.createRomajiToKanaMap
+import dev.esnault.wanakana.utils.romajiToKanaMap
 
 /*
 TODO: JS to convert
@@ -67,7 +68,7 @@ export function toKana(input = '', options = {}, map) {
  * See [Katakana](https://en.wikipedia.org/wiki/Katakana).
  */
 fun toKana(input: String): String {
-    val map = createRomajiToKanaMap()
+    val map = romajiToKanaMap
 
     return splitIntoConvertedKana(input, map)
         .joinToString(separator = "") { token ->

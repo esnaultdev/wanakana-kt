@@ -36,7 +36,7 @@ sealed class MutableMappingTree {
          * Returns a [Branch] addressed by [str].
          * Builds the relevant [Branch]es along the way.
          */
-        fun subTreeOf(str: String): Branch {
+        fun subBranchOf(str: String): Branch {
             return str.toCharArray().fold(initial = this) { result, char ->
                 when (val subTree = result[char]) {
                     null -> Branch(mutableMapOf()).also { result[char] = it }
@@ -47,11 +47,26 @@ sealed class MutableMappingTree {
         }
 
         /**
+         * Returns a subTree addressed by [str].
+         * Builds the relevant [Branch]es along the way.
+         *
+         * Very similar to [subBranchOf] but does not convert the last leaf to a branch.
+         */
+        fun subTreeOf(str: String): MutableMappingTree {
+            val lastChar = str.last()
+            val subBranch = subBranchOf(str.dropLast(1))
+            return when (val subTree = subBranch[lastChar]) {
+                null -> Branch(mutableMapOf()).also { subBranch[lastChar] = it }
+                else -> subTree
+            }
+        }
+
+        /**
          * Updates a sub tree addressed by [str], with the [newSubTree].
          */
         fun updateSubTreeOf(str: String, newSubTree: MutableMappingTree): MutableMappingTree {
             val lastChar = str.last()
-            val toUpdate: Branch = subTreeOf(str.dropLast(1))
+            val toUpdate: Branch = subBranchOf(str.dropLast(1))
             toUpdate[lastChar] = newSubTree
             return newSubTree
         }
@@ -61,7 +76,7 @@ sealed class MutableMappingTree {
          */
         fun setSubTreeValue(str: String, value: String): MutableMappingTree {
             val lastChar = str.last()
-            val toUpdate: Branch = subTreeOf(str.dropLast(1))
+            val toUpdate: Branch = subBranchOf(str.dropLast(1))
             return when (val currentNode = toUpdate[lastChar]) {
                 null -> Leaf(value).also { toUpdate[lastChar] = it }
                 is Leaf -> {
