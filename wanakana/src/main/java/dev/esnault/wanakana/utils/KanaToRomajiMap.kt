@@ -132,7 +132,7 @@ private fun createKanaToHepburnMap(): MappingTree {
         romajiTree.setSubTreeValue("`${kana}ぇ", "${roma}e")
     }
 
-    romajiTree['っ'] = resolveTsu(romajiTree)
+    romajiTree['っ'] = romajiTree.duplicate().also { updateTsu(it) }
 
     SMALL_KANA.forEach { (kana, roma) ->
         romajiTree.setSubTreeValue(kana.toString(), roma)
@@ -156,26 +156,20 @@ private fun createKanaToHepburnMap(): MappingTree {
     return romajiTree.toMappingTree()
 }
 
-private fun resolveTsu(tree: MutableMappingTree.Branch): MutableMappingTree {
+private fun updateTsu(tree: MutableMappingTree) {
     fun newValue(value: String): String {
         val consonant = value.first()
         val whiteListValue = SOKUON_WHITELIST[consonant]
         return if (whiteListValue != null) whiteListValue + value else value
     }
 
-    return tree.children.entries
-        .fold(MutableMappingTree.Branch(mutableMapOf())) { tsuTree, (key, subTree) ->
-            when (subTree) {
-                is MutableMappingTree.Branch -> {
-                    tsuTree[key] = resolveTsu(subTree).also { newTree ->
-                        val newBranch = newTree as MutableMappingTree.Branch
-                        newBranch.value?.let { newBranch.value = newValue(it) }
-                    }
-                }
-                is MutableMappingTree.Leaf -> MutableMappingTree.Leaf(newValue(subTree.value))
-            }
-            tsuTree
+    when (tree) {
+        is MutableMappingTree.Branch -> {
+            tree.children.values.forEach { updateTsu(it) }
+            tree.value?.let { tree.value = newValue(it) }
         }
+        is MutableMappingTree.Leaf -> tree.value = newValue(tree.value)
+    }
 }
 
 val kanaToHepburnMap: MappingTree by lazy { createKanaToHepburnMap() }

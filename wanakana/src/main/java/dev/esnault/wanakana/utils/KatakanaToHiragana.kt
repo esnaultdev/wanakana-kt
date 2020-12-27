@@ -1,6 +1,7 @@
 package dev.esnault.wanakana.utils
 
 import dev.esnault.wanakana.Constants
+import dev.esnault.wanakana.toRomaji
 
 private fun Char.isInitialLongDash(index: Int): Boolean = isLongDash() && index < 1
 private fun Char.isInnerLongDash(index: Int): Boolean = isLongDash() && index > 0
@@ -45,6 +46,3 @@ fun katakanaToHiragana(input: String, isDestinationRomaji: Boolean): String {
         }
     }
 }
-
-// TODO Need to implement toRomaji (but need to create the mapping first)
-fun toRomaji(input: String): String = input

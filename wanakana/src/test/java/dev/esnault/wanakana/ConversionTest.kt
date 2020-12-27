@@ -34,6 +34,25 @@ class ConversionTest {
             }
             return tests
         }
+
+        @DisplayName("toRomaji()")
+        @TestFactory
+        fun toRomajiTest(): Collection<DynamicTest> {
+            val tests = mutableListOf<DynamicTest>()
+            HIRA_KATA_TO_ROMA.forEach { (hiragana, katakana, romaji) ->
+                if (hiragana.isNotEmpty()) {
+                    tests.test(name = "$hiragana -> $romaji") {
+                        assertEquals(expected = romaji, actual = toRomaji(hiragana))
+                    }
+                }
+                if (katakana.isNotEmpty()) {
+                    tests.test(name = "$katakana -> $romaji") {
+                        assertEquals(expected = romaji, actual = toRomaji(katakana))
+                    }
+                }
+            }
+            return tests
+        }
     }
 
     @DisplayName("N edge cases")
@@ -87,16 +106,6 @@ TODO: JS to convert
 
 describe('character conversions', () => {
   describe('test every conversion table char', () => {
-    describe('toKana()', () => {
-      ROMA_TO_HIRA_KATA.forEach((item) => {
-        const [romaji, hiragana, katakana] = item;
-        const lower = toKana(romaji);
-        const upper = toKana(romaji.toUpperCase());
-        it(`${romaji}`, () => expect(lower).toBe(hiragana));
-        it(`${romaji.toUpperCase()}`, () => expect(upper).toBe(katakana));
-      });
-    });
-
     describe('toHiragana()', () => {
       ROMA_TO_HIRA_KATA.forEach((item) => {
         const [romaji, hiragana] = item;
@@ -115,25 +124,6 @@ describe('character conversions', () => {
 
         it(`${romaji}`, () => expect(lower).toBe(katakana));
         it(`${romaji.toUpperCase()}`, () => expect(upper).toBe(katakana));
-      });
-    });
-
-    describe('Hiragana input toRomaji()', () => {
-      HIRA_KATA_TO_ROMA.forEach((item) => {
-        const [hiragana, , romaji] = item;
-        if (hiragana) {
-          const result = toRomaji(hiragana);
-          it(`${hiragana}`, () => expect(result).toBe(romaji));
-        }
-      });
-    });
-    describe('Katakana input toRomaji()', () => {
-      HIRA_KATA_TO_ROMA.forEach((item) => {
-        const [, katakana, romaji] = item;
-        if (katakana) {
-          const result = toRomaji(katakana);
-          it(`${katakana}`, () => expect(result).toBe(romaji));
-        }
       });
     });
   });
