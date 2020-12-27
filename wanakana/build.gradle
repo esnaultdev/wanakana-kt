@@ -11,6 +11,9 @@ java {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
-    testImplementation 'junit:junit:4.+'
+    // Test
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+    // JUnit 5
+    testImplementation "org.junit.jupiter:junit-jupiter-api:5.7.0"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.7.0"
 }
