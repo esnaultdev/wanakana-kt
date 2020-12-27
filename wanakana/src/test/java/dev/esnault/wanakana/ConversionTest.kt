@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.TestFactory
+import java.util.*
 import kotlin.test.assertEquals
 
 fun MutableList<DynamicTest>.test(name: String, block: () -> Unit) =
@@ -22,9 +23,13 @@ class ConversionTest {
         @TestFactory
         fun toKanaTest(): Collection<DynamicTest> {
             val tests = mutableListOf<DynamicTest>()
-            ROMA_TO_HIRA_KATA.forEach { (romaji, hiragana, _) ->
+            ROMA_TO_HIRA_KATA.forEach { (romaji, hiragana, katakana) ->
                 tests.test(name = "$romaji -> $hiragana") {
                     assertEquals(expected = hiragana, actual = toKana(romaji))
+                }
+                val upperRomaji = romaji.toUpperCase(Locale.ENGLISH)
+                tests.test(name = "$upperRomaji -> $katakana") {
+                    assertEquals(expected = katakana, actual = toKana(katakana))
                 }
             }
             return tests
@@ -78,6 +83,8 @@ class ConversionTest {
 }
 
 /*
+TODO: JS to convert
+
 describe('character conversions', () => {
   describe('test every conversion table char', () => {
     describe('toKana()', () => {

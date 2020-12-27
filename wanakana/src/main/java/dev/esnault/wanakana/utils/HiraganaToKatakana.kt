@@ -4,13 +4,13 @@ import dev.esnault.wanakana.Constants
 
 /**
  * Converts Hiragana to Katakana.
- * Passes through any non-hiragana chars
- * @param input the input to convert.
- * @returns the converted input.
+ * Passes through any non-hiragana chars.
+ * @param input the text to convert.
+ * @returns the converted text.
  *
  * For example:
- * - hiraganaToKatakana('ひらがな') => "ヒラガナ"
- * - hiraganaToKatakana('ひらがな is a type of kana') => "ヒラガナ is a type of kana"
+ * - hiraganaToKatakana("ひらがな") => "ヒラガナ"
+ * - hiraganaToKatakana("ひらがな is a type of kana") => "ヒラガナ is a type of kana"
  *
  * See [Hiragana](https://en.wikipedia.org/wiki/Hiragana).
  * See [Katakana](https://en.wikipedia.org/wiki/Katakana).

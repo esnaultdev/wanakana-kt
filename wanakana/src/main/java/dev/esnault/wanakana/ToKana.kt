@@ -3,81 +3,47 @@ package dev.esnault.wanakana
 import dev.esnault.wanakana.utils.KanaToken
 import dev.esnault.wanakana.utils.MappingTree
 import dev.esnault.wanakana.utils.applyMapping
-import dev.esnault.wanakana.utils.createRomajiToKanaMap
+import dev.esnault.wanakana.utils.hiraganaToKatakana
+import dev.esnault.wanakana.utils.isEnglishUpperCase
 import dev.esnault.wanakana.utils.romajiToKanaMap
-
-/*
-TODO: JS to convert
+import java.util.*
 
 /**
- * Convert [Romaji](https://en.wikipedia.org/wiki/Romaji) to [Kana](https://en.wikipedia.org/wiki/Kana), lowercase text will result in [Hiragana](https://en.wikipedia.org/wiki/Hiragana) and uppercase text will result in [Katakana](https://en.wikipedia.org/wiki/Katakana).
- * @param  {String} [input=''] text
- * @param  {DefaultOptions} [options=defaultOptions]
- * @return {String} converted text
- * @example
- * toKana('onaji BUTTSUUJI')
- * // => 'おなじ ブッツウジ'
- * toKana('ONAJI buttsuuji')
- * // => 'オナジ ぶっつうじ'
- * toKana('座禅‘zazen’スタイル')
- * // => '座禅「ざぜん」スタイル'
- * toKana('batsuge-mu')
- * // => 'ばつげーむ'
- * toKana('!?.:/,~-‘’“”[](){}') // Punctuation conversion
- * // => '！？。：・、〜ー「」『』［］（）｛｝'
- * toKana('we', { useObsoleteKana: true })
- * // => 'ゑ'
- * toKana('wanakana', { customKanaMapping: { na: 'に', ka: 'bana' } });
- * // => 'わにbanaに'
- */
-export function toKana(input = '', options = {}, map) {
-  let config;
-  if (!map) {
-    config = mergeWithDefaultOptions(options);
-    map = createRomajiToKanaMap(config);
-  } else {
-    config = options;
-  }
-
-  // throw away the substring index information and just concatenate all the kana
-  return splitIntoConvertedKana(input, config, map)
-    .map((kanaToken) => {
-      const [start, end, kana] = kanaToken;
-      if (kana === null) {
-        // haven't converted the end of the string, since we are in IME mode
-        return input.slice(start);
-      }
-      const enforceHiragana = config.IMEMode === TO_KANA_METHODS.HIRAGANA;
-      const enforceKatakana =
-        config.IMEMode === TO_KANA_METHODS.KATAKANA ||
-        [...input.slice(start, end)].every(isCharUpperCase);
-
-      return enforceHiragana || !enforceKatakana ? kana : hiraganaToKatakana(kana);
-    })
-    .join('');
-}
-*/
-
-/**
- * Converts romaji to kana.
+ * Converts Romaji to Kana.
  * Lowercase text will result in Hiragana and uppercase text will result in Katakana.
+ *
+ * @param input the text to convert to Kana.
+ * @return the converted text.
  *
  * See [Romaji](https://en.wikipedia.org/wiki/Romaji).
  * See [Kana](https://en.wikipedia.org/wiki/Kana).
  * See [Hiragana](https://en.wikipedia.org/wiki/Hiragana).
  * See [Katakana](https://en.wikipedia.org/wiki/Katakana).
+ *
+ * For example:
+ * - toKana("onaji BUTTSUUJI") => "おなじ ブッツウジ"
+ * - toKana("ONAJI buttsuuji") => "オナジ ぶっつうじ"
+ * - toKana("座禅‘zazen’スタイル") => "座禅「ざぜん」スタイル"
+ * - toKana("batsuge-mu") => "ばつげーむ"
+ * - toKana("!?.:/,~-‘’“”[](){}") => "！？。：・、〜ー「」『』［］（）｛｝"
  */
 fun toKana(input: String): String {
     val map = romajiToKanaMap
 
+    val enforceHiragana = false // TODO introduce a config class
+
+    // throw away the substring index information and just concatenate all the kana
     return splitIntoConvertedKana(input, map)
         .joinToString(separator = "") { token ->
-            if (token.kana != null) {
-                token.kana
-            } else {
+            val kana = token.kana
+            if (kana == null) {
                 // haven't converted the end of the string, since we are in IME mode
-                input.drop(token.start)
+                return@joinToString input.drop(token.start)
             }
+
+            val enforceKatakana =
+                input.slice(token.start until token.end).all { it.isEnglishUpperCase() }
+            if (enforceHiragana || !enforceKatakana) kana else hiraganaToKatakana(kana)
         }
 }
 
@@ -104,7 +70,7 @@ export function splitIntoConvertedKana(input = '', options = {}, map) {
 
 private fun splitIntoConvertedKana(input: String, map: MappingTree): List<KanaToken> {
     // TODO add an IMEMode
-    return applyMapping(input.toLowerCase(), map, true)
+    return applyMapping(input.toLowerCase(Locale.ENGLISH), map, true)
 }
 
 /*

@@ -28,4 +28,14 @@ class CharExtTest {
         assertTrue('・'.isSlashDot())
         assertFalse('/'.isSlashDot())
     }
+
+    @Test
+    fun isUpperCase() {
+        assertTrue('A'.isEnglishUpperCase())
+        assertTrue('D'.isEnglishUpperCase())
+        assertFalse('-'.isEnglishUpperCase())
+        assertFalse('ー'.isEnglishUpperCase())
+        assertFalse('a'.isEnglishUpperCase())
+        assertFalse('d'.isEnglishUpperCase())
+    }
 }
