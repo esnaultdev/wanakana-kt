@@ -10,13 +10,15 @@ import kotlin.test.assertEquals
 fun MutableList<DynamicTest>.test(name: String, block: () -> Unit) =
     add(DynamicTest.dynamicTest(name, block))
 
+data class Test(val name: String, val input: String, val expected: String)
+
 @DisplayName("Character conversions")
 class ConversionTest {
 
     @Nested
     @DisplayName("Test every conversion table char")
     inner class ConversionTable {
-
+        @DisplayName("toKana()")
         @TestFactory
         fun toKanaTest(): Collection<DynamicTest> {
             val tests = mutableListOf<DynamicTest>()
@@ -28,7 +30,53 @@ class ConversionTest {
             return tests
         }
     }
+
+    @DisplayName("N edge cases")
+    @TestFactory
+    fun nEdgeCaseTests(): Collection<DynamicTest> {
+        return listOf(
+            Test("Solo N", "n", "ん"),
+            Test("Solo N", "n", "ん"),
+            Test("double N", "onn", "おんん"),
+            Test("N followed by N* syllable", "onna", "おんな"),
+            Test("Triple N", "nnn", "んんん"),
+            Test("Triple N followed by N* syllable", "onnna", "おんんな"),
+            Test("Quadruple N", "nnnn", "んんんん"),
+            Test("nya -> にゃ", "nyan", "にゃん"),
+            Test("nnya -> んにゃ", "nnyann", "んにゃんん"),
+            Test("nnnya -> んにゃ", "nnnyannn", "んんにゃんんん"),
+            Test("n'ya -> んや", "n'ya", "んや"),
+            Test("kin'ya -> きんや", "kin'ya", "きんや"),
+            Test("shin'ya -> しんや", "shin'ya", "しんや"),
+            Test("kinyou -> きにょう", "kinyou", "きにょう"),
+            Test("kin'you -> きんよう", "kin'you", "きんよう"),
+            Test("kin'yu -> きんゆ", "kin'yu", "きんゆ"),
+            Test("Properly add space after \"n[space]\"", "ichiban warui", "いちばん わるい")
+        )
+            .map { test ->
+                DynamicTest.dynamicTest(test.name) {
+                    assertEquals(expected = test.expected, actual = toKana(test.input))
+                }
+            }
+    }
+
+    @DisplayName("Bogus 4 character sequences")
+    @TestFactory
+    fun bogusFourCharTests(): Collection<DynamicTest> {
+        return listOf(
+            Test("Non bogus sequences work", "chya", "ちゃ"),
+            Test("Bogus sequences do not work", "chyx", "chyx"),
+            Test("Bogus sequences do not work", "shyp", "shyp"),
+            Test("Bogus sequences do not work", "ltsb", "ltsb"),
+        )
+            .map { test ->
+                DynamicTest.dynamicTest(test.name) {
+                    assertEquals(expected = test.expected, actual = toKana(test.input))
+                }
+            }
+    }
 }
+
 /*
 describe('character conversions', () => {
   describe('test every conversion table char', () => {

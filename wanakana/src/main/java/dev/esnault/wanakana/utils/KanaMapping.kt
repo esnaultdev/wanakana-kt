@@ -24,9 +24,6 @@ private data class State(
 
     /**
      * The original [String] of the current descent.
-     * Note that, except at the ending, the last char should be dropped when used as a default
-     * value. This is due to our update of the [subTree] that happens before cancelling the current
-     * chunk.
      */
     private var original: String = ""
 
@@ -52,12 +49,12 @@ private data class State(
 
     fun isAtTreeEnd(): Boolean = subTree == null || subTree is MappingTree.Leaf
 
-    fun getCurrentValue(isEnding: Boolean): String {
-        fun original(isEnding: Boolean) = if (!isEnding) original.dropLast(1) else original
+    fun getCurrentValue(rollbackOne: Boolean = false): String {
+        fun original(rollbackOne: Boolean) = if (rollbackOne) original.dropLast(1) else original
         return when (val subTree = subTree) {
-            null -> previousValue ?: original(isEnding)
+            null -> previousValue ?: original(rollbackOne)
             is MappingTree.Leaf -> subTree.value
-            is MappingTree.Branch -> subTree.value ?: previousValue ?: original(isEnding)
+            is MappingTree.Branch -> subTree.value ?: previousValue ?: original(rollbackOne)
         }
     }
 
@@ -103,7 +100,7 @@ private fun parse(
         if (state.convertEnding || state.isAtTreeEnd()) {
             // nothing more to consume, just commit the last chunk and return it
             // so as to not have an empty element at the end of the result
-            val kana: String = state.getCurrentValue(true)
+            val kana: String = state.getCurrentValue()
             return listOf(KanaToken(lastCursor, currentCursor, kana))
         }
 
@@ -113,7 +110,7 @@ private fun parse(
     }
 
     if (state.isAtTreeEnd()) {
-        val kana = state.getCurrentValue(false)
+        val kana = state.getCurrentValue()
         val kanaToken = KanaToken(lastCursor, currentCursor, kana)
         return listOf(kanaToken) + newChunk(state, remaining, currentCursor)
     }
@@ -121,7 +118,7 @@ private fun parse(
     state.nextSubTree(remaining[0])
     val nextSubTree = state.subTree
     if (nextSubTree == null) {
-        val kanaToken = KanaToken(lastCursor, currentCursor, state.getCurrentValue(false))
+        val kanaToken = KanaToken(lastCursor, currentCursor, state.getCurrentValue(true))
         return listOf(kanaToken) + newChunk(state, remaining, currentCursor)
     }
     // continue current branch
