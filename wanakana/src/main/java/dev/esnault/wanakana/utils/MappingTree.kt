@@ -111,3 +111,10 @@ sealed class MutableMappingTree {
         is Leaf -> MappingTree.Leaf(value)
     }
 }
+
+val MutableMappingTree?.value: String?
+    get() = when (this) {
+        is MutableMappingTree.Branch -> this.value
+        is MutableMappingTree.Leaf -> this.value
+        null -> null
+    }

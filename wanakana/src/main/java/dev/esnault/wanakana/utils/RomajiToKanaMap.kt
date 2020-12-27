@@ -8,7 +8,7 @@ import dev.esnault.wanakana.utils.MutableMappingTree as TreeBuilder
  * See [Kunrei-shiki romanization](https://en.wikipedia.org/wiki/Kunrei-shiki_romanization).
  * NOTE: not exactly kunrei shiki, for example ぢゃ -> dya instead of zya, to avoid name clashing.
  */
-val BASIC_KUNREI: Map<Char, Any> = mapOf(
+private val BASIC_KUNREI: Map<Char, Any> = mapOf(
     'a' to "あ", 'i' to "い", 'u' to "う", 'e' to "え", 'o' to "お",
     'k' to mapOf('a' to "か", 'i' to "き", 'u' to "く", 'e' to "け", 'o' to "こ"),
     's' to mapOf('a' to "さ", 'i' to "し", 'u' to "す", 'e' to "せ", 'o' to "そ"),
@@ -28,7 +28,7 @@ val BASIC_KUNREI: Map<Char, Any> = mapOf(
 )
 
 
-val SPECIAL_SYMBOLS: Map<Char, Char> = mapOf(
+private val SPECIAL_SYMBOLS: Map<Char, Char> = mapOf(
     '.' to '。',
     ',' to '、',
     ':' to '：',
@@ -49,7 +49,7 @@ val SPECIAL_SYMBOLS: Map<Char, Char> = mapOf(
     '}' to '｝'
 )
 
-val CONSONANTS: Map<Char, Char> = mapOf(
+private val CONSONANTS: Map<Char, Char> = mapOf(
     'k' to 'き',
     's' to 'し',
     't' to 'ち',
@@ -66,15 +66,15 @@ val CONSONANTS: Map<Char, Char> = mapOf(
     'q' to 'く',
     'f' to 'ふ'
 )
-val SMALL_Y: Map<String, Char> =
+private val SMALL_Y: Map<String, Char> =
     mapOf("ya" to 'ゃ', "yi" to 'ぃ', "yu" to 'ゅ', "ye" to 'ぇ', "yo" to 'ょ')
-val SMALL_VOWELS: Map<String, Char> =
+private val SMALL_VOWELS: Map<String, Char> =
     mapOf("a" to 'ぁ', "i" to 'ぃ', "u" to 'ぅ', "e" to 'ぇ', "o" to 'ぉ')
 
 /**
  * Typing one should be the same as having typed the other instead
  */
-val ALIASES: Map<String, String> = mapOf(
+private val ALIASES: Map<String, String> = mapOf(
     "sh" to "sy", // sha -> sya
     "ch" to "ty", // cho -> tyo
     "cy" to "ty", // cyo -> tyo
@@ -94,7 +94,7 @@ val ALIASES: Map<String, String> = mapOf(
 /**
  * xtu -> っ
  */
-val SMALL_LETTERS: Map<String, Char> = listOf(
+private val SMALL_LETTERS: Map<String, Char> = listOf(
     mapOf(
         "tu" to 'っ',
         "wa" to 'ゎ',
@@ -112,7 +112,7 @@ val SMALL_LETTERS: Map<String, Char> = listOf(
 /**
  * Don't follow any notable patterns
  */
-val SPECIAL_CASES: Map<String, String> = mapOf(
+private val SPECIAL_CASES: Map<String, String> = mapOf(
     "yi" to "い",
     "wu" to "う",
     "ye" to "いぇ",
@@ -130,7 +130,7 @@ val SPECIAL_CASES: Map<String, String> = mapOf(
     "dho" to "でょ",
 )
 
-val AIUEO_CONSTRUCTIONS: Map<String, Char> = mapOf(
+private val AIUEO_CONSTRUCTIONS: Map<String, Char> = mapOf(
     "wh" to 'う',
     "qw" to 'く',
     "q" to 'く',
@@ -182,12 +182,13 @@ fun createRomajiToKanaMap(): MappingTree {
     }
 
     fun getAlternatives(str: String): List<String> {
-        return (ALIASES.entries + mapOf("c" to "k").entries).fold(mutableListOf()) { list, (alt, roma) ->
-            if (str.startsWith(roma)) {
-                list.add(str.replace(roma, alt))
+        return (ALIASES.entries + mapOf("c" to "k").entries)
+            .fold(mutableListOf()) { list, (alt, roma) ->
+                if (str.startsWith(roma)) {
+                    list.add(str.replace(roma, alt))
+                }
+                list
             }
-            list
-        }
     }
 
     SMALL_LETTERS.forEach { (kunreiRoma, kana) ->

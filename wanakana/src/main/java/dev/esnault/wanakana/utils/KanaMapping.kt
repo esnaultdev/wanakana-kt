@@ -131,19 +131,19 @@ private fun parse(
  *
  * This is used to easily build a [MappingTree].
  */
-internal fun transform(map: Map<Char, Any>): MutableMappingTree.Branch {
-    val values: MutableMap<Char, MutableMappingTree> = map.entries.fold(mutableMapOf()) { acc, entry ->
-        val (char, subTree) = entry
-        if (subTree is String) {
-            acc[char] = MutableMappingTree.Leaf(subTree)
+internal fun transform(map: Map<*, *>): MutableMappingTree.Branch {
+    val result = MutableMappingTree.Branch(mutableMapOf())
+    map.entries.forEach { (key, value) ->
+        val str = key.toString()
+        if (value is String) {
+            result.setSubTreeValue(str, value)
         } else {
             @Suppress("UNCHECKED_CAST")
             // We expect the input to be clean, since this is only used internally.
-            acc[char] = transform(subTree as Map<Char, Any>)
+            result.updateSubTreeOf(str, transform(value as Map<*, *>))
         }
-        acc
     }
-    return MutableMappingTree.Branch(values)
+    return result
 }
 
 /*
