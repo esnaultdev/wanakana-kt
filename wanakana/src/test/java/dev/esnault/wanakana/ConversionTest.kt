@@ -2,16 +2,9 @@ package dev.esnault.wanakana
 
 import dev.esnault.wanakana.helpers.*
 import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.TestFactory
 import java.util.*
-import kotlin.test.assertEquals
-
-fun MutableList<DynamicTest>.test(name: String, block: () -> Unit) =
-    add(DynamicTest.dynamicTest(name, block))
-
-data class Test(val name: String, val input: String, val expected: String)
 
 @DisplayName("Character conversions")
 class ConversionTest {
@@ -21,83 +14,71 @@ class ConversionTest {
     inner class ConversionTable {
         @DisplayName("toKana()")
         @TestFactory
-        fun toKanaTest(): Collection<DynamicTest> {
-            val tests = mutableListOf<DynamicTest>()
+        fun toKanaTest() = dynamicTests {
             ROMA_TO_HIRA_KATA.forEach { (romaji, hiragana, katakana) ->
-                tests.test(name = "$romaji -> $hiragana") {
-                    assertEquals(expected = hiragana, actual = toKana(romaji))
+                testEquals(name = "$romaji -> $hiragana", expected = hiragana) {
+                    toKana(romaji)
                 }
                 val upperRomaji = romaji.toUpperCase(Locale.ENGLISH)
-                tests.test(name = "$upperRomaji -> $katakana") {
-                    assertEquals(expected = katakana, actual = toKana(katakana))
+                testEquals(name = "$upperRomaji -> $katakana", expected = katakana) {
+                    toKana(katakana)
                 }
             }
-            return tests
         }
 
         @DisplayName("toRomaji()")
         @TestFactory
-        fun toRomajiTest(): Collection<DynamicTest> {
-            val tests = mutableListOf<DynamicTest>()
+        fun toRomajiTest() = dynamicTests {
             HIRA_KATA_TO_ROMA.forEach { (hiragana, katakana, romaji) ->
                 if (hiragana.isNotEmpty()) {
-                    tests.test(name = "$hiragana -> $romaji") {
-                        assertEquals(expected = romaji, actual = toRomaji(hiragana))
+                    testEquals(name = "$hiragana -> $romaji", expected = romaji) {
+                        toRomaji(hiragana)
                     }
                 }
                 if (katakana.isNotEmpty()) {
-                    tests.test(name = "$katakana -> $romaji") {
-                        assertEquals(expected = romaji, actual = toRomaji(katakana))
+                    testEquals(name = "$katakana -> $romaji", expected = romaji) {
+                        toRomaji(katakana)
                     }
                 }
             }
-            return tests
         }
     }
 
     @DisplayName("N edge cases")
     @TestFactory
-    fun nEdgeCaseTests(): Collection<DynamicTest> {
-        return listOf(
-            Test("Solo N", "n", "ん"),
-            Test("Solo N", "n", "ん"),
-            Test("double N", "onn", "おんん"),
-            Test("N followed by N* syllable", "onna", "おんな"),
-            Test("Triple N", "nnn", "んんん"),
-            Test("Triple N followed by N* syllable", "onnna", "おんんな"),
-            Test("Quadruple N", "nnnn", "んんんん"),
-            Test("nya -> にゃ", "nyan", "にゃん"),
-            Test("nnya -> んにゃ", "nnyann", "んにゃんん"),
-            Test("nnnya -> んにゃ", "nnnyannn", "んんにゃんんん"),
-            Test("n'ya -> んや", "n'ya", "んや"),
-            Test("kin'ya -> きんや", "kin'ya", "きんや"),
-            Test("shin'ya -> しんや", "shin'ya", "しんや"),
-            Test("kinyou -> きにょう", "kinyou", "きにょう"),
-            Test("kin'you -> きんよう", "kin'you", "きんよう"),
-            Test("kin'yu -> きんゆ", "kin'yu", "きんゆ"),
-            Test("Properly add space after \"n[space]\"", "ichiban warui", "いちばん わるい")
-        )
-            .map { test ->
-                DynamicTest.dynamicTest(test.name) {
-                    assertEquals(expected = test.expected, actual = toKana(test.input))
-                }
-            }
+    fun nEdgeCaseTests() = dynamicTests {
+        fun test(name: String, input: String, expected: String) =
+            testEquals(name, expected) { toKana(input) }
+
+        test("Solo N", "n", "ん")
+        test("Solo N", "n", "ん")
+        test("double N", "onn", "おんん")
+        test("N followed by N* syllable", "onna", "おんな")
+        test("Triple N", "nnn", "んんん")
+        test("Triple N followed by N* syllable", "onnna", "おんんな")
+        test("Quadruple N", "nnnn", "んんんん")
+        test("nya -> にゃ", "nyan", "にゃん")
+        test("nnya -> んにゃ", "nnyann", "んにゃんん")
+        test("nnnya -> んにゃ", "nnnyannn", "んんにゃんんん")
+        test("n'ya -> んや", "n'ya", "んや")
+        test("kin'ya -> きんや", "kin'ya", "きんや")
+        test("shin'ya -> しんや", "shin'ya", "しんや")
+        test("kinyou -> きにょう", "kinyou", "きにょう")
+        test("kin'you -> きんよう", "kin'you", "きんよう")
+        test("kin'yu -> きんゆ", "kin'yu", "きんゆ")
+        test("Properly add space after \"n[space]\"", "ichiban warui", "いちばん わるい")
     }
 
     @DisplayName("Bogus 4 character sequences")
     @TestFactory
-    fun bogusFourCharTests(): Collection<DynamicTest> {
-        return listOf(
-            Test("Non bogus sequences work", "chya", "ちゃ"),
-            Test("Bogus sequences do not work", "chyx", "chyx"),
-            Test("Bogus sequences do not work", "shyp", "shyp"),
-            Test("Bogus sequences do not work", "ltsb", "ltsb"),
-        )
-            .map { test ->
-                DynamicTest.dynamicTest(test.name) {
-                    assertEquals(expected = test.expected, actual = toKana(test.input))
-                }
-            }
+    fun bogusFourCharTests() = dynamicTests {
+        fun test(name: String, input: String, expected: String) =
+            testEquals(name, expected) { toKana(input) }
+
+        test("Non bogus sequences work", "chya", "ちゃ")
+        test("Bogus sequences do not work", "chyx", "chyx")
+        test("Bogus sequences do not work", "shyp", "shyp")
+        test("Bogus sequences do not work", "ltsb", "ltsb")
     }
 }
 

@@ -1,102 +1,133 @@
 package dev.esnault.wanakana.utils
 
+import dev.esnault.wanakana.dynamicTests
 import dev.esnault.wanakana.helpers.EN_PUNC
 import dev.esnault.wanakana.helpers.JA_PUNC
-import org.junit.jupiter.api.Test
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
+import org.junit.jupiter.api.TestFactory
 
 
 class CharExtTest {
 
-    @Test
-    fun isHiragana() {
-        assertTrue('な'.isHiragana())
-        assertFalse('ナ'.isHiragana())
-        assertFalse('n'.isHiragana())
-        assertFalse('!'.isHiragana())
+    @TestFactory
+    fun isHiragana() = dynamicTests {
+        fun Char.test(expected: Boolean) =
+            testBoolean("$this -> $expected", expected, this::isHiragana)
+
+        'な'.test(true)
+        'ナ'.test(false)
+        'n'.test(false)
+        '!'.test(false)
     }
 
-    @Test
-    fun isKatakana() {
-        assertTrue('ナ'.isKatakana())
-        assertFalse('は'.isKatakana())
-        assertFalse('n'.isKatakana())
-        assertFalse('!'.isKatakana())
+    @TestFactory
+    fun isKatakana() = dynamicTests {
+        fun Char.test(expected: Boolean) =
+            testBoolean("$this -> $expected", expected, this::isKatakana)
+
+        'ナ'.test(true)
+        'は'.test(false)
+        'n'.test(false)
+        '!'.test(false)
     }
 
-    @Test
-    fun isKana() {
-        assertTrue('は'.isKana())
-        assertTrue('ナ'.isKana())
-        assertFalse('n'.isKana())
-        assertFalse('!'.isKana())
-        assertFalse('-'.isKana())
-        assertTrue('ー'.isKana())
+    @TestFactory
+    fun isKana()  = dynamicTests {
+        fun Char.test(expected: Boolean) =
+            testBoolean("$this -> $expected", expected, this::isKana)
+
+        'は'.test(true)
+        'ナ'.test(true)
+        'n'.test(false)
+        '!'.test(false)
+        '-'.test(false)
+        'ー'.test(true)
     }
 
-    @Test
-    fun isLongDash() {
-        assertTrue('ー'.isLongDash())
-        assertFalse('-'.isLongDash())
-        assertFalse('f'.isLongDash())
-        assertFalse('ふ'.isLongDash())
+    @TestFactory
+    fun isLongDash() = dynamicTests {
+        fun Char.test(expected: Boolean) =
+            testBoolean("$this -> $expected", expected, this::isLongDash)
+        
+        'ー'.test(true)
+        '-'.test(false)
+        'f'.test(false)
+        'ふ'.test(false)
     }
 
-    @Test
-    fun isSlashDot() {
-        assertTrue('・'.isSlashDot())
-        assertFalse('/'.isSlashDot())
+    @TestFactory
+    fun isSlashDot() = dynamicTests {
+        fun Char.test(expected: Boolean) =
+            testBoolean("$this -> $expected", expected, this::isSlashDot)
+        
+        '・'.test(true)
+        '/'.test(false)
+        'f'.test(false)
+        'ふ'.test(false)
     }
 
-    @Test
-    fun isUpperCase() {
-        assertTrue('A'.isEnglishUpperCase())
-        assertTrue('D'.isEnglishUpperCase())
-        assertFalse('-'.isEnglishUpperCase())
-        assertFalse('ー'.isEnglishUpperCase())
-        assertFalse('a'.isEnglishUpperCase())
-        assertFalse('d'.isEnglishUpperCase())
+    @TestFactory
+    fun isUpperCase() = dynamicTests {
+        fun Char.test(expected: Boolean) =
+            testBoolean("$this -> $expected", expected, this::isEnglishUpperCase)
+        
+        'A'.test(true)
+        'D'.test(true)
+        '-'.test(false)
+        'ー'.test(false)
+        'a'.test(false)
+        'd'.test(false)
     }
 
-    @Test
-    fun isKanji() {
-        assertTrue('腹'.isKanji())
-        assertTrue('一'.isKanji()) // kanji for いち・1 - not a long hyphen
-        assertFalse('ー'.isKanji()) // long hyphen
-        assertFalse('は'.isKanji())
-        assertFalse('ナ'.isKanji())
-        assertFalse('n'.isKanji())
-        assertFalse('!'.isKanji())
+    @TestFactory
+    fun isKanji() = dynamicTests {
+        fun Char.test(expected: Boolean) =
+            testBoolean("$this -> $expected", expected, this::isKanji)
+        
+        '腹'.test(true)
+        '一'.test(true) // kanji for いち・1 - not a long hyphen
+        'ー'.test(false) // long hyphen
+        'は'.test(false)
+        'ナ'.test(false)
+        'n'.test(false)
+        '!'.test(false)
     }
 
-    @Test
-    fun isRomaji() {
-        assertTrue('n'.isRomaji())
-        assertTrue('!'.isRomaji())
-        assertFalse('ナ'.isRomaji())
-        assertFalse('は'.isRomaji())
-        assertFalse('缶'.isRomaji())
+    @TestFactory
+    fun isRomaji() = dynamicTests {
+        fun Char.test(expected: Boolean) =
+            testBoolean("$this -> $expected", expected, this::isRomaji)
+        
+        'n'.test(true)
+        '!'.test(true)
+        'ナ'.test(false)
+        'は'.test(false)
+        '缶'.test(false)
     }
 
-    @Test
-    fun isEnglishPunctuation() {
-        EN_PUNC.forEach { char -> assertTrue(char.isEnglishPunctuation()) }
-        JA_PUNC.forEach { char -> assertFalse(char.isEnglishPunctuation()) }
-        assertTrue(' '.isEnglishPunctuation())
-        assertFalse('a'.isEnglishPunctuation())
-        assertFalse('ふ'.isEnglishPunctuation())
-        assertFalse('字'.isEnglishPunctuation())
+    @TestFactory
+    fun isEnglishPunctuation() = dynamicTests {
+        fun Char.test(expected: Boolean) =
+            testBoolean("$this -> $expected", expected, this::isEnglishPunctuation)
+
+        EN_PUNC.forEach { char -> char.test(true) }
+        JA_PUNC.forEach { char -> char.test(false) }
+        ' '.test(true)
+        'a'.test(false)
+        'ふ'.test(false)
+        '字'.test(false)
     }
 
-    @Test
-    fun isJapanesePunctuation() {
-        JA_PUNC.forEach { char -> assertTrue(char.isJapanesePunctuation()) }
-        EN_PUNC.forEach { char -> assertFalse(char.isJapanesePunctuation()) }
-        assertTrue('　'.isJapanesePunctuation())
-        assertFalse('?'.isJapanesePunctuation())
-        assertFalse('a'.isJapanesePunctuation())
-        assertFalse('ふ'.isJapanesePunctuation())
-        assertFalse('字'.isJapanesePunctuation())
+    @TestFactory
+    fun isJapanesePunctuation() = dynamicTests {
+        fun Char.test(expected: Boolean) =
+            testBoolean("$this -> $expected", expected, this::isJapanesePunctuation)
+
+        JA_PUNC.forEach { char -> char.test(true) }
+        EN_PUNC.forEach { char -> char.test(false) }
+        '　'.test(true)
+        '?'.test(false)
+        'a'.test(false)
+        'ふ'.test(false)
+        '字'.test(false)
     }
 }
