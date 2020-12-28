@@ -21,11 +21,11 @@ import java.util.*
  * See [Katakana](https://en.wikipedia.org/wiki/Katakana).
  *
  * For example:
- * - toKana("onaji BUTTSUUJI") => "おなじ ブッツウジ"
- * - toKana("ONAJI buttsuuji") => "オナジ ぶっつうじ"
- * - toKana("座禅‘zazen’スタイル") => "座禅「ざぜん」スタイル"
- * - toKana("batsuge-mu") => "ばつげーむ"
- * - toKana("!?.:/,~-‘’“”[](){}") => "！？。：・、〜ー「」『』［］（）｛｝"
+ * - `toKana("onaji BUTTSUUJI")` => `"おなじ ブッツウジ"`
+ * - `toKana("ONAJI buttsuuji")` => `"オナジ ぶっつうじ"`
+ * - `toKana("座禅‘zazen’スタイル")` => `"座禅「ざぜん」スタイル"`
+ * - `toKana("batsuge-mu")` => `"ばつげーむ"`
+ * - `toKana("!?.:/,~-‘’“”[](){}")` => `"！？。：・、〜ー「」『』［］（）｛｝"`
  */
 fun toKana(input: String): String {
     val map = romajiToKanaMap

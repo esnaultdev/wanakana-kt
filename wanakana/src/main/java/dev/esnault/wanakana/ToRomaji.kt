@@ -12,8 +12,8 @@ import dev.esnault.wanakana.utils.katakanaToHiragana
  * @return the converted text
  *
  * For example:
- * - toRomaji('ひらがな　カタカナ') => 'hiragana katakana'
- * - toRomaji('げーむ　ゲーム') => 'ge-mu geemu'
+ * - `toRomaji("ひらがな　カタカナ")` => `"hiragana katakana"`
+ * - `toRomaji("げーむ　ゲーム")` => `"ge-mu geemu"`
  */
 fun toRomaji(input: String): String {
     // throw away the substring index information and just concatenate all the kana
