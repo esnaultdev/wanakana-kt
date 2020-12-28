@@ -47,3 +47,17 @@ fun Char.isEnglishUpperCase() = this.toInt() in Constants.LATIN_UPPERCASE_RANGE
 fun Char.isRomaji() = this.toInt().let { charCode ->
     Constants.ROMAJI_RANGES.any { range -> charCode in range }
 }
+
+/**
+ * Returns `true` if this is considered English punctuation.
+ */
+fun Char.isEnglishPunctuation() = this.toInt().let { charCode ->
+    Constants.EN_PUNCTUATION_RANGES.any { range -> charCode in range }
+}
+
+/**
+ * Returns `true` if this is considered Japanese punctuation.
+ */
+fun Char.isJapanesePunctuation() = this.toInt().let { charCode ->
+    Constants.JA_PUNCTUATION_RANGES.any { range -> charCode in range }
+}

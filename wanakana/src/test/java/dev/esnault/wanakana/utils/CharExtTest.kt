@@ -1,5 +1,7 @@
 package dev.esnault.wanakana.utils
 
+import dev.esnault.wanakana.helpers.EN_PUNC
+import dev.esnault.wanakana.helpers.JA_PUNC
 import org.junit.jupiter.api.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -75,5 +77,26 @@ class CharExtTest {
         assertFalse('ナ'.isRomaji())
         assertFalse('は'.isRomaji())
         assertFalse('缶'.isRomaji())
+    }
+
+    @Test
+    fun isEnglishPunctuation() {
+        EN_PUNC.forEach { char -> assertTrue(char.isEnglishPunctuation()) }
+        JA_PUNC.forEach { char -> assertFalse(char.isEnglishPunctuation()) }
+        assertTrue(' '.isEnglishPunctuation())
+        assertFalse('a'.isEnglishPunctuation())
+        assertFalse('ふ'.isEnglishPunctuation())
+        assertFalse('字'.isEnglishPunctuation())
+    }
+
+    @Test
+    fun isJapanesePunctuation() {
+        JA_PUNC.forEach { char -> assertTrue(char.isJapanesePunctuation()) }
+        EN_PUNC.forEach { char -> assertFalse(char.isJapanesePunctuation()) }
+        assertTrue('　'.isJapanesePunctuation())
+        assertFalse('?'.isJapanesePunctuation())
+        assertFalse('a'.isJapanesePunctuation())
+        assertFalse('ふ'.isJapanesePunctuation())
+        assertFalse('字'.isJapanesePunctuation())
     }
 }
