@@ -26,7 +26,7 @@ fun Char.isKatakana() = this.toInt() in Constants.KATAKANA_RANGE
 /**
  * Returns `true` if this is [Kana](https://en.wikipedia.org/wiki/Kana).
  */
-fun Char.isKana() = this.isHiragana() || this.isHiragana()
+fun Char.isKana() = this.isHiragana() || this.isKatakana()
 
 /**
  * Returns `true` if this is a CJK ideograph (kanji).
