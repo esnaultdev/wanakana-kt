@@ -23,5 +23,5 @@ import dev.esnault.wanakana.utils.isRomaji
  */
 fun isMixed(input: String, passKanji: Boolean = true): Boolean {
     val hasKanji = if (!passKanji) input.any(Char::isKanji) else false
-    return input.any(Char::isKana) && input.any(Char::isRomaji) && !hasKanji
+    return !hasKanji && input.any(Char::isKana) && input.any(Char::isRomaji)
 }

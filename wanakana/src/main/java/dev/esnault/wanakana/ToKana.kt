@@ -6,7 +6,7 @@ import dev.esnault.wanakana.utils.applyMapping
 import dev.esnault.wanakana.utils.hiraganaToKatakana
 import dev.esnault.wanakana.utils.isEnglishUpperCase
 import dev.esnault.wanakana.utils.romajiToKanaMap
-import java.util.*
+import dev.esnault.wanakana.utils.safeLowerCase
 
 /**
  * Converts Romaji to Kana.
@@ -70,7 +70,7 @@ export function splitIntoConvertedKana(input = '', options = {}, map) {
 
 private fun splitIntoConvertedKana(input: String, map: MappingTree): List<KanaToken> {
     // TODO add an IMEMode
-    return applyMapping(input.toLowerCase(Locale.ENGLISH), map, true)
+    return applyMapping(input.safeLowerCase(), map, true)
 }
 
 /*

@@ -20,7 +20,7 @@ object Wanakana {
     // Conversion
     // toRomaji
     // toKana
-    // TODO toHiragana
+    // toHiragana
     // TODO toKatakana
 
     // Other utils

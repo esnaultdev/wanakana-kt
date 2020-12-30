@@ -1,10 +1,10 @@
 package dev.esnault.wanakana
 
 import dev.esnault.wanakana.helpers.*
+import dev.esnault.wanakana.utils.safeUpperCase
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.TestFactory
-import java.util.*
 
 @DisplayName("Character conversions")
 class ConversionTest {
@@ -12,23 +12,34 @@ class ConversionTest {
     @Nested
     @DisplayName("Test every conversion table char")
     inner class ConversionTable {
-        @DisplayName("toKana()")
         @TestFactory
-        fun toKanaTest() = dynamicTests {
+        fun toKana() = dynamicTests {
             ROMA_TO_HIRA_KATA.forEach { (romaji, hiragana, katakana) ->
                 testEquals(name = "$romaji -> $hiragana", expected = hiragana) {
                     toKana(romaji)
                 }
-                val upperRomaji = romaji.toUpperCase(Locale.ENGLISH)
+                val upperRomaji = romaji.safeUpperCase()
                 testEquals(name = "$upperRomaji -> $katakana", expected = katakana) {
-                    toKana(katakana)
+                    toKana(upperRomaji)
                 }
             }
         }
 
-        @DisplayName("toRomaji()")
         @TestFactory
-        fun toRomajiTest() = dynamicTests {
+        fun toHiragana() = dynamicTests {
+            ROMA_TO_HIRA_KATA.forEach { (romaji, hiragana) ->
+                testEquals(name = "$romaji -> $hiragana", expected = hiragana) {
+                    toHiragana(romaji)
+                }
+                val upperRomaji = romaji.safeUpperCase()
+                testEquals(name = "$upperRomaji -> $hiragana", expected = hiragana) {
+                    toHiragana(upperRomaji)
+                }
+            }
+        }
+
+        @TestFactory
+        fun toRomaji() = dynamicTests {
             HIRA_KATA_TO_ROMA.forEach { (hiragana, katakana, romaji) ->
                 if (hiragana.isNotEmpty()) {
                     testEquals(name = "$hiragana -> $romaji", expected = romaji) {
@@ -87,15 +98,7 @@ TODO: JS to convert
 
 describe('character conversions', () => {
   describe('test every conversion table char', () => {
-    describe('toHiragana()', () => {
-      ROMA_TO_HIRA_KATA.forEach((item) => {
-        const [romaji, hiragana] = item;
-        const lower = toHiragana(romaji);
-        const upper = toHiragana(romaji.toUpperCase());
-        it(`${romaji}`, () => expect(lower).toBe(hiragana));
-        it(`${romaji.toUpperCase()}`, () => expect(upper).toBe(hiragana));
-      });
-    });
+
 
     describe('toKatakana()', () => {
       ROMA_TO_HIRA_KATA.forEach((item) => {

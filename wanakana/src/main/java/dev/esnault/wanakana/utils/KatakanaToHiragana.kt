@@ -14,7 +14,7 @@ val LONG_VOWELS = mapOf<Char, Char>(
     'o' to 'う',
 )
 
-fun katakanaToHiragana(input: String, isDestinationRomaji: Boolean): String {
+fun katakanaToHiragana(input: String, isDestinationRomaji: Boolean = false): String {
     var previousKana: Char? = null
     return buildString {
         input.forEachIndexed { index, char ->
