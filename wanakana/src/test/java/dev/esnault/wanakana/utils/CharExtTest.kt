@@ -130,4 +130,22 @@ class CharExtTest {
         'ふ'.test(false)
         '字'.test(false)
     }
+
+    @TestFactory
+    fun isJapanese() = dynamicTests {
+        fun Char.test(expected: Boolean) =
+            testBoolean("$this -> $expected", expected, this::isJapanese)
+
+        '１'.test(true)
+        'ナ'.test(true)
+        'は'.test(true)
+        '缶'.test(true)
+        '〜'.test(true)
+        'ｎ'.test(true)
+        'Ｋ'.test(true)
+        '1'.test(false)
+        'n'.test(false)
+        'K'.test(false)
+        '!'.test(false)
+    }
 }

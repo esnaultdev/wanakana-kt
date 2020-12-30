@@ -61,3 +61,10 @@ fun Char.isEnglishPunctuation() = this.toInt().let { charCode ->
 fun Char.isJapanesePunctuation() = this.toInt().let { charCode ->
     Constants.JA_PUNCTUATION_RANGES.any { range -> charCode in range }
 }
+
+/**
+ * Returns `true` if this is Japanese.
+ */
+fun Char.isJapanese() = this.toInt().let { charCode ->
+    Constants.JAPANESE_RANGES.any { range -> charCode in range }
+}
