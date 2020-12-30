@@ -39,6 +39,19 @@ class ConversionTest {
         }
 
         @TestFactory
+        fun toKatakana() = dynamicTests {
+            ROMA_TO_HIRA_KATA.forEach { (romaji, _, katakana) ->
+                testEquals(name = "$romaji -> $katakana", expected = katakana) {
+                    toKatakana(romaji)
+                }
+                val upperRomaji = romaji.safeUpperCase()
+                testEquals(name = "$upperRomaji -> $katakana", expected = katakana) {
+                    toKatakana(upperRomaji)
+                }
+            }
+        }
+
+        @TestFactory
         fun toRomaji() = dynamicTests {
             HIRA_KATA_TO_ROMA.forEach { (hiragana, katakana, romaji) ->
                 if (hiragana.isNotEmpty()) {

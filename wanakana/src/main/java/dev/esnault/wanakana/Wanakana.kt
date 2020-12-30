@@ -21,7 +21,7 @@ object Wanakana {
     // toRomaji
     // toKana
     // toHiragana
-    // TODO toKatakana
+    // toKatakana
 
     // Other utils
     // TODO stripOkurigana
