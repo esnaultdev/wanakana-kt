@@ -9,8 +9,9 @@ import dev.esnault.wanakana.utils.safeUpperCase
 
 /**
  * Converts kana to romaji.
- * @param input the kana text input
- * @return the converted text
+ * @param input the kana text input.
+ * @param upcaseKatakana if `true`, katakana will be converted to uppercase, defaults to `false`.
+ * @return the converted text.
  *
  * For example:
  * - `toRomaji("ひらがな　カタカナ")` => `"hiragana katakana"`
