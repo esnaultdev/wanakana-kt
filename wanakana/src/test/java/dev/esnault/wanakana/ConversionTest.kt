@@ -68,9 +68,148 @@ class ConversionTest {
         }
     }
 
+    @Nested
+    @DisplayName("Converting kana to kana")
+    inner class KanaToKanaConversion {
+
+        @TestFactory
+        @DisplayName("Basic conversion")
+        fun basicConversion() = dynamicTests {            
+            testEquals(name = "k -> h", expected = "ばける", actual = toHiragana("バケル"))
+            testEquals(name = "h -> k", expected = "バケル", actual = toKatakana("ばける"))
+
+            testEquals(
+                name = "It survives only katakana toKatakana",
+                expected = "スタイル",
+                actual = toKatakana("スタイル")
+            )
+            testEquals(
+                name = "It survives only hiragana toHiragana",
+                expected = "すたーいる",
+                actual = toHiragana("すたーいる")
+            )
+            testEquals(
+                name = "Mixed kana converts every char k -> h",
+                expected = "アメリカジン",
+                actual = toKatakana("アメリカじん")
+            )
+            testEquals(
+                name = "Mixed kana converts every char h -> k",
+                expected = "あめりかじん",
+                actual = toHiragana("アメリカじん")
+            )
+        }
+
+        @TestFactory
+        @DisplayName("Long vowels")
+        fun longVowels() = dynamicTests {
+            testEquals(
+                name = "Converts long vowels correctly from k -> h",
+                expected = "ばつごう",
+                actual = toHiragana("バツゴー")
+            )
+            testEquals(
+                name = "Preserves long dash from h -> k",
+                expected = "バツゲーム",
+                actual = toKatakana("ばつゲーム")
+            )
+            testEquals(
+                name = "Preserves long dash from h -> h",
+                expected = "ばつげーむ",
+                actual = toHiragana("ばつげーむ")
+            )
+            testEquals(
+                name = "Preserves long dash from k -> k",
+                expected = "バツゲーム",
+                actual = toKatakana("バツゲーム")
+            )
+
+            testEquals(
+                name = "Preserves long dash from mixed -> k",
+                expected = "バツゲーム",
+                actual = toKatakana("バツゲーム")
+            )
+            testEquals(
+                name = "Preserves long dash from mixed -> k",
+                expected = "テスート",
+                actual = toKatakana("テスーと")
+            )
+            testEquals(
+                name = "Preserves long dash from mixed -> h",
+                expected = "てすーと",
+                actual = toHiragana("てすート")
+            )
+            testEquals(
+                name = "Preserves long dash from mixed -> h",
+                expected = "てすー戸",
+                actual = toHiragana("てすー戸")
+            )
+            testEquals(
+                name = "Preserves long dash from mixed -> h",
+                expected = "手巣ーと",
+                actual = toHiragana("手巣ート")
+            )
+            testEquals(
+                name = "Preserves long dash from mixed -> h",
+                expected = "てsーと",
+                actual = toHiragana("tesート")
+            )
+            testEquals(
+                name = "Preserves long dash from mixed -> h",
+                expected = "ーとてす",
+                actual = toHiragana("ートtesu")
+            )
+        }
+
+        @TestFactory
+        @DisplayName("Mixed syllabaries")
+        fun mixedSyllabaries() = dynamicTests {
+            testEquals(
+                name = "It passes non-katakana through when passRomaji is true k -> h",
+                expected = "座禅‘zazen’すたいる",
+                actual = toHiragana("座禅‘zazen’スタイル", passRomaji = true)
+            )
+            testEquals(
+                name = "It passes non-hiragana through when passRomaji is true h -> k",
+                expected = "座禅‘zazen’スタイル",
+                actual = toKatakana("座禅‘zazen’すたいる", passRomaji = true)
+            )
+            testEquals(
+                name = "It converts non-katakana when passRomaji is false k -> h",
+                expected = "座禅「ざぜん」すたいる",
+                actual = toHiragana("座禅‘zazen’スタイル")
+            )
+            testEquals(
+                name = "It converts non-hiragana when passRomaji is false h -> k",
+                expected = "座禅「ザゼン」スタイル",
+                actual = toKatakana("座禅‘zazen’すたいる")
+            )
+        }
+    }
+
+    @TestFactory
+    @DisplayName("Case sensitivity")
+    fun caseSensitivity() = dynamicTests {
+        testEquals(
+            name = "cAse DoEsn'T MatTER for toHiragana()",
+            expected = toHiragana("aiueo"),
+            actual = toHiragana("AIUEO")
+        )
+        testEquals(
+            name = "cAse DoEsn'T MatTER for toKatakana()",
+            expected = toKatakana("aiueo"),
+            actual = toKatakana("AIUEO")
+        )
+        testNotEquals(
+            name = "cAse DOES MatTER for toKana()",
+            expected = toKana("aiueo"),
+            actual = toKana("AIUEO")
+        )
+    }
+
     @DisplayName("N edge cases")
     @TestFactory
-    fun nEdgeCaseTests() = dynamicTests {
+    fun nEdgeCase() = dynamicTests {
         fun test(name: String, input: String, expected: String) =
             testEquals(name, expected) { toKana(input) }
 
@@ -95,7 +234,7 @@ class ConversionTest {
 
     @DisplayName("Bogus 4 character sequences")
     @TestFactory
-    fun bogusFourCharTests() = dynamicTests {
+    fun bogusFourChar() = dynamicTests {
         fun test(name: String, input: String, expected: String) =
             testEquals(name, expected) { toKana(input) }
 
@@ -105,89 +244,3 @@ class ConversionTest {
         test("Bogus sequences do not work", "ltsb", "ltsb")
     }
 }
-
-/*
-TODO: JS to convert
-
-describe('character conversions', () => {
-  describe('test every conversion table char', () => {
-
-
-    describe('toKatakana()', () => {
-      ROMA_TO_HIRA_KATA.forEach((item) => {
-        const [romaji, , katakana] = item;
-        const lower = toKatakana(romaji);
-        const upper = toKatakana(romaji.toUpperCase());
-
-        it(`${romaji}`, () => expect(lower).toBe(katakana));
-        it(`${romaji.toUpperCase()}`, () => expect(upper).toBe(katakana));
-      });
-    });
-  });
-
-  describe('Converting kana to kana', () => {
-    it('k -> h', () => expect(toHiragana('バケル')).toBe('ばける'));
-    it('h -> k', () => expect(toKatakana('ばける')).toBe('バケル'));
-
-    it('It survives only katakana toKatakana', () =>
-      expect(toKatakana('スタイル')).toBe('スタイル'));
-    it('It survives only hiragana toHiragana', () =>
-      expect(toHiragana('すたーいる')).toBe('すたーいる'));
-    it('Mixed kana converts every char k -> h', () =>
-      expect(toKatakana('アメリカじん')).toBe('アメリカジン'));
-    it('Mixed kana converts every char h -> k', () =>
-      expect(toHiragana('アメリカじん')).toBe('あめりかじん'));
-
-    describe('long vowels', () => {
-      it('Converts long vowels correctly from k -> h', () =>
-        expect(toHiragana('バツゴー')).toBe('ばつごう'));
-      it('Preserves long dash from h -> k', () =>
-        expect(toKatakana('ばつゲーム')).toBe('バツゲーム'));
-      it('Preserves long dash from h -> h', () =>
-        expect(toHiragana('ばつげーむ')).toBe('ばつげーむ'));
-      it('Preserves long dash from k -> k', () =>
-        expect(toKatakana('バツゲーム')).toBe('バツゲーム'));
-      it('Preserves long dash from mixed -> k', () =>
-        expect(toKatakana('バツゲーム')).toBe('バツゲーム'));
-      it('Preserves long dash from mixed -> k', () =>
-        expect(toKatakana('テスーと')).toBe('テスート'));
-      it('Preserves long dash from mixed -> h', () =>
-        expect(toHiragana('てすート')).toBe('てすーと'));
-      it('Preserves long dash from mixed -> h', () =>
-        expect(toHiragana('てすー戸')).toBe('てすー戸'));
-      it('Preserves long dash from mixed -> h', () =>
-        expect(toHiragana('手巣ート')).toBe('手巣ーと'));
-      it('Preserves long dash from mixed -> h', () =>
-        expect(toHiragana('tesート')).toBe('てsーと'));
-      it('Preserves long dash from mixed -> h', () =>
-        expect(toHiragana('ートtesu')).toBe('ーとてす'));
-    });
-
-    describe('Mixed syllabaries', () => {
-      it('It passes non-katakana through when passRomaji is true k -> h', () =>
-        expect(toHiragana('座禅‘zazen’スタイル', { passRomaji: true })).toBe(
-          '座禅‘zazen’すたいる'
-        ));
-
-      it('It passes non-hiragana through when passRomaji is true h -> k', () =>
-        expect(toKatakana('座禅‘zazen’すたいる', { passRomaji: true })).toBe(
-          '座禅‘zazen’スタイル'
-        ));
-
-      it('It converts non-katakana when passRomaji is false k -> h', () =>
-        expect(toHiragana('座禅‘zazen’スタイル')).toBe('座禅「ざぜん」すたいる'));
-
-      it('It converts non-hiragana when passRomaji is false h -> k', () =>
-        expect(toKatakana('座禅‘zazen’すたいる')).toBe('座禅「ザゼン」スタイル'));
-    });
-  });
-
-  describe('Case sensitivity', () => {
-    it("cAse DoEsn'T MatTER for toHiragana()", () =>
-      expect(toHiragana('aiueo')).toBe(toHiragana('AIUEO')));
-    it("cAse DoEsn'T MatTER for toKatakana()", () =>
-      expect(toKatakana('aiueo')).toBe(toKatakana('AIUEO')));
-    it('Case DOES matter for toKana()', () => expect(toKana('aiueo')).not.toBe(toKana('AIUEO')));
-  });
-});
- */
