@@ -1,6 +1,6 @@
 package dev.esnault.wanakana
 
-import dev.esnault.wanakana.utils.KanaToken
+import dev.esnault.wanakana.utils.ConversionToken
 import dev.esnault.wanakana.utils.applyMapping
 import dev.esnault.wanakana.utils.kanaToHepburnMap
 import dev.esnault.wanakana.utils.katakanaToHiragana
@@ -22,7 +22,7 @@ fun toRomaji(input: String, upcaseKatakana: Boolean = false): String {
     // throw away the substring index information and just concatenate all the kana
     return splitIntoRomaji(input)
         .joinToString(separator = "") { token ->
-            val romaji = token.kana
+            val romaji = token.value
             if (romaji == null) {
                 // haven't converted the end of the string, since we are in IME mode
                 input.slice(token.range)
@@ -33,7 +33,7 @@ fun toRomaji(input: String, upcaseKatakana: Boolean = false): String {
         }
 }
 
-private fun splitIntoRomaji(input: String): List<KanaToken> {
+private fun splitIntoRomaji(input: String): List<ConversionToken> {
     val map = kanaToHepburnMap
     val hiragana = katakanaToHiragana(input, true)
     // TODO Add IME mode

@@ -1,7 +1,7 @@
 package dev.esnault.wanakana.utils
 
 
-fun applyMapping(input: String, map: MappingTree, convertEnding: Boolean): List<KanaToken> {
+fun applyMapping(input: String, map: MappingTree, convertEnding: Boolean): List<ConversionToken> {
     val state = State(map, convertEnding)
     return newChunk(state, input, 0)
 }
@@ -66,10 +66,10 @@ private data class State(
 }
 
 /**
- * Parses a new chunk of [remaining] and returns the corresponding list of [KanaToken]s.
+ * Parses a new chunk of [remaining] and returns the corresponding list of [ConversionToken]s.
  * @see applyMapping
  */
-private fun newChunk(state: State, remaining: String, currentCursor: Int): List<KanaToken> {
+private fun newChunk(state: State, remaining: String, currentCursor: Int): List<ConversionToken> {
     if (remaining.isEmpty()) return emptyList()
 
     // start parsing a new chunk
@@ -86,7 +86,7 @@ private fun newChunk(state: State, remaining: String, currentCursor: Int): List<
 }
 
 /**
- * Parses a chunk of [remaining] and returns the corresponding list of [KanaToken].
+ * Parses a chunk of [remaining] and returns the corresponding list of [ConversionToken].
  * @see applyMapping
  * @see newChunk
  */
@@ -95,31 +95,31 @@ private fun parse(
     remaining: String,
     lastCursor: Int,
     currentCursor: Int
-): List<KanaToken> {
+): List<ConversionToken> {
     if (remaining.isEmpty()) {
         if (state.convertEnding || state.isAtTreeEnd()) {
             // nothing more to consume, just commit the last chunk and return it
             // so as to not have an empty element at the end of the result
             val kana: String = state.getCurrentValue()
-            return listOf(KanaToken(lastCursor, currentCursor, kana))
+            return listOf(ConversionToken(lastCursor, currentCursor, kana))
         }
 
         // if we don't want to convert the ending, because there are still possible continuations
         // return null as the final node value
-        return listOf(KanaToken(lastCursor, currentCursor, null))
+        return listOf(ConversionToken(lastCursor, currentCursor, null))
     }
 
     if (state.isAtTreeEnd()) {
-        val kana = state.getCurrentValue()
-        val kanaToken = KanaToken(lastCursor, currentCursor, kana)
-        return listOf(kanaToken) + newChunk(state, remaining, currentCursor)
+        val value = state.getCurrentValue()
+        val token = ConversionToken(lastCursor, currentCursor, value)
+        return listOf(token) + newChunk(state, remaining, currentCursor)
     }
 
     state.nextSubTree(remaining[0])
     val nextSubTree = state.subTree
     if (nextSubTree == null) {
-        val kanaToken = KanaToken(lastCursor, currentCursor, state.getCurrentValue(true))
-        return listOf(kanaToken) + newChunk(state, remaining, currentCursor)
+        val token = ConversionToken(lastCursor, currentCursor, state.getCurrentValue(true))
+        return listOf(token) + newChunk(state, remaining, currentCursor)
     }
     // continue current branch
     return parse(state, remaining.drop(1), lastCursor, currentCursor + 1)

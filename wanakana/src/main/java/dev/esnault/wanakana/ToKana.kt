@@ -1,6 +1,6 @@
 package dev.esnault.wanakana
 
-import dev.esnault.wanakana.utils.KanaToken
+import dev.esnault.wanakana.utils.ConversionToken
 import dev.esnault.wanakana.utils.MappingTree
 import dev.esnault.wanakana.utils.applyMapping
 import dev.esnault.wanakana.utils.hiraganaToKatakana
@@ -35,7 +35,7 @@ fun toKana(input: String): String {
     // throw away the substring index information and just concatenate all the kana
     return splitIntoConvertedKana(input, map)
         .joinToString(separator = "") { token ->
-            val kana = token.kana
+            val kana = token.value
             if (kana == null) {
                 // haven't converted the end of the string, since we are in IME mode
                 return@joinToString input.slice(token.range)
@@ -68,7 +68,7 @@ export function splitIntoConvertedKana(input = '', options = {}, map) {
 }
 */
 
-private fun splitIntoConvertedKana(input: String, map: MappingTree): List<KanaToken> {
+private fun splitIntoConvertedKana(input: String, map: MappingTree): List<ConversionToken> {
     // TODO add an IMEMode
     return applyMapping(input.safeLowerCase(), map, true)
 }
