@@ -41,6 +41,7 @@ class DynamicTestsBuilder {
     fun <T> testNotEquals(name: String, expected: T, actual: T) =
         test(name) { assertNotEquals(expected, actual) }
 }
+
 fun dynamicTests(init: DynamicTestsBuilder.() -> Unit) : List<DynamicTest> {
     val builder = DynamicTestsBuilder()
     builder.init()

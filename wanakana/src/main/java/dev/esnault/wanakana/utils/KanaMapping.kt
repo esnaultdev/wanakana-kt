@@ -35,26 +35,22 @@ private data class State(
     fun nextSubTree(nextChar: Char) {
         original += nextChar
         when (val subTree = this.subTree) {
-            is MappingTree.Branch -> {
+            null -> previousValue = null
+            else -> {
                 this.subTree = subTree[nextChar]
                 previousValue = subTree.value
             }
-            is MappingTree.Leaf -> {
-                this.subTree = null
-                previousValue = subTree.value
-            }
-            null -> previousValue = null
         }
     }
 
-    fun isAtTreeEnd(): Boolean = subTree == null || subTree is MappingTree.Leaf
+    fun isAtTreeEnd(): Boolean = subTree?.hasChildren() != true
 
     fun getCurrentValue(rollbackOne: Boolean = false): String {
-        fun original(rollbackOne: Boolean) = if (rollbackOne) original.dropLast(1) else original
-        return when (val subTree = subTree) {
-            null -> previousValue ?: original(rollbackOne)
-            is MappingTree.Leaf -> subTree.value
-            is MappingTree.Branch -> subTree.value ?: previousValue ?: original(rollbackOne)
+        val currentOrPrevious = subTree?.value ?: previousValue
+        return when {
+            currentOrPrevious != null -> currentOrPrevious
+            rollbackOne -> original.dropLast(1)
+            else -> original
         }
     }
 
@@ -123,27 +119,6 @@ private fun parse(
     }
     // continue current branch
     return parse(state, remaining.drop(1), lastCursor, currentCursor + 1)
-}
-
-/**
- * Transforms a [map] containing a pseudo tree into a [MappingTree.Branch].
- * The [map] should contain [String]s for leaves and [Map]s as branches.
- *
- * This is used to easily build a [MappingTree].
- */
-internal fun transform(map: Map<*, *>): MutableMappingTree.Branch {
-    val result = MutableMappingTree.Branch(mutableMapOf())
-    map.entries.forEach { (key, value) ->
-        val str = key.toString()
-        if (value is String) {
-            result.setSubTreeValue(str, value)
-        } else {
-            @Suppress("UNCHECKED_CAST")
-            // We expect the input to be clean, since this is only used internally.
-            result.updateSubTreeOf(str, transform(value as Map<*, *>))
-        }
-    }
-    return result
 }
 
 /*
