@@ -46,11 +46,11 @@ class ToRomajiTest {
         testEquals(
             name = "Use the upcaseKatakana flag to preserve casing. Works for katakana.",
             expected = "WANIKANI"
-        ) { toRomaji("ワニカニ") } // TODO Missing flag
+        ) { toRomaji("ワニカニ", upcaseKatakana = true) }
         testEquals(
             name = "Use the upcaseKatakana flag to preserve casing. Works for mixed kana.",
             expected = "WANIKANI ga sugoi da"
-        ) { toRomaji("ワニカニ　が　すごい　だ") } // TODO Missing flag
+        ) { toRomaji("ワニカニ　が　すごい　だ", upcaseKatakana = true) }
         testRoma(
             name = "Converts long dash 'ー' in hiragana to hyphen",
             input = "ばつげーむ",

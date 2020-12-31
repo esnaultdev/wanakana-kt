@@ -5,4 +5,6 @@ data class KanaToken(
     val start: Int,
     val end: Int,
     val kana: String?
-)
+) {
+    val range: IntRange = start until end
+}

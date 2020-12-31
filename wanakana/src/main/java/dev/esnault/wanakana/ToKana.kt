@@ -38,11 +38,11 @@ fun toKana(input: String): String {
             val kana = token.kana
             if (kana == null) {
                 // haven't converted the end of the string, since we are in IME mode
-                return@joinToString input.drop(token.start)
+                return@joinToString input.slice(token.range)
             }
 
             val enforceKatakana =
-                input.slice(token.start until token.end).all { it.isEnglishUpperCase() }
+                input.slice(token.range).all { it.isEnglishUpperCase() }
             if (enforceHiragana || !enforceKatakana) kana else hiraganaToKatakana(kana)
         }
 }

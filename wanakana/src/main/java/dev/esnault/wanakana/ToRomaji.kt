@@ -4,6 +4,7 @@ import dev.esnault.wanakana.utils.KanaToken
 import dev.esnault.wanakana.utils.applyMapping
 import dev.esnault.wanakana.utils.kanaToHepburnMap
 import dev.esnault.wanakana.utils.katakanaToHiragana
+import dev.esnault.wanakana.utils.safeUpperCase
 
 
 /**
@@ -14,17 +15,20 @@ import dev.esnault.wanakana.utils.katakanaToHiragana
  * For example:
  * - `toRomaji("ひらがな　カタカナ")` => `"hiragana katakana"`
  * - `toRomaji("げーむ　ゲーム")` => `"ge-mu geemu"`
+ * - `toRomaji("ひらがな　カタカナ", upcaseKatakana = true)` => `"hiragana KATAKANA"`
  */
-fun toRomaji(input: String): String {
+fun toRomaji(input: String, upcaseKatakana: Boolean = false): String {
     // throw away the substring index information and just concatenate all the kana
     return splitIntoRomaji(input)
         .joinToString(separator = "") { token ->
             val romaji = token.kana
             if (romaji == null) {
                 // haven't converted the end of the string, since we are in IME mode
-                return@joinToString input.drop(token.start)
+                input.slice(token.range)
+            } else {
+                val makeUpperCase = upcaseKatakana && isKatakana(input.slice(token.range))
+                if (makeUpperCase) romaji.safeUpperCase() else romaji
             }
-            romaji
         }
 }
 
