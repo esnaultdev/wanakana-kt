@@ -9,6 +9,7 @@ import dev.esnault.wanakana.utils.safeUpperCase
 
 /**
  * Converts kana to romaji.
+ *
  * @param input the kana text input.
  * @param imeMode if enabled, handles conversion while the text is being typed, defaults to
  * [IMEMode.DISABLED].
@@ -43,4 +44,13 @@ private fun splitIntoRomaji(input: String, imeMode: IMEMode): List<ConversionTok
     val map = kanaToHepburnMap
     val hiragana = katakanaToHiragana(input, true)
     return applyMapping(hiragana, map, imeMode == IMEMode.DISABLED)
+}
+
+/**
+ * Converts kana to romaji.
+ *
+ * See [toRomaji] for more details.
+ */
+fun toRomaji(input: String, config: Config = Config.DEFAULT): String {
+    return toRomaji(input, config.imeMode, config.upcaseKatakana)
 }

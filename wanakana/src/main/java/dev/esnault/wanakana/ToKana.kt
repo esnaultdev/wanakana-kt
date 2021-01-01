@@ -57,6 +57,16 @@ fun toKana(
         }
 }
 
+/**
+ * Converts Romaji to Kana.
+ * Lowercase text will result in Hiragana and uppercase text will result in Katakana.
+ *
+ * See [toKana] for more details.
+ */
+fun toKana(input: String, config: Config = Config.DEFAULT): String {
+    return toKana(input, config.imeMode, config.useObsoleteKana)
+}
+
 private fun splitIntoConvertedKana(
     input: String,
     map: MappingTree,

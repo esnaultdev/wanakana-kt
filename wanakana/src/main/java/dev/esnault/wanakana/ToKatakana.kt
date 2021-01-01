@@ -41,3 +41,13 @@ fun toKatakana(
 
     return hiraganaToKatakana(input)
 }
+
+
+/**
+ * Converts input to [Katakana](https://en.wikipedia.org/wiki/Katakana).
+ *
+ * See [toKatakana] for more details.
+ */
+fun toKatakana(input: String, config: Config = Config.DEFAULT): String {
+    return toKatakana(input, config.imeMode, config.passRomaji, config.useObsoleteKana)
+}

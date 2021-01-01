@@ -49,3 +49,12 @@ fun toHiragana(
 
     return katakanaToHiragana(input)
 }
+
+/**
+ * Converts input to [Hiragana](https://en.wikipedia.org/wiki/Hiragana).
+ *
+ * See [toHiragana] for more details.
+ */
+fun toHiragana(input: String, config: Config = Config.DEFAULT): String {
+    return toHiragana(input, config.imeMode, config.passRomaji, config.useObsoleteKana)
+}
