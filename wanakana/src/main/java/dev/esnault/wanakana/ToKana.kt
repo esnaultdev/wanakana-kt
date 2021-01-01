@@ -15,6 +15,9 @@ import dev.esnault.wanakana.utils.useObsoleteKana
  * Lowercase text will result in Hiragana and uppercase text will result in Katakana.
  *
  * @param input the text to convert to Kana.
+ * @param imeMode if enabled, handles conversion while the text is being typed, defaults to
+ * [IMEMode.DISABLED].
+ * @param useObsoleteKana if `true` obsolete kanas will be used (ゐゑヰヱ), defaults to `false`.
  * @return the converted text.
  *
  * See [Romaji](https://en.wikipedia.org/wiki/Romaji).
@@ -34,8 +37,6 @@ fun toKana(
     imeMode: IMEMode = IMEMode.DISABLED,
     useObsoleteKana: Boolean = false
 ): String {
-    // TODO introduce useObsoleteKana to other methods
-    // TODO introduce imeMode to other methods
     val map = createRomajiToKanaMap(imeMode, useObsoleteKana)
 
     val enforceHiragana = imeMode == IMEMode.TO_HIRAGANA
