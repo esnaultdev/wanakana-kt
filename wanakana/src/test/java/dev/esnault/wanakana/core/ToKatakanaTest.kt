@@ -3,86 +3,86 @@ package dev.esnault.wanakana.core
 import dev.esnault.wanakana.DynamicTestsBuilder
 import dev.esnault.wanakana.IMEMode
 import dev.esnault.wanakana.dynamicTests
-import dev.esnault.wanakana.toHiragana
+import dev.esnault.wanakana.toKatakana
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.TestFactory
 
 
-@DisplayName("toHiragana()")
-class ToHiraganaTest {
+@DisplayName("toKatakana()")
+class ToKatakanaTest {
 
-    private fun DynamicTestsBuilder.testHira(name: String, input: String, expected: String) =
-        testEquals(name = name, expected = expected) { toHiragana(input) }
+    private fun DynamicTestsBuilder.testKata(name: String, input: String, expected: String) =
+        testEquals(name = name, expected = expected) { toKatakana(input) }
 
     @TestFactory
     @DisplayName("Basic usage")
     fun basicUsage() = dynamicTests {
-        testHira(name = "Sane default", input = "", expected = "")
-        testHira(
+        testKata(name = "Sane default", input = "", expected = "")
+        testKata(
             name = "Lowercase characters",
             input = "onaji",
-            expected = "おなじ"
+            expected = "オナジ"
         )
-        testHira(
+        testKata(
             name = "Double consonants and double vowels",
             input = "buttsuuji",
-            expected = "ぶっつうじ"
+            expected = "ブッツウジ"
         )
-        testHira(
+        testKata(
             name = "Uppercase characters",
             input = "ONAJI",
-            expected = "おなじ"
+            expected = "オナジ"
         )
-        testHira(
+        testKata(
             name = "Mixed case",
             input = "WaniKani",
-            expected = "わにかに"
+            expected = "ワニカニ"
         )
-        testHira(
+        testKata(
             name = "Katakana choōnpu",
-            input = "スーパー",
-            expected = "すうぱあ"
+            input = "すうぱあ",
+            expected = "スウパア"
         )
-        testHira(
+        testKata(
             name = "Katakana choōnpu",
-            input = "バンゴー",
-            expected = "ばんごう"
+            input = "ばんごう",
+            expected = "バンゴウ"
         )
-        testHira(
+        testKata(
             name = "Mixed input",
-            input = "#22 ２２漢字、toukyou, オオサカ",
-            expected = "#22 ２２漢字、とうきょう、 おおさか"
+            input = "#22 ２２漢字、toukyou, おおさか",
+            expected = "#22 ２２漢字、トウキョウ、 オオサカ"
         )
     }
 
     @TestFactory
-    @DisplayName("Iroha (Romaji to Hiragana)")
+    @DisplayName("Iroha (Romaji to Katakana)")
     fun iroha() = dynamicTests {
         fun test(input: String, expected: String) =
             testEquals(name = expected, expected = expected) {
-                toHiragana(input, useObsoleteKana = true)
+                toKatakana(input, useObsoleteKana = true)
             }
-        
+
         // https://en.wikipedia.org/wiki/Iroha
         // Even the colorful fragrant flowers'
-        test(input = "IROHANIHOHETO", expected = "いろはにほへと")
+        test(input = "IROHANIHOHETO", expected = "イロハニホヘト")
         // die sooner or later.'
-        test(input = "CHIRINURUWO", expected = "ちりぬるを")
+        test(input = "CHIRINURUWO", expected = "チリヌルヲ")
         // Us who live in this world'
-        test(input = "WAKAYOTARESO", expected = "わかよたれそ")
+        test(input = "WAKAYOTARESO", expected = "ワカヨタレソ")
         // cannot live forever, either.'
-        test(input = "TSUNENARAMU", expected = "つねならむ")
+        test(input = "TSUNENARAMU", expected = "ツネナラム")
         // This transient mountain with shifts and changes,'
-        test(input = "UWINOOKUYAMA", expected = "うゐのおくやま")
+        test(input = "UWINOOKUYAMA", expected = "ウヰノオクヤマ")
         // today we are going to overcome, and reach the world of enlightenment.'
-        test(input = "KEFUKOETE", expected = "けふこえて")
+        test(input = "KEFUKOETE", expected = "ケフコエテ")
         // We are not going to have meaningless dreams'
-        test(input = "ASAKIYUMEMISHI", expected = "あさきゆめみし")
+        test(input = "ASAKIYUMEMISHI", expected = "アサキユメミシ")
         // nor become intoxicated with the fake world anymore.'
-        test(input = "WEHIMOSESU", expected = "ゑひもせす")
+        test(input = "WEHIMOSESU", expected = "ヱヒモセス")
         // *not in iroha*
-        test(input = "NLTU", expected ="んっ")
+        test(input = "NLTU", expected ="ンッ")
     }
 
     @Nested
@@ -91,20 +91,20 @@ class ToHiraganaTest {
         @TestFactory
         @DisplayName("Without IME Mode")
         fun withoutIMEMode() = dynamicTests {
-            testHira(
+            testKata(
                 name = "solo n is transliterated regardless of following chars",
                 input = "n",
-                expected = "ん"
+                expected = "ン"
             )
-            testHira(
+            testKata(
                 name = "last n is transliterated regardless of following chars",
                 input = "shin",
-                expected = "しん"
+                expected = "シン"
             )
-            testHira(
-                name = "double n's are transliterated to double ん",
+            testKata(
+                name = "double n's are transliterated to double ン",
                 input = "nn",
-                expected = "んん"
+                expected = "ンン"
             )
         }
 
@@ -113,7 +113,7 @@ class ToHiraganaTest {
         fun withIMEMode() = dynamicTests {
             fun testWithIME(name: String, input: String, expected: String) =
                 testEquals(name = name, expected = expected) {
-                    toHiragana(input, imeMode = IMEMode.ENABLED)
+                    toKatakana(input, imeMode = IMEMode.ENABLED)
                 }
 
             testWithIME(
@@ -124,27 +124,26 @@ class ToHiraganaTest {
             testWithIME(
                 name = "solo n's are not transliterated unless chars follow - last n",
                 input = "shin",
-                expected = "しn"
+                expected = "シn"
             )
             testWithIME(
-                name = "solo n's are not transliterated unless chars follow - solo n becomes に",
+                name = "solo n's are not transliterated unless chars follow - solo n becomes ニ",
                 input = "shinyou",
-                expected = "しにょう"
-            )
+                expected = "シニョウ")
             testWithIME(
                 name = "solo n's are not transliterated unless chars follow - solo n + '",
                 input = "shin'you",
-                expected = "しんよう"
+                expected = "シンヨウ"
             )
             testWithIME(
                 name = "solo n's are not transliterated unless chars follow - solo n + [space]",
                 input = "shin you",
-                expected = "しんよう"
+                expected = "シンヨウ"
             )
             testWithIME(
-                name = "double n's are transliterated to single ん",
+                name = "double n's are transliterated to single ン",
                 input = "nn",
-                expected = "ん"
+                expected = "ン"
             )
         }
     }
@@ -155,8 +154,8 @@ class ToHiraganaTest {
         @TestFactory
         @DisplayName("Without obsolete kanas")
         fun withoutObsoleteKanas() = dynamicTests {
-            testHira(name = "wi -> うぃ", input = "wi", expected = "うぃ")
-            testHira(name = "we -> うぇ", input = "we", expected = "うぇ")
+            testKata(name = "wi -> ウィ", input = "wi", expected = "ウィ")
+            testKata(name = "we -> ウェ", input = "we", expected = "ウェ")
         }
 
         @TestFactory
@@ -164,22 +163,22 @@ class ToHiraganaTest {
         fun withObsoleteKanas() = dynamicTests {
             fun testWithObsolete(name: String, input: String, expected: String) =
                 testEquals(name = name, expected = expected) {
-                    toHiragana(input, useObsoleteKana = true)
+                    toKatakana(input, useObsoleteKana = true)
                 }
 
-            testWithObsolete(name = "wi -> ゐ", input = "wi", expected = "ゐ")
-            testWithObsolete(name = "we -> ゑ", input = "we", expected = "ゑ")
+            testWithObsolete(name = "wi -> ヰ", input = "wi", expected = "ヰ")
+            testWithObsolete(name = "we -> ヱ", input = "we", expected = "ヱ")
         }
     }
 
     @TestFactory
     @DisplayName("Pass romaji")
     fun passRomajiTest() = dynamicTests {
-        testEquals(name = "False by default", expected = "おんly かな") {
-            toHiragana("only カナ")
+        testEquals(name = "False by default", expected = "オンly カナ") {
+            toKatakana("only かな")
         }
-        testEquals(name = "Ignores romaji", expected = "only かな") {
-            toHiragana("only カナ", passRomaji = true)
+        testEquals(name = "Ignores romaji", expected = "only カナ") {
+            toKatakana("only かな", passRomaji = true)
         }
     }
 }

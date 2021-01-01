@@ -8,6 +8,8 @@ import dev.esnault.wanakana.utils.safeLowerCase
  * Converts input to [Katakana](https://en.wikipedia.org/wiki/Katakana).
  *
  * @param input the text to convert.
+ * @param imeMode if enabled, handles conversion while the text is being typed, defaults to
+ * [IMEMode.DISABLED].
  * @param passRomaji if `true` romaji will be kept as-is, defaults to `false`.
  * @param useObsoleteKana if `true` obsolete kanas will be used (ヰ and ヱ), defaults to `false`.
  * @return the converted text.
@@ -20,16 +22,20 @@ import dev.esnault.wanakana.utils.safeLowerCase
  */
 fun toKatakana(
     input: String,
+    imeMode: IMEMode = IMEMode.DISABLED,
     passRomaji: Boolean = false,
     useObsoleteKana: Boolean = false
 ): String {
-    // TODO introduce useObsoleteKana to other methods
     if (passRomaji) {
         return hiraganaToKatakana(input)
     }
 
     if (isMixed(input) || isRomaji(input) || isEnglishPunctuation(input)) {
-        val hiragana = toKana(input.safeLowerCase())
+        val hiragana = toKana(
+            input = input.safeLowerCase(),
+            imeMode = imeMode,
+            useObsoleteKana = useObsoleteKana
+        )
         return hiraganaToKatakana(hiragana)
     }
 
