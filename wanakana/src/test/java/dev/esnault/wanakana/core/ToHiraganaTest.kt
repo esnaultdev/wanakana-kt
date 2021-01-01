@@ -175,9 +175,7 @@ class ToHiraganaTest {
     @TestFactory
     @DisplayName("Pass romaji")
     fun passRomajiTest() = dynamicTests {
-        testEquals(name = "False by default", expected = "おんly かな") {
-            toHiragana("only カナ")
-        }
+        testHira(name = "False by default", expected = "おんly かな", input = "only カナ")
         testEquals(name = "Ignores romaji", expected = "only かな") {
             toHiragana("only カナ", passRomaji = true)
         }

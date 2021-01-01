@@ -110,7 +110,7 @@ class ToKanaTest {
                 expected = "しn"
             )
             testWithIME(
-                name = "solo n's are not transliterated unless chars follow - solo n becomes に",
+                name = "solo n's are not transliterated unless chars follow - n becomes に",
                 input = "shinyou",
                 expected = "しにょう"
             )

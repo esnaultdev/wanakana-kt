@@ -174,9 +174,7 @@ class ToKatakanaTest {
     @TestFactory
     @DisplayName("Pass romaji")
     fun passRomajiTest() = dynamicTests {
-        testEquals(name = "False by default", expected = "オンly カナ") {
-            toKatakana("only かな")
-        }
+        testKata(name = "False by default", expected = "オンly カナ", input = "only かな")
         testEquals(name = "Ignores romaji", expected = "only カナ") {
             toKatakana("only かな", passRomaji = true)
         }

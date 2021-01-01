@@ -1,11 +1,13 @@
 package dev.esnault.wanakana.core
 
 import dev.esnault.wanakana.DynamicTestsBuilder
+import dev.esnault.wanakana.IMEMode
 import dev.esnault.wanakana.dynamicTests
 import dev.esnault.wanakana.helpers.EN_PUNC
 import dev.esnault.wanakana.helpers.JA_PUNC
 import dev.esnault.wanakana.toRomaji
 import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.TestFactory
 
 @DisplayName("toRomaji()")
@@ -111,5 +113,48 @@ class ToRomajiTest {
         testRoma("おんよみ", input = "おんよみ", expected = "on'yomi")
         testRoma("んよ んあ んゆ", input = "んよ んあ んゆ", expected = "n'yo n'a n'yu")
         testRoma("シンヨ", input = "シンヨ", expected = "shin'yo")
+    }
+
+    @Nested
+    @DisplayName("IMEMode")
+    inner class IMEModeTest {
+        @TestFactory
+        @DisplayName("Without IME Mode")
+        fun withoutIMEMode() = dynamicTests {
+            testRoma(
+                name = "Solo ん is transliterated regardless of following chars",
+                input = "ん",
+                expected = "n"
+            )
+            testRoma(
+                name = "Last ん is transliterated regardless of following chars",
+                input = "うん",
+                expected = "un"
+            )
+        }
+
+        @TestFactory
+        @DisplayName("With IME Mode")
+        fun withIMEMode() = dynamicTests {
+            fun testWithIME(name: String, input: String, expected: String) =
+                testEquals(name = name, expected = expected) {
+                    toRomaji(input, imeMode = IMEMode.ENABLED)
+                }
+            testWithIME(
+                name = "solo ん's are not transliterated unless chars follow - solo ん",
+                input = "ん",
+                expected = "ん"
+            )
+            testWithIME(
+                name = "solo ん's are not transliterated unless chars follow - last ん",
+                input = "しん",
+                expected = "shiん"
+            )
+            testWithIME(
+                name = "solo n's are not transliterated unless chars follow - ん becomes n'a",
+                input = "しんあ",
+                expected = "shin'a"
+            )
+        }
     }
 }

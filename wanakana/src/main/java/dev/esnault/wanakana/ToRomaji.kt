@@ -10,6 +10,8 @@ import dev.esnault.wanakana.utils.safeUpperCase
 /**
  * Converts kana to romaji.
  * @param input the kana text input.
+ * @param imeMode if enabled, handles conversion while the text is being typed, defaults to
+ * [IMEMode.DISABLED].
  * @param upcaseKatakana if `true`, katakana will be converted to uppercase, defaults to `false`.
  * @return the converted text.
  *
@@ -18,9 +20,13 @@ import dev.esnault.wanakana.utils.safeUpperCase
  * - `toRomaji("げーむ　ゲーム")` => `"ge-mu geemu"`
  * - `toRomaji("ひらがな　カタカナ", upcaseKatakana = true)` => `"hiragana KATAKANA"`
  */
-fun toRomaji(input: String, upcaseKatakana: Boolean = false): String {
+fun toRomaji(
+    input: String,
+    imeMode: IMEMode = IMEMode.DISABLED,
+    upcaseKatakana: Boolean = false
+): String {
     // throw away the substring index information and just concatenate all the kana
-    return splitIntoRomaji(input)
+    return splitIntoRomaji(input, imeMode)
         .joinToString(separator = "") { token ->
             val romaji = token.value
             if (romaji == null) {
@@ -33,9 +39,8 @@ fun toRomaji(input: String, upcaseKatakana: Boolean = false): String {
         }
 }
 
-private fun splitIntoRomaji(input: String): List<ConversionToken> {
+private fun splitIntoRomaji(input: String, imeMode: IMEMode): List<ConversionToken> {
     val map = kanaToHepburnMap
     val hiragana = katakanaToHiragana(input, true)
-    // TODO Add IME mode
-    return applyMapping(hiragana, map, true)
+    return applyMapping(hiragana, map, imeMode == IMEMode.DISABLED)
 }
