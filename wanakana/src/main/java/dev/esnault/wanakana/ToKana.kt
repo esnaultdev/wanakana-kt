@@ -27,10 +27,17 @@ import dev.esnault.wanakana.utils.safeLowerCase
  * - `toKana("batsuge-mu")` => `"ばつげーむ"`
  * - `toKana("!?.:/,~-‘’“”[](){}")` => `"！？。：・、〜ー「」『』［］（）｛｝"`
  */
-fun toKana(input: String): String {
+fun toKana(
+    input: String,
+    imeMode: IMEMode = IMEMode.DISABLED,
+    useObsoleteKana: Boolean = false
+): String {
+    // TODO introduce useObsoleteKana to other methods
+    // TODO introduce imeMode to other methods
     val map = romajiToKanaMap
 
-    val enforceHiragana = false // TODO introduce a config class
+    val enforceHiragana = imeMode == IMEMode.TO_HIRAGANA
+    val enforceKatakanaMode = imeMode == IMEMode.TO_KATAKANA
 
     // throw away the substring index information and just concatenate all the kana
     return splitIntoConvertedKana(input, map)
@@ -41,8 +48,8 @@ fun toKana(input: String): String {
                 return@joinToString input.slice(token.range)
             }
 
-            val enforceKatakana =
-                input.slice(token.range).all { it.isEnglishUpperCase() }
+            val enforceKatakana = enforceKatakanaMode
+                    || input.slice(token.range).all { it.isEnglishUpperCase() }
             if (enforceHiragana || !enforceKatakana) kana else hiraganaToKatakana(kana)
         }
 }
