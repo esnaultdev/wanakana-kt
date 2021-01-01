@@ -13,6 +13,16 @@ class MappingTree(
     operator fun get(key: Char): MappingTree? = children?.get(key)
 
     fun hasChildren(): Boolean = children?.isNotEmpty() == true
+
+    /**
+     * Returns a mutable version of this tree.
+     */
+    fun toMutableMappingTree(): MutableMappingTree =
+        MutableMappingTree(value = value).also { newTree ->
+            children?.forEach { (key, value) ->
+                newTree[key] = value.toMutableMappingTree()
+            }
+        }
 }
 
 /**

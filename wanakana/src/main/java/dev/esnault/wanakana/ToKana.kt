@@ -5,8 +5,10 @@ import dev.esnault.wanakana.utils.MappingTree
 import dev.esnault.wanakana.utils.applyMapping
 import dev.esnault.wanakana.utils.hiraganaToKatakana
 import dev.esnault.wanakana.utils.isEnglishUpperCase
+import dev.esnault.wanakana.utils.kanaImeMode
 import dev.esnault.wanakana.utils.romajiToKanaMap
 import dev.esnault.wanakana.utils.safeLowerCase
+import dev.esnault.wanakana.utils.useObsoleteKana
 
 /**
  * Converts Romaji to Kana.
@@ -34,13 +36,13 @@ fun toKana(
 ): String {
     // TODO introduce useObsoleteKana to other methods
     // TODO introduce imeMode to other methods
-    val map = romajiToKanaMap
+    val map = createRomajiToKanaMap(imeMode, useObsoleteKana)
 
     val enforceHiragana = imeMode == IMEMode.TO_HIRAGANA
     val enforceKatakanaMode = imeMode == IMEMode.TO_KATAKANA
 
     // throw away the substring index information and just concatenate all the kana
-    return splitIntoConvertedKana(input, map)
+    return splitIntoConvertedKana(input, map, imeMode)
         .joinToString(separator = "") { token ->
             val kana = token.value
             if (kana == null) {
@@ -54,49 +56,22 @@ fun toKana(
         }
 }
 
-/*
-TODO: JS to convert
-
-/**
- *
- * @private
- * @param {String} [input=''] input text
- * @param {Object} [options={}] toKana options
- * @returns {Array[]} [[start, end, token]]
- * @example
- * splitIntoConvertedKana('buttsuuji')
- * // => [[0, 2, 'ぶ'], [2, 6, 'っつ'], [6, 7, 'う'], [7, 9, 'じ']]
- */
-export function splitIntoConvertedKana(input = '', options = {}, map) {
-  if (!map) {
-    map = createRomajiToKanaMap(options);
-  }
-  return applyMapping(input.toLowerCase(), map, !options.IMEMode);
-}
-*/
-
-private fun splitIntoConvertedKana(input: String, map: MappingTree): List<ConversionToken> {
-    // TODO add an IMEMode
-    return applyMapping(input.safeLowerCase(), map, true)
+private fun splitIntoConvertedKana(
+    input: String,
+    map: MappingTree,
+    imeMode: IMEMode
+): List<ConversionToken> {
+    return applyMapping(input.safeLowerCase(), map, imeMode == IMEMode.DISABLED)
 }
 
-/*
-TODO: JS to convert
-
-let customMapping = null;
-export function createRomajiToKanaMap(options = {}) {
-  let map = getRomajiToKanaTree();
-
-  map = options.IMEMode ? IME_MODE_MAP(map) : map;
-  map = options.useObsoleteKana ? USE_OBSOLETE_KANA_MAP(map) : map;
-
-  if (options.customKanaMapping) {
-    if (customMapping == null) {
-      customMapping = mergeCustomMapping(map, options.customKanaMapping);
+private fun createRomajiToKanaMap(imeMode: IMEMode, useObsoleteKana: Boolean): MappingTree {
+    var map = romajiToKanaMap
+    if (imeMode != IMEMode.DISABLED) {
+        map = kanaImeMode(map)
     }
-    map = customMapping;
-  }
-
-  return map;
+    if (useObsoleteKana) {
+        map = useObsoleteKana(map)
+    }
+    // TODO Introduce custom mappings
+    return map
 }
-*/

@@ -66,12 +66,6 @@ class ToKanaTest {
             input = EN_PUNC.joinToString(separator = " "),
             expected = JA_PUNC.joinToString(separator = " ")
         )
-        testKana(name = "", input = "", expected = "")
-        testKana(
-            name = "",
-            input = "",
-            expected = ""
-        )
     }
 
     @Nested
@@ -153,7 +147,7 @@ class ToKanaTest {
         fun withObsoleteKanas() = dynamicTests {
             fun testWithObsolete(name: String, input: String, expected: String) =
                 testEquals(name = name, expected = expected) {
-                    toKana(input)
+                    toKana(input, useObsoleteKana = true)
                 }
 
             testWithObsolete(name = "wi -> ゐ", input = "wi", expected = "ゐ")

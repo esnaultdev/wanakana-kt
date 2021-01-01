@@ -143,7 +143,7 @@ private val AIUEO_CONSTRUCTIONS: Map<String, Char> = mapOf(
     "f" to 'ふ'
 )
 
-fun createRomajiToKanaMap(): MappingTree {
+private fun createRomajiToKanaMap(): MappingTree {
     val kanaTree = BASIC_KUNREI_TREE
 
     // Add tya, sya, etc.
@@ -231,16 +231,12 @@ fun createRomajiToKanaMap(): MappingTree {
 
 val romajiToKanaMap: MappingTree by lazy { createRomajiToKanaMap() }
 
-/*
-TODO: JS to convert
-
-export const USE_OBSOLETE_KANA_MAP = createCustomMapping({ wi: 'ゐ', we: 'ゑ' });
-
-export function IME_MODE_MAP(map) {
-  // in IME mode, we do not want to convert single ns
-  const mapCopy = JSON.parse(JSON.stringify(map));
-  mapCopy.n.n = { '': 'ん' };
-  mapCopy.n[' '] = { '': 'ん' };
-  return mapCopy;
+fun useObsoleteKana(map: MappingTree): MappingTree {
+    val obsoleteKanaMapping = mapping { "wi" to 'ゐ'; "we" to 'ゑ' }
+    return map.toMutableMappingTree().also { obsoleteKanaMapping.mergeInto(it) }.toMappingTree()
 }
-*/
+
+fun kanaImeMode(map: MappingTree): MappingTree {
+    val customNMapping = mapping { "nn" to 'ん'; "n " to 'ん' }
+    return map.toMutableMappingTree().also { customNMapping.mergeInto(it) }.toMappingTree()
+}
