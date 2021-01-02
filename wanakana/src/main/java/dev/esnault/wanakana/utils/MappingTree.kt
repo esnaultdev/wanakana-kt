@@ -92,6 +92,11 @@ interface MutableMappingTree : MappingTree {
     }
 
     /**
+     * Returns a read-only version of this tree.
+     */
+    fun toMappingTree(): MappingTree
+
+    /**
      * Returns a deep copy of this tree.
      */
     override fun duplicate(): MutableMappingTree
@@ -112,12 +117,17 @@ interface MutableMappingTree : MappingTree {
      * Updates the subTree addressed by [str] to set its value to [value].
      * Builds the relevant subTrees along the way.
      */
-    fun setSubTreeValue(str: String, value: String)
+    fun setSubTreeValue(str: String, value: String) {
+
+    }
 
     /**
-     * Returns a read-only version of this tree.
+     * Updates the tree using a DSL.
+     * See [mapping] for more information.
      */
-    fun toMappingTree(): MappingTree
+    fun update(block: MappingTreeBuilder.() -> Unit) {
+        MappingTreeBuilder(this).block()
+    }
 }
 
 /**

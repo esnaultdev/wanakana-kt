@@ -283,7 +283,6 @@ class MappingTreeTest {
     @Nested
     @DisplayName("MappingTree implementation")
     inner class MappingTreeImplTest {
-
         @Test
         fun hasSubTreeNull() {
             val mapping = mappingTreeOf(value = "test", subTrees = null)
@@ -390,6 +389,205 @@ class MappingTreeTest {
                 expected = firstDuplicate,
                 actual = first
             )
+        }
+    }
+
+    @Nested
+    @DisplayName("MutableMappingTree implementation")
+    inner class MutableMappingTreeImplTest {
+        @Test
+        fun hasSubTreeEmptyNotInitialized() {
+            // Splitting this test into two tests is not very good since it's not black box,
+            // but it's still interesting to test both cases.
+            val mapping = mutableMappingTreeOf(value = "test", subTrees = null)
+            assertFalse(actual = mapping.hasSubTree())
+        }
+
+        @Test
+        fun hasSubTreeEmptyInitialized() {
+            // Splitting this test into two tests is not very good since it's not black box,
+            // but it's still interesting to test both cases.
+            val mapping = mutableMappingTreeOf(value = "test", subTrees = null)
+            mapping['a'] // Calling this will initialize the underlying map
+            assertFalse(actual = mapping.hasSubTree())
+        }
+
+        @Test
+        fun hasSubTreeAtLeastOne() {
+            val mapping = mutableMappingTreeOf(
+                value = "test",
+                subTrees = mutableMapOf(
+                    'a' to mutableMappingTreeOf(value = "other")
+                )
+            )
+            assertTrue(actual = mapping.hasSubTree())
+        }
+
+        @Test
+        fun toMutableMappingTreeIsSame() {
+            val mapping = mapping {
+                value = "test"
+                "abc" to "other"
+            }
+            val mutableMappingTree: MutableMappingTree = mapping.toMutableMappingTree()
+            assertEquals(expected = mapping, actual = mutableMappingTree)
+        }
+
+        @Test
+        fun toMappingTreeIsSame() {
+            val mapping = mapping {
+                value = "test"
+                "abc" to "other"
+            }
+            val readOnlyMappingTree: MappingTree = mapping.toMappingTree()
+            assertEquals(expected = mapping, actual = readOnlyMappingTree)
+        }
+
+        @Nested
+        @DisplayName("duplicate()")
+        inner class DuplicateTest {
+            @Test
+            fun duplicateIsTheSame() {
+                val mapping = mapping {
+                    value = "test"
+                    "abc" to "other"
+                }
+                val newMapping = mapping.duplicate()
+                assertEquals(expected = mapping, actual = newMapping)
+            }
+
+            @Test
+            fun duplicateIsNotSameInstance() {
+                val mapping = mapping {
+                    value = "test"
+                    "abc" to "other"
+                }
+                val newMapping = mapping.duplicate()
+                newMapping['a']?.get('b')?.get('c')?.value = null
+                assertEquals(expected = "other", actual = mapping['a']?.get('b')?.get('c')?.value)
+            }
+        }
+
+        @Nested
+        @DisplayName("subTreeOf()")
+        inner class SubTreeOfTest {
+            @Test
+            fun deepReference() {
+                val mapping = mapping {
+                    "abc" to "test"
+                }
+                val subTree = mapping.subTreeOf("abc")
+                val expected = mapping['a']?.get('b')?.get('c')
+                assertEquals(expected = expected, actual = subTree)
+            }
+
+            @Test
+            fun createsTreesAlongTheWay() {
+                val mapping = mapping {
+                    "ab" to "test"
+                }
+                mapping.subTreeOf("abc").value = "other"
+                val expected = mapping {
+                    "ab" to "test"
+                    "abc" to "other"
+                }
+                assertEquals(expected = expected, actual = mapping)
+            }
+
+            @Test
+            fun emptyStringIsSelf() {
+                val mapping = mapping {
+                    "ab" to "test"
+                }
+                val subTree = mapping.subTreeOf("")
+                assertEquals(expected = mapping, actual = subTree)
+            }
+        }
+
+        @Nested
+        @DisplayName("replaceSubTreeOf()")
+        inner class ReplaceSubTreeOfTest {
+            @Test
+            fun replaceExistingSubTree() {
+                val mapping = mapping {
+                    "ab" to "test"
+                    "abc" to mapping {
+                        value = "other"
+                        "e" to "foo"
+                    }
+                }
+                mapping.replaceSubTreeOf("abc", mapping { "d" to "another" })
+                val expected = mapping {
+                    "ab" to "test"
+                    "abcd" to "another"
+                }
+                assertEquals(expected = expected, actual = mapping)
+            }
+
+            @Test
+            fun createsTreesAlongTheWay() {
+                val mapping = mapping {
+                    "ab" to "test"
+                }
+                mapping.replaceSubTreeOf("abcd", mapping { value = "other" })
+                val expected = mapping {
+                    "ab" to "test"
+                    "abcd" to "other"
+                }
+                assertEquals(expected = expected, actual = mapping)
+            }
+
+            @Test
+            fun emptyStringReferenceIsInvalid() {
+                val mapping = mapping {
+                    "ab" to "test"
+                }
+                assertThrows<IllegalArgumentException> {
+                    mapping.replaceSubTreeOf("", mapping { value = "other" })
+                }
+            }
+        }
+
+        @Nested
+        @DisplayName("setSubTreeValue()")
+        inner class SetSubTreeValueTest {
+            @Test
+            fun replaceExistingValue() {
+                val mapping = mapping {
+                    "ab" to "test"
+                }
+                mapping.setSubTreeValue("ab", "other")
+                val expected = mapping {
+                    "ab" to "other"
+                }
+                assertEquals(expected = expected, actual = mapping)
+            }
+
+            @Test
+            fun createsTreesAlongTheWay() {
+                val mapping = mapping {
+                    "ab" to "test"
+                }
+                mapping.setSubTreeValue("abcd", "other")
+                val expected = mapping {
+                    "ab" to "test"
+                    "abcd" to "other"
+                }
+                assertEquals(expected = expected, actual = mapping)
+            }
+
+            @Test
+            fun emptyStringReplacesCurrentValue() {
+                val mapping = mapping {
+                    "ab" to "test"
+                }
+                mapping.setSubTreeValue("", "other")
+                val expected = mapping {
+                    value = "other"
+                    "ab" to "test"
+                }
+                assertEquals(expected = mapping, actual = mapping)
+            }
         }
     }
 }
