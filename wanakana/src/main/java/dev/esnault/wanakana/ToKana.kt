@@ -37,6 +37,8 @@ fun toKana(
     imeMode: IMEMode = IMEMode.DISABLED,
     useObsoleteKana: Boolean = false
 ): String {
+    if (input.isEmpty()) return input
+
     val map = createRomajiToKanaMap(imeMode, useObsoleteKana)
 
     val enforceHiragana = imeMode == IMEMode.TO_HIRAGANA

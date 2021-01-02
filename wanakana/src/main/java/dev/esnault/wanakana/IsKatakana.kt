@@ -11,7 +11,4 @@ import dev.esnault.wanakana.utils.isKatakana
  * - `isKatakana("A")` => `false`
  * - `isKatakana("あア")` => `false`
  */
-fun isKatakana(input: String): Boolean {
-    if (input.isEmpty()) return false
-    return input.all(Char::isKatakana)
-}
+fun isKatakana(input: String): Boolean = input.all(Char::isKatakana)

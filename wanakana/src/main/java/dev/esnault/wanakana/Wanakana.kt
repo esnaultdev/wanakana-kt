@@ -12,8 +12,8 @@ object Wanakana {
     // isRomaji
     // TODO isJapanese
     // TODO isKana
-    // TODO isHiragana
-    // TODO isKatakana
+    // isHiragana
+    // isKatakana
     // isMixed
     // isKanji
 

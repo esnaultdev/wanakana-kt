@@ -26,6 +26,8 @@ fun toHiragana(
     passRomaji: Boolean = false,
     useObsoleteKana: Boolean = false
 ): String {
+    if (input.isEmpty()) return input
+
     if (passRomaji) {
         return katakanaToHiragana(input)
     }

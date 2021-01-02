@@ -26,6 +26,8 @@ fun toRomaji(
     imeMode: IMEMode = IMEMode.DISABLED,
     upcaseKatakana: Boolean = false
 ): String {
+    if (input.isEmpty()) return input
+
     // throw away the substring index information and just concatenate all the kana
     return splitIntoRomaji(input, imeMode)
         .joinToString(separator = "") { token ->

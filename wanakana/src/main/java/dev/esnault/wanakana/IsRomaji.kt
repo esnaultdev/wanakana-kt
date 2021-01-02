@@ -20,7 +20,6 @@ import dev.esnault.wanakana.utils.isRomaji
  * - `isRomaji("a！b&cーd", Regex("""[！ー]"""))` => `true`
  */
 fun isRomaji(input: String, allowed: Regex? = null): Boolean {
-    if (input.isEmpty()) return false
     return input.all { char ->
         char.isRomaji() || (allowed?.matches(char.toString()) ?: false)
     }
