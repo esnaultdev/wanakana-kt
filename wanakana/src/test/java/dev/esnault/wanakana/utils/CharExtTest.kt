@@ -17,6 +17,7 @@ class CharExtTest {
         'ナ'.test(false)
         'n'.test(false)
         '!'.test(false)
+        'ー'.test(true)
     }
 
     @TestFactory

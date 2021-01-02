@@ -11,7 +11,7 @@ object Wanakana {
     // Writing system checks
     // isRomaji
     // TODO isJapanese
-    // TODO isKana
+    // isKana
     // isHiragana
     // isKatakana
     // isMixed
