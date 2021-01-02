@@ -166,15 +166,3 @@ private fun updateTsu(tree: MutableMappingTree) {
 }
 
 val kanaToHepburnMap: MappingTree by lazy { createKanaToHepburnMap() }
-
-/*
-TODO: Convert JS
-export function getKanaToRomajiTree(fullOptions) {
-  switch (fullOptions.romanization) {
-    case ROMANIZATIONS.HEPBURN:
-      return getKanaToHepburnTree(fullOptions);
-    default:
-      return {};
-  }
-}
-*/
