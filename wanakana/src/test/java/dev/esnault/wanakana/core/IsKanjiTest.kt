@@ -11,7 +11,7 @@ class IsKanjiTest {
 
     @TestFactory
     @DisplayName("Basic usage")
-    fun isHiraganaTest() = dynamicTests {
+    fun isKanjiTest() = dynamicTests {
         fun test(name: String, input: String, expected: Boolean) =
             testBoolean(name = name, expected = expected) { isKanji(input) }
 

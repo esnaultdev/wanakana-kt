@@ -10,7 +10,7 @@ object Wanakana {
 
     // Writing system checks
     // isRomaji
-    // TODO isJapanese
+    // isJapanese
     // isKana
     // isHiragana
     // isKatakana

@@ -11,7 +11,7 @@ class IsMixedTest {
 
     @TestFactory
     @DisplayName("Basic usage")
-    fun isHiraganaTest() = dynamicTests {
+    fun isMixedTest() = dynamicTests {
         fun test(name: String, input: String, expected: Boolean) =
             testBoolean(name = name, expected = expected) { isMixed(input) }
 
