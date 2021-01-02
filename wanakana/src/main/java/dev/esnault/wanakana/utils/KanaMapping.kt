@@ -43,7 +43,7 @@ private data class State(
         }
     }
 
-    fun isAtTreeEnd(): Boolean = subTree?.hasChildren() != true
+    fun isAtTreeEnd(): Boolean = subTree?.hasSubTree() != true
 
     fun getCurrentValue(rollbackOne: Boolean = false): String {
         val currentOrPrevious = subTree?.value ?: previousValue

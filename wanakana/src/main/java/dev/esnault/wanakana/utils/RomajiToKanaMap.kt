@@ -191,7 +191,7 @@ private fun createRomajiToKanaMap(): MappingTree {
 
     SMALL_LETTERS.forEach { (kunreiRoma, kana) ->
         val xRoma = "x$kunreiRoma"
-        val xSubTree = kanaTree.setSubTreeValue(xRoma, kana.toString())
+        val xSubTree = kanaTree.subTreeOf(xRoma).also { it.value = kana.toString() }
 
         // ltu -> xtu -> っ
         kanaTree.replaceSubTreeOf("l$kunreiRoma", xSubTree)
@@ -211,10 +211,10 @@ private fun createRomajiToKanaMap(): MappingTree {
 
     // add kka, tta, etc.
     fun addTsu(tree: MutableMappingTree) {
-        if (!tree.hasChildren()) { // // we have reached the bottom of this branch
+        if (!tree.hasSubTree()) { // // we have reached the bottom of this branch
             tree.value = "っ${tree.value}"
         } else {
-            tree.children.values.forEach { subTree -> addTsu(subTree) }
+            tree.subTrees.values.forEach { subTree -> addTsu(subTree) }
         }
     }
     // have to explicitly name c here, because we made it a copy of k, not a reference
@@ -224,7 +224,7 @@ private fun createRomajiToKanaMap(): MappingTree {
         subTree[consonant] = subTree.duplicate().also { addTsu(it) }
     }
     // nn should not be っん
-    kanaTree['n']!!.children.remove('n')
+    kanaTree['n']!!.subTrees.remove('n')
 
     return kanaTree.toMappingTree()
 }

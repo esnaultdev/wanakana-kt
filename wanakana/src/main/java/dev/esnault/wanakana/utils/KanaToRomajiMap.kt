@@ -161,7 +161,7 @@ private fun updateTsu(tree: MutableMappingTree) {
         return if (whiteListValue != null) whiteListValue + value else value
     }
 
-    tree.children.values.forEach { updateTsu(it) }
+    tree.subTrees.values.forEach { updateTsu(it) }
     tree.value?.let { tree.value = newValue(it) }
 }
 

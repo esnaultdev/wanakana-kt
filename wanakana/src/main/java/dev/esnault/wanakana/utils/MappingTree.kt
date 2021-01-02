@@ -4,104 +4,59 @@ import java.lang.IllegalArgumentException
 
 /**
  * A mapping tree used to map a [String] to another [String].
- * @property value a value that can be used for conversion.
  */
-class MappingTree(
-    private val children: Map<Char, MappingTree>? = null,
-    val value: String? = null
-) {
-    operator fun get(key: Char): MappingTree? = children?.get(key)
+interface MappingTree {
+    /**
+     * A value that can be used for conversion at this level of the tree.
+     */
+    val value: String?
 
-    fun hasChildren(): Boolean = children?.isNotEmpty() == true
+    /**
+     * The subTrees that can be used to continue the conversion.
+     */
+    val subTrees: Map<Char, MappingTree>?
+
+    /**
+     * Returns the subTree referenced by [key], if any.
+     */
+    operator fun get(key: Char): MappingTree? = subTrees?.get(key)
+
+    /**
+     * Returns `true` if this has any subTree.
+     */
+    fun hasSubTree(): Boolean
 
     /**
      * Returns a mutable version of this tree.
+     * The returned tree is not guaranteed to be a new tree, use [duplicate] if needed.
      */
-    fun toMutableMappingTree(): MutableMappingTree =
-        MutableMappingTree(value = value).also { newTree ->
-            children?.forEach { (key, value) ->
-                newTree[key] = value.toMutableMappingTree()
-            }
-        }
-}
-
-/**
- * A mutable [MappingTree], used to build a [MappingTree].
- */
-class MutableMappingTree(var value: String? = null) {
-    private val childrenDelegate = lazy { mutableMapOf<Char, MutableMappingTree>() }
-    val children: MutableMap<Char, MutableMappingTree> by childrenDelegate
-
-    operator fun get(key: Char): MutableMappingTree? = children[key]
-    operator fun set(key: Char, child: MutableMappingTree) {
-        children[key] = child
-    }
-
-    fun hasChildren(): Boolean = childrenDelegate.isInitialized() && children.isNotEmpty()
-
-    /**
-     * Returns a subTree addressed by [str].
-     * Builds the relevant subTrees along the way.
-     */
-    fun subTreeOf(str: String): MutableMappingTree {
-        if (str.isEmpty()) return this
-        if (str.length == 1) {
-            val char = str.first()
-            return children[char] ?: MutableMappingTree().also { children[char] = it }
-        }
-        return str.toCharArray().fold(initial = this) { result, char ->
-            result[char] ?: MutableMappingTree().also { result[char] = it }
-        }
-    }
-
-    /**
-     * Replace a subTree addressed by [str] with [newSubTree].
-     * Builds the relevant subTrees along the way.
-     */
-    fun replaceSubTreeOf(str: String, newSubTree: MutableMappingTree) {
-        if (str.isEmpty()) emptyReference()
-        val lastChar = str.last()
-        val toUpdate = subTreeOf(str.dropLast(1))
-        toUpdate[lastChar] = newSubTree
-    }
-
-    /**
-     * Updates the subTree addressed by [str] to set its value to [value].
-     * Builds the relevant subTrees along the way.
-     * @return the updated subTree.
-     */
-    fun setSubTreeValue(str: String, value: String): MutableMappingTree {
-        val toUpdate = subTreeOf(str)
-        toUpdate.value = value
-        return toUpdate
-    }
+    fun toMutableMappingTree(): MutableMappingTree
 
     /**
      * Returns a deep copy of this tree.
      */
-    fun duplicate(): MutableMappingTree =
-        MutableMappingTree().also { newTree ->
-            newTree.value = value
-            children.forEach { (char, subTree) ->
-                newTree[char] = subTree.duplicate()
-            }
-        }
+    fun duplicate(): MappingTree
 
     /**
-     * Returns a read-only version of this tree.
+     * Returns a new [MappingTree] that contains both mappings from this and the [other] tree.
+     * When two values conflict, the mapping of this tree is used over the other.
      */
-    fun toMappingTree(): MappingTree =
-        MappingTree(
-            children = children.mapValues { (_, value) -> value.toMappingTree() },
-            value = value
-        )
+    fun mergeWith(other: MappingTree): MappingTree {
+        return other.duplicate().toMutableMappingTree().also { this.mergeInto(it) }
+    }
 
+    /**
+     * Merge this tree into the [other].
+     * The [other] tree will be updated to include the mapping of this tree.
+     * When two values conflict, the mapping of this tree replaces the other.
+     */
     fun mergeInto(other: MutableMappingTree) {
         other.value = value
-        children.forEach { (char, subTree) ->
+        if (!hasSubTree()) return
+        subTrees?.forEach { (char, subTree) ->
             val otherSubTree = other[char]
             if (otherSubTree == null) {
-                other[char] = subTree
+                other[char] = subTree.toMutableMappingTree()
             } else {
                 subTree.mergeInto(otherSubTree)
             }
@@ -109,8 +64,86 @@ class MutableMappingTree(var value: String? = null) {
     }
 }
 
-class MappingTreeBuilder(internal val tree: MutableMappingTree = MutableMappingTree()) {
-    var value: String? = null
+/**
+ * A mutable [MappingTree], used to build a [MappingTree].
+ */
+interface MutableMappingTree : MappingTree {
+    /**
+     * A value that can be used for conversion at this level of the tree.
+     */
+    override var value: String?
+
+    /**
+     * The subTrees that can be used to continue the conversion.
+     */
+    override val subTrees: MutableMap<Char, MutableMappingTree>
+
+    /**
+     * Returns the subTree referenced by [key], if any.
+     */
+    override operator fun get(key: Char): MutableMappingTree? = subTrees[key]
+
+    /**
+     * Replaces the subTree referenced by [key] with [subTree].
+     */
+    operator fun set(key: Char, subTree: MutableMappingTree) {
+        subTrees[key] = subTree
+    }
+
+    /**
+     * Returns a deep copy of this tree.
+     */
+    override fun duplicate(): MutableMappingTree
+
+    /**
+     * Returns a subTree addressed by [str].
+     * Builds the relevant subTrees along the way.
+     */
+    fun subTreeOf(str: String): MutableMappingTree
+
+    /**
+     * Replace a subTree addressed by [str] with [newSubTree].
+     * Builds the relevant subTrees along the way.
+     */
+    fun replaceSubTreeOf(str: String, newSubTree: MutableMappingTree)
+
+    /**
+     * Updates the subTree addressed by [str] to set its value to [value].
+     * Builds the relevant subTrees along the way.
+     */
+    fun setSubTreeValue(str: String, value: String)
+
+    /**
+     * Returns a read-only version of this tree.
+     */
+    fun toMappingTree(): MappingTree
+}
+
+/**
+ * Returns a read-only [MappingTree] with the given [value] and [subTrees].
+ */
+fun mappingTreeOf(value: String? = null, subTrees: Map<Char, MappingTree>? = null): MappingTree =
+    MappingTreeImpl(value = value, children = subTrees)
+
+/**
+ * Returns a [MutableMappingTree] with the given [value] and [subTrees].
+ */
+fun mutableMappingTreeOf(
+    value: String? = null,
+    subTrees: Map<Char, MutableMappingTree>? = null
+): MutableMappingTree = MutableMappingTreeImpl(value = value).also { newTree ->
+    subTrees?.forEach { (char, subTree) ->
+        newTree[char] = subTree
+    }
+}
+
+/**
+ * A builder of [MutableMappingTree], used by the [mapping] DSL.
+ */
+class MappingTreeBuilder(internal val tree: MutableMappingTree = mutableMappingTreeOf()) {
+    var value: String?
+        get() = tree.value
+        set(value) { tree.value = value }
 
     infix fun Char.to(value: String) {
         tree.setSubTreeValue(this.toString(), value)
@@ -122,7 +155,7 @@ class MappingTreeBuilder(internal val tree: MutableMappingTree = MutableMappingT
     }
 
     infix fun Char.to(value: Char) {
-        tree[this] = MutableMappingTree(value = value.toString())
+        tree[this] = mutableMappingTreeOf(value = value.toString())
     }
 
     infix fun String.to(value: Char) {
@@ -158,12 +191,35 @@ class MappingTreeBuilder(internal val tree: MutableMappingTree = MutableMappingT
     }
 }
 
+/**
+ * Returns a [MappingTree], built using a DSL.
+ * The syntax is similar to `mapOf()` using an infix `to` to add to the tree.
+ * Keys can be [Char] or [String], and values can be [Char] or [String] or a [mapping].
+ *
+ * For example:
+ * ```
+ *  mapping {
+ *      'n' to 'ん'; "n'" to 'ん'
+ *  }
+ * ```
+ * is equivalent to
+ * ```
+ *  mapping {
+ *      'n' to "ん"; "n'" to "ん"
+ *  }
+ * ```
+ * and equivalent to
+ * ```
+ *  mapping {
+ *      'n' to mapping {
+ *          value = "ん"
+ *          "'" to "ん"
+ *      }
+ *  }
+ * ```
+ */
 fun mapping(init: MappingTreeBuilder.() -> Unit): MutableMappingTree {
     val builder = MappingTreeBuilder()
     builder.init()
     return builder.tree
 }
-
-@Suppress("NOTHING_TO_INLINE")
-private inline fun emptyReference(): Nothing =
-    throw IllegalArgumentException("An empty string is not a valid subTree reference.")
