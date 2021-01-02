@@ -23,11 +23,7 @@ internal class MappingTreeImpl(
             }
         }
 
-    override fun duplicate(): MappingTree =
-        mappingTreeOf(
-            subTrees = children?.mapValues { (_, value) -> value.duplicate() },
-            value = value
-        )
+    override fun duplicate(): MappingTree = this
 
     override fun equals(other: Any?): Boolean = equalsImpl(other)
 

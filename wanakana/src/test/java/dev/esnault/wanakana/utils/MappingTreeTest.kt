@@ -1,10 +1,14 @@
 package dev.esnault.wanakana.utils
 
+import dev.esnault.wanakana.dynamicTests
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.assertThrows
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 
 class MappingTreeTest {
@@ -273,6 +277,119 @@ class MappingTreeTest {
                 )
             )
             assertEquals(expected = expected, actual = mapping)
+        }
+    }
+
+    @Nested
+    @DisplayName("MappingTree implementation")
+    inner class MappingTreeImplTest {
+
+        @Test
+        fun hasSubTreeNull() {
+            val mapping = mappingTreeOf(value = "test", subTrees = null)
+            assertFalse(actual = mapping.hasSubTree())
+        }
+
+        @Test
+        fun hasSubTreeEmpty() {
+            val mapping = mappingTreeOf(value = "test", subTrees = emptyMap())
+            assertFalse(actual = mapping.hasSubTree())
+        }
+
+        @Test
+        fun hasSubTreeAtLeastOne() {
+            val mapping = mappingTreeOf(
+                value = "test",
+                subTrees = mapOf(
+                    'a' to mappingTreeOf(value = "other")
+                )
+            )
+            assertTrue(actual = mapping.hasSubTree())
+        }
+
+        @Test
+        fun toMutableMappingTreeIsSame() {
+            val mapping = mappingTreeOf(
+                value = "test",
+                subTrees = mapOf(
+                    'a' to mappingTreeOf(value = "other")
+                )
+            )
+            val mutableMappingTree: MutableMappingTree = mapping.toMutableMappingTree()
+            assertEquals(expected = mapping, actual = mutableMappingTree)
+        }
+
+        @Test
+        fun duplicateIsSame() {
+            val mapping = mappingTreeOf(
+                value = "test",
+                subTrees = mapOf(
+                    'a' to mappingTreeOf(value = "other")
+                )
+            )
+            assertEquals(expected = mapping, actual = mapping.duplicate())
+        }
+
+        @TestFactory
+        @DisplayName("mergeWith()")
+        fun mergeWithTest() = dynamicTests {
+            val first = mapping {
+                value = "testFirst"
+                "ab" to "otherFirst"
+            }
+            val firstDuplicate = first.duplicate()
+            val second = mapping {
+                value = "testSecond"
+                "ac" to "otherSecond"
+            }
+            val secondDuplicate = second.duplicate()
+            val expected = mapping {
+                value = "testFirst"
+                'a' to mapping {
+                    'b' to "otherFirst"
+                    'c' to "otherSecond"
+                }
+            }
+            val merged = first.mergeWith(second)
+            testEquals(name = "Merged mapping is correct", expected = expected, actual = merged)
+            testEquals(
+                name = "First mapping was not modified",
+                expected = firstDuplicate,
+                actual = first
+            )
+            testEquals(
+                name = "Second mapping was not modified",
+                expected = secondDuplicate,
+                actual = second
+            )
+        }
+
+        @TestFactory
+        @DisplayName("mergeInto()")
+        fun mergeIntoTest() = dynamicTests {
+            val first = mapping {
+                value = "testFirst"
+                "ab" to "otherFirst"
+            }
+            val firstDuplicate = first.duplicate()
+            val second = mapping {
+                value = "testSecond"
+                "ac" to "otherSecond"
+            }
+            val expected = mapping {
+                value = "testFirst"
+                'a' to mapping {
+                    'b' to "otherFirst"
+                    'c' to "otherSecond"
+                }
+            }
+            first.mergeInto(second)
+            testEquals(name = "Merged mapping is correct", expected = expected, actual = second)
+            testEquals(
+                name = "First mapping was not modified",
+                expected = firstDuplicate,
+                actual = first
+            )
         }
     }
 }

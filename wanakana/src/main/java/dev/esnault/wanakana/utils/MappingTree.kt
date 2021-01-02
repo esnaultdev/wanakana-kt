@@ -34,6 +34,7 @@ interface MappingTree {
 
     /**
      * Returns a deep copy of this tree.
+     * This returns the same tree for read only trees.
      */
     fun duplicate(): MappingTree
 
