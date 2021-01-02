@@ -8,6 +8,10 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
+compileTestKotlin {
+    kotlinOptions.jvmTarget = JavaVersion.VERSION_1_8.toString()
+}
+
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 

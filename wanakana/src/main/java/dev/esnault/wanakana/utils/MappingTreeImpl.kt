@@ -6,7 +6,7 @@ import java.lang.IllegalArgumentException
 /**
  * Default implementation of a [MappingTree].
  */
-internal data class MappingTreeImpl(
+internal class MappingTreeImpl(
     val children: Map<Char, MappingTree>? = null,
     override val value: String? = null
 ) : MappingTree {
@@ -28,6 +28,12 @@ internal data class MappingTreeImpl(
             subTrees = children?.mapValues { (_, value) -> value.duplicate() },
             value = value
         )
+
+    override fun equals(other: Any?): Boolean = equalsImpl(other)
+
+    override fun hashCode(): Int = hashCodeImpl()
+
+    override fun toString(): String = toStringImpl()
 }
 
 /**
@@ -79,6 +85,44 @@ internal class MutableMappingTreeImpl(override var value: String? = null) : Muta
         )
 
     override fun toMutableMappingTree(): MutableMappingTree = this
+
+    override fun equals(other: Any?): Boolean = equalsImpl(other)
+
+    override fun hashCode(): Int = hashCodeImpl()
+
+    override fun toString(): String = toStringImpl()
+}
+
+private fun MappingTree.hashCodeImpl(): Int {
+    var result = subTrees?.hashCode() ?: 0
+    result = 31 * result + (value?.hashCode() ?: 0)
+    return result
+}
+
+private fun MappingTree.equalsImpl(other: Any?): Boolean {
+    if (this === other) return true
+    if (other !is MappingTree) return false
+
+    if (hasSubTree() != other.hasSubTree()) return false
+    val subTrees = subTrees
+    if (subTrees != null) {
+        val allSubTreesEqual = subTrees.all { (char, subTree) ->
+            other.subTrees?.get(char) == subTree
+        }
+        if (!allSubTreesEqual) return false
+    }
+
+    if (value != other.value) return false
+
+    return true
+}
+
+private fun MappingTree.toStringImpl(): String = buildString {
+    append("<${value ?: ""}> [")
+    subTrees?.entries?.sortedBy { it.key }?.forEach { (key, value) ->
+        append("$key: $value")
+    }
+    append("]")
 }
 
 @Suppress("NOTHING_TO_INLINE")
