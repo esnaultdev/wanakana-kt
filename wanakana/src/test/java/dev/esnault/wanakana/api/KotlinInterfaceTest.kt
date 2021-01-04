@@ -2,6 +2,8 @@ package dev.esnault.wanakana.api
 
 import dev.esnault.wanakana.Config
 import dev.esnault.wanakana.IMEMode
+import dev.esnault.wanakana.TokenType
+import dev.esnault.wanakana.TypedToken
 import dev.esnault.wanakana.Wanakana
 import dev.esnault.wanakana.dynamicTests
 import dev.esnault.wanakana.extension.isHiragana
@@ -18,10 +20,13 @@ import dev.esnault.wanakana.isKanji
 import dev.esnault.wanakana.isKatakana
 import dev.esnault.wanakana.isMixed
 import dev.esnault.wanakana.isRomaji
+import dev.esnault.wanakana.stripOkurigana
 import dev.esnault.wanakana.toHiragana
 import dev.esnault.wanakana.toKana
 import dev.esnault.wanakana.toKatakana
 import dev.esnault.wanakana.toRomaji
+import dev.esnault.wanakana.tokenize
+import dev.esnault.wanakana.tokenizeWithType
 import dev.esnault.wanakana.utils.mapping
 import dev.esnault.wanakana.utils.mappingTreeOf
 import org.junit.jupiter.api.DisplayName
@@ -33,6 +38,8 @@ import kotlin.test.assertEquals
 
 /**
  * Interface tests to ensure that refactorings don't impact existing users.
+ *
+ * // TODO Add tests for named parameters.
  */
 class KotlinInterfaceTest {
 
@@ -44,9 +51,6 @@ class KotlinInterfaceTest {
         @DisplayName("toHiragana()")
         fun toHiraganaTest() = dynamicTests {
             testEquals(name = "minimal input", expected = "おなじ") {
-                toHiragana("onaji")
-            }
-            testEquals(name = "named minimal input", expected = "おなじ") {
                 toHiragana("onaji")
             }
             testEquals(name = "all parameters", expected = "おなゐ") {
@@ -63,9 +67,6 @@ class KotlinInterfaceTest {
             testEquals(name = "minimal input", expected = "オナジ") {
                 toKatakana("onaji")
             }
-            testEquals(name = "named minimal input", expected = "オナジ") {
-                toKatakana("onaji")
-            }
             testEquals(name = "all parameters", expected = "オナヰ") {
                 toKatakana("onawi", IMEMode.DISABLED, false, true)
             }
@@ -78,9 +79,6 @@ class KotlinInterfaceTest {
         @DisplayName("toKana()")
         fun toKanaTest() = dynamicTests {
             testEquals(name = "minimal input", expected = "おなじ") {
-                toKana("onaji")
-            }
-            testEquals(name = "named minimal input", expected = "おなじ") {
                 toKana("onaji")
             }
             testEquals(name = "all parameters", expected = "おなゐ") {
@@ -97,14 +95,53 @@ class KotlinInterfaceTest {
             testEquals(name = "minimal input", expected = "onaji") {
                 toRomaji("おなじ")
             }
-            testEquals(name = "named minimal input", expected = "onaji") {
-                toRomaji("おなじ")
-            }
             testEquals(name = "all parameters", expected = "ONAJI") {
                 toRomaji("オナジ", IMEMode.DISABLED, true)
             }
             testEquals(name = "config", expected = "onaji") {
                 toRomaji(input = "おなじ", config = Config.DEFAULT)
+            }
+        }
+
+        @TestFactory
+        @DisplayName("stripOkurigana()")
+        fun stripOkuriganaTest() = dynamicTests {
+            testEquals(name = "minimal input", expected = "お祝") {
+                stripOkurigana("お祝い")
+            }
+            testEquals(name = "all parameters", expected = "みまい") {
+                stripOkurigana("おみまい", true, matchKanji = "お祝い")
+            }
+        }
+
+        @TestFactory
+        @DisplayName("tokenize()")
+        fun tokenizeTest() = dynamicTests {
+            testEquals(name = "minimal input", expected = listOf("ア", "お")) {
+                tokenize("アお")
+            }
+            testEquals(name = "all parameters", expected = listOf("アお")) {
+                tokenize("アお", true)
+            }
+        }
+
+        @TestFactory
+        @DisplayName("tokenizeWithType()")
+        fun tokenizeWithTypeTest() = dynamicTests {
+            test(name = "minimal input") {
+                val expected = listOf(
+                    TypedToken("ア", TokenType.KATAKANA),
+                    TypedToken("お", TokenType.HIRAGANA)
+                )
+                val result = tokenizeWithType("アお")
+                assertEquals(expected = expected, actual = result)
+            }
+            test(name = "all parameters") {
+                val expected = listOf(
+                    TypedToken("アお", TokenType.JA)
+                )
+                val result = tokenizeWithType("アお", true)
+                assertEquals(expected = expected, actual = result)
             }
         }
         
@@ -147,9 +184,6 @@ class KotlinInterfaceTest {
             testEquals(name = "minimal input", expected = "おなじ") {
                 Wanakana.toHiragana("onaji")
             }
-            testEquals(name = "named minimal input", expected = "おなじ") {
-                Wanakana.toHiragana("onaji")
-            }
             testEquals(name = "all parameters", expected = "おなゐ") {
                 Wanakana.toHiragana("onawi", IMEMode.DISABLED, false, true)
             }
@@ -162,9 +196,6 @@ class KotlinInterfaceTest {
         @DisplayName("toKatakana()")
         fun toKatakanaTest() = dynamicTests {
             testEquals(name = "minimal input", expected = "オナジ") {
-                Wanakana.toKatakana("onaji")
-            }
-            testEquals(name = "named minimal input", expected = "オナジ") {
                 Wanakana.toKatakana("onaji")
             }
             testEquals(name = "all parameters", expected = "オナヰ") {
@@ -181,9 +212,6 @@ class KotlinInterfaceTest {
             testEquals(name = "minimal input", expected = "おなじ") {
                 Wanakana.toKana("onaji")
             }
-            testEquals(name = "named minimal input", expected = "おなじ") {
-                Wanakana.toKana("onaji")
-            }
             testEquals(name = "all parameters", expected = "おなゐ") {
                 Wanakana.toKana("onawi", IMEMode.DISABLED, true)
             }
@@ -198,14 +226,53 @@ class KotlinInterfaceTest {
             testEquals(name = "minimal input", expected = "onaji") {
                 Wanakana.toRomaji("おなじ")
             }
-            testEquals(name = "named minimal input", expected = "onaji") {
-                Wanakana.toRomaji("おなじ")
-            }
             testEquals(name = "all parameters", expected = "ONAJI") {
                 Wanakana.toRomaji("オナジ", IMEMode.DISABLED, true)
             }
             testEquals(name = "config", expected = "onaji") {
                 Wanakana.toRomaji(input = "おなじ", config = Config.DEFAULT)
+            }
+        }
+
+        @TestFactory
+        @DisplayName("stripOkurigana()")
+        fun stripOkuriganaTest() = dynamicTests {
+            testEquals(name = "minimal input", expected = "お祝") {
+                Wanakana.stripOkurigana("お祝い")
+            }
+            testEquals(name = "all parameters", expected = "みまい") {
+                Wanakana.stripOkurigana("おみまい", true, matchKanji = "お祝い")
+            }
+        }
+
+        @TestFactory
+        @DisplayName("tokenize()")
+        fun tokenizeTest() = dynamicTests {
+            testEquals(name = "minimal input", expected = listOf("ア", "お")) {
+                Wanakana.tokenize("アお")
+            }
+            testEquals(name = "all parameters", expected = listOf("アお")) {
+                Wanakana.tokenize("アお", true)
+            }
+        }
+
+        @TestFactory
+        @DisplayName("tokenizeWithType()")
+        fun tokenizeWithTypeTest() = dynamicTests {
+            test(name = "minimal input") {
+                val expected = listOf(
+                    TypedToken("ア", TokenType.KATAKANA),
+                    TypedToken("お", TokenType.HIRAGANA)
+                )
+                val result = Wanakana.tokenizeWithType("アお")
+                assertEquals(expected = expected, actual = result)
+            }
+            test(name = "all parameters") {
+                val expected = listOf(
+                    TypedToken("アお", TokenType.JA)
+                )
+                val result = Wanakana.tokenizeWithType("アお", true)
+                assertEquals(expected = expected, actual = result)
             }
         }
 
