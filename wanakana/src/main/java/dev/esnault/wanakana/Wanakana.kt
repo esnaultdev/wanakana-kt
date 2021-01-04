@@ -8,7 +8,7 @@ object Wanakana {
     // bind
     // unbind
 
-    // Writing system checks
+    // Writing system checks (String + Char)
     // isRomaji
     // isJapanese
     // isKana
