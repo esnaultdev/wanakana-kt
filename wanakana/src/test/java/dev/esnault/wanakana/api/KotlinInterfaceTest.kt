@@ -128,58 +128,6 @@ class KotlinInterfaceTest {
                 toRomaji(input = "おなじ", config = Config.DEFAULT)
             }
         }
-
-        @Nested
-        @DisplayName("Config")
-        inner class ConfigTest {
-            @Test
-            fun defaultConfig() {
-                val config = Config.DEFAULT
-                val expected = Config(false, false, false, IMEMode.DISABLED)
-                assertEquals(expected = expected, actual = config)
-            }
-
-            @Test
-            fun createConfigWithUpcaseKatakana() {
-                val config = Config(upcaseKatakana = true)
-                val expected = Config(false, false, true, IMEMode.DISABLED)
-                assertEquals(expected = expected, actual = config)
-            }
-
-            @Test
-            fun updateConfigWithUpcaseKatakana() {
-                val config = Config.DEFAULT
-                val newConfig = config.copy(upcaseKatakana = true)
-                val expected = Config(false, false, true, IMEMode.DISABLED)
-                assertEquals(expected = expected, actual = newConfig)
-            }
-        }
-
-        @Test
-        @DisplayName("Custom mapping")
-        fun customMappingTest() {
-            val mapping = mapping {
-                value = "test"
-                "ab" to "other"
-                "c" to mapping { value = "another" }
-            }
-            val expected = mappingTreeOf(
-                value = "test",
-                subTrees = mapOf(
-                    'a' to mappingTreeOf(
-                        subTrees = mapOf(
-                            'b' to mappingTreeOf(
-                                value = "other"
-                            )
-                        )
-                    ),
-                    'c' to mappingTreeOf(
-                        value = "another"
-                    )
-                )
-            )
-            assertEquals(expected = expected, actual = mapping)
-        }
         
         @TestFactory
         @DisplayName("Detection methods")
@@ -236,5 +184,57 @@ class KotlinInterfaceTest {
         testTrue(name = "isKanji()") { '腹'.isKanji() }
         testTrue(name = "isJapanese()") { '泣'.isJapanese() }
         testTrue(name = "isRomaji()") { 'Ō'.isRomaji() }
+    }
+
+    @Nested
+    @DisplayName("Config")
+    inner class ConfigTest {
+        @Test
+        fun defaultConfig() {
+            val config = Config.DEFAULT
+            val expected = Config(false, false, false, IMEMode.DISABLED)
+            assertEquals(expected = expected, actual = config)
+        }
+
+        @Test
+        fun createConfigWithUpcaseKatakana() {
+            val config = Config(upcaseKatakana = true)
+            val expected = Config(false, false, true, IMEMode.DISABLED)
+            assertEquals(expected = expected, actual = config)
+        }
+
+        @Test
+        fun updateConfigWithUpcaseKatakana() {
+            val config = Config.DEFAULT
+            val newConfig = config.copy(upcaseKatakana = true)
+            val expected = Config(false, false, true, IMEMode.DISABLED)
+            assertEquals(expected = expected, actual = newConfig)
+        }
+    }
+
+    @Test
+    @DisplayName("Custom mapping")
+    fun customMappingTest() {
+        val mapping = mapping {
+            value = "test"
+            "ab" to "other"
+            "c" to mapping { value = "another" }
+        }
+        val expected = mappingTreeOf(
+            value = "test",
+            subTrees = mapOf(
+                'a' to mappingTreeOf(
+                    subTrees = mapOf(
+                        'b' to mappingTreeOf(
+                            value = "other"
+                        )
+                    )
+                ),
+                'c' to mappingTreeOf(
+                    value = "another"
+                )
+            )
+        )
+        assertEquals(expected = expected, actual = mapping)
     }
 }
