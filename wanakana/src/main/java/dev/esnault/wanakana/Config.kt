@@ -53,6 +53,7 @@ data class Config(
          * Default configuration.
          * See the [Config] documentation for the default values.
          */
+        @JvmField
         val DEFAULT = Config()
     }
 }

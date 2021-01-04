@@ -25,6 +25,7 @@ object Wanakana {
      *
      * See [dev.esnault.wanakana.isRomaji] for more details.
      */
+    @JvmStatic
     fun isRomaji(input: Char): Boolean =
         dev.esnault.wanakana.isRomaji(input)
 
