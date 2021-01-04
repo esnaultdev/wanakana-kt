@@ -9,7 +9,7 @@ import java.lang.IllegalArgumentException
 internal class MappingTreeImpl(
     val children: Map<Char, MappingTree>? = null,
     override val value: String? = null
-) : MappingTree {
+) : MappingTree() {
     override operator fun get(key: Char): MappingTree? = children?.get(key)
 
     override fun hasSubTree(): Boolean = children?.isNotEmpty() == true
@@ -35,7 +35,7 @@ internal class MappingTreeImpl(
 /**
  * Default implementation of a [MutableMappingTree].
  */
-internal class MutableMappingTreeImpl(override var value: String? = null) : MutableMappingTree {
+internal class MutableMappingTreeImpl(override var value: String? = null) : MutableMappingTree() {
     private val childrenDelegate = lazy { mutableMapOf<Char, MutableMappingTree>() }
     private val children: MutableMap<Char, MutableMappingTree> by childrenDelegate
 

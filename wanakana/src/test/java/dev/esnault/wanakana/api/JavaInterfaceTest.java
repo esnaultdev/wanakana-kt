@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import dev.esnault.wanakana.Config;
 import dev.esnault.wanakana.ConfigBuilder;
@@ -15,6 +16,8 @@ import dev.esnault.wanakana.IMEMode;
 import dev.esnault.wanakana.TokenType;
 import dev.esnault.wanakana.TypedToken;
 import dev.esnault.wanakana.Wanakana;
+import dev.esnault.wanakana.utils.MappingBuilder;
+import dev.esnault.wanakana.utils.MappingTree;
 import kotlin.text.Regex;
 
 /**
@@ -284,32 +287,30 @@ class JavaInterfaceTest {
         }
     }
 
-    /*
     @Test
     @DisplayName("Custom mapping")
     void customMappingTest() {
-        // TODO improve this, this is quite horrible.
-        val mapping = mapping {
-            value = "test"
-            "ab" to "other"
-            "c" to mapping { value = "another" }
-        }
-        val expected = mappingTreeOf(
-                value = "test",
-                subTrees = mapOf(
-                        'a' to mappingTreeOf(
-                                subTrees = mapOf(
-                                        'b' to mappingTreeOf(
-                                                value = "other"
-                                        )
+        MappingTree mapping = new MappingBuilder()
+                .value("test")
+                .to("ab", "other")
+                .to("c", new MappingBuilder()
+                        .value("another")
+                        .build()
+                )
+                .build();
+        MappingTree expected = MappingTree.of(
+                "test",
+                Map.of(
+                        'a', MappingTree.of(
+                                null,
+                                Map.of(
+                                        'b',
+                                        MappingTree.of("other")
                                 )
                         ),
-                        'c' to mappingTreeOf(
-                                value = "another"
-                        )
+                        'c', MappingTree.of("another")
                 )
         );
         Assert.assertEquals(expected, mapping);
     }
-    */
 }
