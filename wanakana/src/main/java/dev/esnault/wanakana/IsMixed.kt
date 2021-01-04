@@ -8,8 +8,8 @@ import dev.esnault.wanakana.extension.isRomaji
 /**
  * Returns `true` if [input] contains a mix of Romaji and Kana.
  *
- * // TODO Investigate the reasoning behind this parameter, it doesn't make much sense.
- * @param passKanji if `true`, pass through kanji (defaults to `true`)
+ * @param passKanji if `true`, ignore kanji, otherwise this check will fail if any character is a
+ * Kanji. Defaults to `true`.
  *
  * See [Romaji](https://en.wikipedia.org/wiki/Romaji)
  * See [Kana](https://en.wikipedia.org/wiki/Kana)

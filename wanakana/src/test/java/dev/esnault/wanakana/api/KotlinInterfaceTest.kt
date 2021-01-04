@@ -184,6 +184,7 @@ class KotlinInterfaceTest {
         @TestFactory
         @DisplayName("Detection methods")
         fun detectionMethodsTest() = dynamicTests {
+            // String
             testTrue(name = "isKana()") { isKana("あ") }
             testTrue(name = "isHiragana()") { isHiragana("あ") }
             testTrue(name = "isKatakana()") { isKatakana("ア") }
@@ -198,12 +199,21 @@ class KotlinInterfaceTest {
             testTrue(name = "isRomaji()") {
                 isRomaji("a！b&cーd", allowed = Regex("""[！ー]"""))
             }
+
+            // Char
+            testTrue(name = "isKana()") { isKana('あ') }
+            testTrue(name = "isHiragana()") { isHiragana('あ') }
+            testTrue(name = "isKatakana()") { isKatakana('ア') }
+            testTrue(name = "isKanji()") { isKanji('腹') }
+            testTrue(name = "isJapanese()") { isJapanese('泣') }
+            testTrue(name = "isRomaji()") { isRomaji('Ō') }
         }
     }
 
     @TestFactory
     @DisplayName("Extensions")
     fun detectionMethodsExtTest() = dynamicTests {
+        // String
         testTrue(name = "isKana()") { "あ".isKana() }
         testTrue(name = "isHiragana()") { "あ".isHiragana() }
         testTrue(name = "isKatakana()") { "ア".isKatakana() }
@@ -218,5 +228,13 @@ class KotlinInterfaceTest {
         testTrue(name = "isRomaji()") {
             "a！b&cーd".isRomaji(allowed = Regex("""[！ー]"""))
         }
+
+        // Char
+        testTrue(name = "isKana()") { 'あ'.isKana() }
+        testTrue(name = "isHiragana()") { 'あ'.isHiragana() }
+        testTrue(name = "isKatakana()") { 'ア'.isKatakana() }
+        testTrue(name = "isKanji()") { '腹'.isKanji() }
+        testTrue(name = "isJapanese()") { '泣'.isJapanese() }
+        testTrue(name = "isRomaji()") { 'Ō'.isRomaji() }
     }
 }

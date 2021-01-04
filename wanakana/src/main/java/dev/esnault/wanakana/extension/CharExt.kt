@@ -1,40 +1,54 @@
 package dev.esnault.wanakana.extension
 
 import dev.esnault.wanakana.utils.Constants
-import dev.esnault.wanakana.utils.isLongDash
 
 /**
  * Returns `true` if this is [Hiragana](https://en.wikipedia.org/wiki/Hiragana).
+ *
+ * See [dev.esnault.wanakana.isHiragana].
  */
-fun Char.isHiragana(): Boolean {
-    if (isLongDash()) return true
-    return this.toInt() in Constants.HIRAGANA_RANGE
-}
+fun Char.isHiragana(): Boolean =
+    dev.esnault.wanakana.isHiragana(this)
 
 /**
  * Returns `true` if this is [Katakana](https://en.wikipedia.org/wiki/Katakana).
+ *
+ * See [dev.esnault.wanakana.isKatakana].
  */
-fun Char.isKatakana(): Boolean = this.toInt() in Constants.KATAKANA_RANGE
+fun Char.isKatakana(): Boolean =
+    dev.esnault.wanakana.isKatakana(this)
 
 /**
  * Returns `true` if this is [Kana](https://en.wikipedia.org/wiki/Kana).
+ *
+ * See [dev.esnault.wanakana.isKana].
  */
-fun Char.isKana(): Boolean = this.isHiragana() || this.isKatakana()
+fun Char.isKana(): Boolean =
+    dev.esnault.wanakana.isKana(this)
 
 /**
  * Returns `true` if this is a CJK ideograph (kanji).
+ *
+ * See [dev.esnault.wanakana.isKanji].
  */
-fun Char.isKanji(): Boolean = this.toInt() in Constants.KANJI_RANGE
+fun Char.isKanji(): Boolean =
+    dev.esnault.wanakana.isKanji(this)
 
 /**
  * Returns `true` if this is Romaji (allowing Hepburn romanisation).
  *
- * See [Romaji](https://en.wikipedia.org/wiki/Romaji).
- * See [Hepburn romanisation](https://en.wikipedia.org/wiki/Hepburn_romanization).
+ * See [dev.esnault.wanakana.isRomaji].
  */
-fun Char.isRomaji(): Boolean = this.toInt().let { charCode ->
-    Constants.ROMAJI_RANGES.any { range -> charCode in range }
-}
+fun Char.isRomaji(): Boolean =
+    dev.esnault.wanakana.isRomaji(this)
+
+/**
+ * Returns `true` if this is Japanese.
+ *
+ * See [dev.esnault.wanakana.isJapanese].
+ */
+fun Char.isJapanese(): Boolean =
+    dev.esnault.wanakana.isJapanese(this)
 
 /**
  * Returns `true` if this is considered English punctuation.
@@ -48,11 +62,4 @@ fun Char.isEnglishPunctuation(): Boolean = this.toInt().let { charCode ->
  */
 fun Char.isJapanesePunctuation(): Boolean = this.toInt().let { charCode ->
     Constants.JA_PUNCTUATION_RANGES.any { range -> charCode in range }
-}
-
-/**
- * Returns `true` if this is Japanese.
- */
-fun Char.isJapanese(): Boolean = this.toInt().let { charCode ->
-    Constants.JAPANESE_RANGES.any { range -> charCode in range }
 }
