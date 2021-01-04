@@ -1,6 +1,17 @@
 package dev.esnault.wanakana.utils
 
 import dev.esnault.wanakana.dynamicTests
+import dev.esnault.wanakana.extension.isEnglishPunctuation
+import dev.esnault.wanakana.extension.isEnglishUpperCase
+import dev.esnault.wanakana.extension.isHiragana
+import dev.esnault.wanakana.extension.isJapanese
+import dev.esnault.wanakana.extension.isJapanesePunctuation
+import dev.esnault.wanakana.extension.isKana
+import dev.esnault.wanakana.extension.isKanji
+import dev.esnault.wanakana.extension.isKatakana
+import dev.esnault.wanakana.extension.isLongDash
+import dev.esnault.wanakana.extension.isRomaji
+import dev.esnault.wanakana.extension.isSlashDot
 import dev.esnault.wanakana.helpers.EN_PUNC
 import dev.esnault.wanakana.helpers.JA_PUNC
 import org.junit.jupiter.api.TestFactory

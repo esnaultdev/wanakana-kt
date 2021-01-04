@@ -1,6 +1,6 @@
 package dev.esnault.wanakana
 
-import dev.esnault.wanakana.utils.isHiragana
+import dev.esnault.wanakana.extension.isHiragana
 
 
 /**

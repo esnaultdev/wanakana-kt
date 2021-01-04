@@ -1,6 +1,6 @@
 package dev.esnault.wanakana
 
-import dev.esnault.wanakana.utils.isKatakana
+import dev.esnault.wanakana.extension.isKatakana
 
 /**
  * Returns `true` if [input] is [Katakana](https://en.wikipedia.org/wiki/Katakana).

@@ -1,17 +1,6 @@
-package dev.esnault.wanakana.utils
+package dev.esnault.wanakana.extension
 
 import dev.esnault.wanakana.Constants
-
-
-/**
- * Returns `true` if this is '・'.
- */
-fun Char.isSlashDot(): Boolean = this.toInt() == Constants.KANA_SLASH_DOT
-
-/**
- * Returns `true` if this is 'ー'.
- */
-fun Char.isLongDash(): Boolean = this.toInt() == Constants.PROLONGED_SOUND_MARK
 
 /**
  * Returns `true` if this is [Hiragana](https://en.wikipedia.org/wiki/Hiragana).
@@ -35,11 +24,6 @@ fun Char.isKana(): Boolean = this.isHiragana() || this.isKatakana()
  * Returns `true` if this is a CJK ideograph (kanji).
  */
 fun Char.isKanji(): Boolean = this.toInt() in Constants.KANJI_RANGE
-
-/**
- * Returns `true` is this is an English uppercase letter.
- */
-fun Char.isEnglishUpperCase(): Boolean = this.toInt() in Constants.LATIN_UPPERCASE_RANGE
 
 /**
  * Returns `true` if this is Romaji (allowing Hepburn romanisation).
@@ -71,3 +55,21 @@ fun Char.isJapanesePunctuation(): Boolean = this.toInt().let { charCode ->
 fun Char.isJapanese(): Boolean = this.toInt().let { charCode ->
     Constants.JAPANESE_RANGES.any { range -> charCode in range }
 }
+
+// Internal API
+
+/**
+ * Returns `true` if this is '・'.
+ */
+internal fun Char.isSlashDot(): Boolean = this.toInt() == Constants.KANA_SLASH_DOT
+
+/**
+ * Returns `true` if this is 'ー'.
+ */
+internal fun Char.isLongDash(): Boolean = this.toInt() == Constants.PROLONGED_SOUND_MARK
+
+
+/**
+ * Returns `true` is this is an English uppercase letter.
+ */
+internal fun Char.isEnglishUpperCase(): Boolean = this.toInt() in Constants.LATIN_UPPERCASE_RANGE

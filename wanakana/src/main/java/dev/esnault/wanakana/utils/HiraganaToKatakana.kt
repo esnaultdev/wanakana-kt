@@ -1,6 +1,9 @@
 package dev.esnault.wanakana.utils
 
 import dev.esnault.wanakana.Constants
+import dev.esnault.wanakana.extension.isHiragana
+import dev.esnault.wanakana.extension.isLongDash
+import dev.esnault.wanakana.extension.isSlashDot
 
 /**
  * Converts Hiragana to Katakana.

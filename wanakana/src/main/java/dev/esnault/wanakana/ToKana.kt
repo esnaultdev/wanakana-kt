@@ -4,7 +4,7 @@ import dev.esnault.wanakana.utils.ConversionToken
 import dev.esnault.wanakana.utils.MappingTree
 import dev.esnault.wanakana.utils.applyMapping
 import dev.esnault.wanakana.utils.hiraganaToKatakana
-import dev.esnault.wanakana.utils.isEnglishUpperCase
+import dev.esnault.wanakana.extension.isEnglishUpperCase
 import dev.esnault.wanakana.utils.kanaImeMode
 import dev.esnault.wanakana.utils.romajiToKanaMap
 import dev.esnault.wanakana.utils.safeLowerCase
