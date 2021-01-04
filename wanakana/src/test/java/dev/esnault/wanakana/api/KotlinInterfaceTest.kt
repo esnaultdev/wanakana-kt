@@ -2,6 +2,7 @@ package dev.esnault.wanakana.api
 
 import dev.esnault.wanakana.Config
 import dev.esnault.wanakana.IMEMode
+import dev.esnault.wanakana.Wanakana
 import dev.esnault.wanakana.dynamicTests
 import dev.esnault.wanakana.extension.isHiragana
 import dev.esnault.wanakana.extension.isJapanese
@@ -31,8 +32,7 @@ import kotlin.test.assertEquals
 
 
 /**
- * Interface test to ensure that all of the API is available to other modules.
- * TODO Move this to the app module.
+ * Interface tests to ensure that refactorings don't impact existing users.
  */
 class KotlinInterfaceTest {
 
@@ -47,21 +47,13 @@ class KotlinInterfaceTest {
                 toHiragana("onaji")
             }
             testEquals(name = "named minimal input", expected = "おなじ") {
-                toHiragana(input = "onaji")
+                toHiragana("onaji")
             }
-            testEquals(name = "all parameters", expected = "おなじ") {
-                toHiragana(
-                    input = "onaji",
-                    imeMode = IMEMode.DISABLED,
-                    passRomaji = false,
-                    useObsoleteKana = false
-                )
+            testEquals(name = "all parameters", expected = "おなゐ") {
+                toHiragana("onawi", IMEMode.DISABLED, false, true)
             }
             testEquals(name = "config", expected = "おなじ") {
-                toHiragana(
-                    input = "onaji",
-                    config = Config.DEFAULT
-                )
+                toHiragana("onaji", Config.DEFAULT)
             }
         }
 
@@ -72,18 +64,13 @@ class KotlinInterfaceTest {
                 toKatakana("onaji")
             }
             testEquals(name = "named minimal input", expected = "オナジ") {
-                toKatakana(input = "onaji")
+                toKatakana("onaji")
             }
-            testEquals(name = "all parameters", expected = "オナジ") {
-                toKatakana(
-                    input = "onaji",
-                    imeMode = IMEMode.DISABLED,
-                    passRomaji = false,
-                    useObsoleteKana = false
-                )
+            testEquals(name = "all parameters", expected = "オナヰ") {
+                toKatakana("onawi", IMEMode.DISABLED, false, true)
             }
             testEquals(name = "config", expected = "オナジ") {
-                toKatakana(input = "onaji", config = Config.DEFAULT)
+                toKatakana("onaji", Config.DEFAULT)
             }
         }
 
@@ -94,17 +81,13 @@ class KotlinInterfaceTest {
                 toKana("onaji")
             }
             testEquals(name = "named minimal input", expected = "おなじ") {
-                toKana(input = "onaji")
+                toKana("onaji")
             }
-            testEquals(name = "all parameters", expected = "おなじ") {
-                toKana(
-                    input = "onaji",
-                    imeMode = IMEMode.DISABLED,
-                    useObsoleteKana = false
-                )
+            testEquals(name = "all parameters", expected = "おなゐ") {
+                toKana("onawi", IMEMode.DISABLED, true)
             }
             testEquals(name = "config", expected = "おなじ") {
-                toKana(input = "onaji", config = Config.DEFAULT)
+                toKana("onaji", Config.DEFAULT)
             }
         }
 
@@ -115,14 +98,10 @@ class KotlinInterfaceTest {
                 toRomaji("おなじ")
             }
             testEquals(name = "named minimal input", expected = "onaji") {
-                toRomaji(input = "おなじ")
+                toRomaji("おなじ")
             }
-            testEquals(name = "all parameters", expected = "onaji") {
-                toRomaji(
-                    input = "おなじ",
-                    imeMode = IMEMode.DISABLED,
-                    upcaseKatakana = false
-                )
+            testEquals(name = "all parameters", expected = "ONAJI") {
+                toRomaji("オナジ", IMEMode.DISABLED, true)
             }
             testEquals(name = "config", expected = "onaji") {
                 toRomaji(input = "おなじ", config = Config.DEFAULT)
@@ -137,15 +116,15 @@ class KotlinInterfaceTest {
             testTrue(name = "isHiragana()") { isHiragana("あ") }
             testTrue(name = "isKatakana()") { isKatakana("ア") }
             testTrue(name = "isMixed()") { isMixed("Abあア") }
-            testFalse(name = "isMixed()") { isMixed("お腹A", passKanji = false) }
+            testFalse(name = "isMixed(passKanji)") { isMixed("お腹A", false) }
             testTrue(name = "isKanji()") { isKanji("腹") }
             testTrue(name = "isJapanese()") { isJapanese("泣き虫") }
-            testTrue(name = "isJapanese()") {
-                isJapanese("≪偽括弧≫", allowed = Regex("""[≪≫]"""))
+            testTrue(name = "isJapanese(regex)") {
+                isJapanese("≪偽括弧≫", Regex("""[≪≫]"""))
             }
             testTrue(name = "isRomaji()") { isRomaji("Tōkyō and Ōsaka") }
-            testTrue(name = "isRomaji()") {
-                isRomaji("a！b&cーd", allowed = Regex("""[！ー]"""))
+            testTrue(name = "isRomaji(regex)") {
+                isRomaji("a！b&cーd", Regex("""[！ー]"""))
             }
 
             // Char
@@ -158,6 +137,107 @@ class KotlinInterfaceTest {
         }
     }
 
+    @Nested
+    @DisplayName("Wanakana methods")
+    inner class WanakanaTest {
+
+        @TestFactory
+        @DisplayName("toHiragana()")
+        fun toHiraganaTest() = dynamicTests {
+            testEquals(name = "minimal input", expected = "おなじ") {
+                Wanakana.toHiragana("onaji")
+            }
+            testEquals(name = "named minimal input", expected = "おなじ") {
+                Wanakana.toHiragana("onaji")
+            }
+            testEquals(name = "all parameters", expected = "おなゐ") {
+                Wanakana.toHiragana("onawi", IMEMode.DISABLED, false, true)
+            }
+            testEquals(name = "config", expected = "おなじ") {
+                Wanakana.toHiragana("onaji", Config.DEFAULT)
+            }
+        }
+
+        @TestFactory
+        @DisplayName("toKatakana()")
+        fun toKatakanaTest() = dynamicTests {
+            testEquals(name = "minimal input", expected = "オナジ") {
+                Wanakana.toKatakana("onaji")
+            }
+            testEquals(name = "named minimal input", expected = "オナジ") {
+                Wanakana.toKatakana("onaji")
+            }
+            testEquals(name = "all parameters", expected = "オナヰ") {
+                Wanakana.toKatakana("onawi", IMEMode.DISABLED, false, true)
+            }
+            testEquals(name = "config", expected = "オナジ") {
+                Wanakana.toKatakana("onaji", Config.DEFAULT)
+            }
+        }
+
+        @TestFactory
+        @DisplayName("toKana()")
+        fun toKanaTest() = dynamicTests {
+            testEquals(name = "minimal input", expected = "おなじ") {
+                Wanakana.toKana("onaji")
+            }
+            testEquals(name = "named minimal input", expected = "おなじ") {
+                Wanakana.toKana("onaji")
+            }
+            testEquals(name = "all parameters", expected = "おなゐ") {
+                Wanakana.toKana("onawi", IMEMode.DISABLED, true)
+            }
+            testEquals(name = "config", expected = "おなじ") {
+                Wanakana.toKana("onaji", Config.DEFAULT)
+            }
+        }
+
+        @TestFactory
+        @DisplayName("toRomaji()")
+        fun toRomajiTest() = dynamicTests {
+            testEquals(name = "minimal input", expected = "onaji") {
+                Wanakana.toRomaji("おなじ")
+            }
+            testEquals(name = "named minimal input", expected = "onaji") {
+                Wanakana.toRomaji("おなじ")
+            }
+            testEquals(name = "all parameters", expected = "ONAJI") {
+                Wanakana.toRomaji("オナジ", IMEMode.DISABLED, true)
+            }
+            testEquals(name = "config", expected = "onaji") {
+                Wanakana.toRomaji(input = "おなじ", config = Config.DEFAULT)
+            }
+        }
+
+        @TestFactory
+        @DisplayName("Detection methods")
+        fun detectionMethodsTest() = dynamicTests {
+            // String
+            testTrue(name = "isKana()") { Wanakana.isKana("あ") }
+            testTrue(name = "isHiragana()") { Wanakana.isHiragana("あ") }
+            testTrue(name = "isKatakana()") { Wanakana.isKatakana("ア") }
+            testTrue(name = "isMixed()") { Wanakana.isMixed("Abあア") }
+            testFalse(name = "isMixed(passKanji)") { Wanakana.isMixed("お腹A", false) }
+            testTrue(name = "isKanji()") { Wanakana.isKanji("腹") }
+            testTrue(name = "isJapanese()") { Wanakana.isJapanese("泣き虫") }
+            testTrue(name = "isJapanese(regex)") {
+                Wanakana.isJapanese("≪偽括弧≫", Regex("""[≪≫]"""))
+            }
+            testTrue(name = "isRomaji()") { Wanakana.isRomaji("Tōkyō and Ōsaka") }
+            testTrue(name = "isRomaji(regex)") {
+                Wanakana.isRomaji("a！b&cーd", Regex("""[！ー]"""))
+            }
+
+            // Char
+            testTrue(name = "isKana()") { Wanakana.isKana('あ') }
+            testTrue(name = "isHiragana()") { Wanakana.isHiragana('あ') }
+            testTrue(name = "isKatakana()") { Wanakana.isKatakana('ア') }
+            testTrue(name = "isKanji()") { Wanakana.isKanji('腹') }
+            testTrue(name = "isJapanese()") { Wanakana.isJapanese('泣') }
+            testTrue(name = "isRomaji()") { Wanakana.isRomaji('Ō') }
+        }
+    }
+
     @TestFactory
     @DisplayName("Extensions")
     fun detectionMethodsExtTest() = dynamicTests {
@@ -166,15 +246,15 @@ class KotlinInterfaceTest {
         testTrue(name = "isHiragana()") { "あ".isHiragana() }
         testTrue(name = "isKatakana()") { "ア".isKatakana() }
         testTrue(name = "isMixed()") { "Abあア".isMixed() }
-        testFalse(name = "isMixed()") { "お腹A".isMixed(passKanji = false) }
+        testFalse(name = "isMixed(passKanji)") { "お腹A".isMixed(false) }
         testTrue(name = "isKanji()") { "腹".isKanji() }
         testTrue(name = "isJapanese()") { "泣き虫".isJapanese() }
-        testTrue(name = "isJapanese()") {
-            "≪偽括弧≫".isJapanese(allowed = Regex("""[≪≫]"""))
+        testTrue(name = "isJapanese(regex)") {
+            "≪偽括弧≫".isJapanese(Regex("""[≪≫]"""))
         }
         testTrue(name = "isRomaji()") { "Tōkyō and Ōsaka".isRomaji() }
-        testTrue(name = "isRomaji()") {
-            "a！b&cーd".isRomaji(allowed = Regex("""[！ー]"""))
+        testTrue(name = "isRomaji(regex)") {
+            "a！b&cーd".isRomaji(Regex("""[！ー]"""))
         }
 
         // Char
@@ -237,4 +317,5 @@ class KotlinInterfaceTest {
         )
         assertEquals(expected = expected, actual = mapping)
     }
+
 }

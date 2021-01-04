@@ -111,7 +111,7 @@ object Wanakana {
     @JvmStatic
     @JvmOverloads
     fun isMixed(input: String, passKanji: Boolean = true): Boolean =
-        dev.esnault.wanakana.isMixed(input)
+        dev.esnault.wanakana.isMixed(input, passKanji)
 
     /**
      * Returns `true` if [input] is [Kanji](https://en.wikipedia.org/wiki/Kanji).
