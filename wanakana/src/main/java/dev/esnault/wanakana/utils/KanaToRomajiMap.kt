@@ -1,7 +1,7 @@
 package dev.esnault.wanakana.utils
 
 
-val BASIC_ROMAJI_TREE = mapping {
+private val BASIC_ROMAJI_TREE = mapping {
     "あ" to "a"; "い" to "i"; "う" to "u"; "え" to "e"; "お" to "o"
     "か" to "ka"; "き" to "ki"; "く" to "ku"; "け" to "ke"; "こ" to "ko"
     "さ" to "sa"; "し" to "shi"; "す" to "su"; "せ" to "se"; "そ" to "so"
@@ -165,4 +165,4 @@ private fun updateTsu(tree: MutableMappingTree) {
     tree.value?.let { tree.value = newValue(it) }
 }
 
-val kanaToHepburnMap: MappingTree by lazy { createKanaToHepburnMap() }
+internal val kanaToHepburnMap: MappingTree by lazy { createKanaToHepburnMap() }

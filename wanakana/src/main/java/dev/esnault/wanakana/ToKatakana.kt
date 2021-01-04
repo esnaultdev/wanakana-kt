@@ -1,6 +1,7 @@
 package dev.esnault.wanakana
 
 import dev.esnault.wanakana.utils.hiraganaToKatakana
+import dev.esnault.wanakana.utils.isEnglishPunctuation
 import dev.esnault.wanakana.utils.safeLowerCase
 
 
@@ -32,7 +33,7 @@ fun toKatakana(
         return hiraganaToKatakana(input)
     }
 
-    if (isMixed(input) || isRomaji(input) || isEnglishPunctuation(input)) {
+    if (isMixed(input) || isRomaji(input) || input.isEnglishPunctuation()) {
         val hiragana = toKana(
             input = input.safeLowerCase(),
             imeMode = imeMode,

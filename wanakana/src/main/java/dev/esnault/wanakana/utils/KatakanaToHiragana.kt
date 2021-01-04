@@ -6,7 +6,7 @@ import dev.esnault.wanakana.toRomaji
 private fun Char.isInitialLongDash(index: Int): Boolean = isLongDash() && index < 1
 private fun Char.isInnerLongDash(index: Int): Boolean = isLongDash() && index > 0
 private fun Char.isKanaAsSymbol(): Boolean = this in listOf('ヶ', 'ヵ')
-val LONG_VOWELS = mapOf<Char, Char>(
+private val LONG_VOWELS = mapOf<Char, Char>(
     'a' to 'あ',
     'i' to 'い',
     'u' to 'う',
@@ -14,7 +14,7 @@ val LONG_VOWELS = mapOf<Char, Char>(
     'o' to 'う',
 )
 
-fun katakanaToHiragana(input: String, isDestinationRomaji: Boolean = false): String {
+internal fun katakanaToHiragana(input: String, isDestinationRomaji: Boolean = false): String {
     var previousKana: Char? = null
     return buildString {
         input.forEachIndexed { index, char ->

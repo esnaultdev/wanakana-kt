@@ -15,7 +15,7 @@ import dev.esnault.wanakana.Constants
  * See [Hiragana](https://en.wikipedia.org/wiki/Hiragana).
  * See [Katakana](https://en.wikipedia.org/wiki/Katakana).
  */
-fun hiraganaToKatakana(input: String): String = buildString {
+internal fun hiraganaToKatakana(input: String): String = buildString {
     input.forEach { char ->
         // Short circuit to avoid incorrect codeshift for 'ー' and '・'
         if (char.isLongDash() || char.isSlashDot()) {

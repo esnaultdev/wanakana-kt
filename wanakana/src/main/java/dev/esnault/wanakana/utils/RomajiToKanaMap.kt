@@ -229,14 +229,14 @@ private fun createRomajiToKanaMap(): MappingTree {
     return kanaTree.toMappingTree()
 }
 
-val romajiToKanaMap: MappingTree by lazy { createRomajiToKanaMap() }
+internal val romajiToKanaMap: MappingTree by lazy { createRomajiToKanaMap() }
 
-fun useObsoleteKana(map: MappingTree): MappingTree {
+internal fun useObsoleteKana(map: MappingTree): MappingTree {
     val obsoleteKanaMapping = mapping { "wi" to 'ゐ'; "we" to 'ゑ' }
     return obsoleteKanaMapping.mergeWith(map)
 }
 
-fun kanaImeMode(map: MappingTree): MappingTree {
+internal fun kanaImeMode(map: MappingTree): MappingTree {
     val customNMapping = mapping { "nn" to 'ん'; "n " to 'ん' }
     return customNMapping.mergeWith(map)
 }

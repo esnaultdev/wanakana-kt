@@ -1,5 +1,6 @@
 package dev.esnault.wanakana
 
+import dev.esnault.wanakana.utils.isEnglishPunctuation
 import dev.esnault.wanakana.utils.katakanaToHiragana
 import dev.esnault.wanakana.utils.safeLowerCase
 
@@ -41,7 +42,7 @@ fun toHiragana(
         )
     }
 
-    if (isRomaji(input) || isEnglishPunctuation(input)) {
+    if (isRomaji(input) || input.isEnglishPunctuation()) {
         return toKana(
             input = input.safeLowerCase(),
             imeMode = imeMode,

@@ -1,7 +1,10 @@
 package dev.esnault.wanakana
 
 
-object Constants {
+/**
+ * Constants to work with Unicode characters.
+ */
+internal object Constants {
     // CharCode References
     // http://www.rikai.com/library/kanjitables/kanji_codes.unicode.shtml
     // http://unicode-table.com
