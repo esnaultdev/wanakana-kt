@@ -2,8 +2,6 @@ package dev.esnault.wanakana.utils
 
 import dev.esnault.wanakana.Constants
 import dev.esnault.wanakana.extension.isKatakana
-import dev.esnault.wanakana.extension.isLongDash
-import dev.esnault.wanakana.extension.isSlashDot
 import dev.esnault.wanakana.toRomaji
 
 private fun Char.isInitialLongDash(index: Int): Boolean = isLongDash() && index < 1
