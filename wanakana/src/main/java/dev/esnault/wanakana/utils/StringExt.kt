@@ -1,6 +1,5 @@
 package dev.esnault.wanakana.utils
 
-import dev.esnault.wanakana.extension.isEnglishPunctuation
 import java.util.*
 
 /**

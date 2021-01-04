@@ -49,17 +49,3 @@ fun Char.isRomaji(): Boolean =
  */
 fun Char.isJapanese(): Boolean =
     dev.esnault.wanakana.isJapanese(this)
-
-/**
- * Returns `true` if this is considered English punctuation.
- */
-fun Char.isEnglishPunctuation(): Boolean = this.toInt().let { charCode ->
-    Constants.EN_PUNCTUATION_RANGES.any { range -> charCode in range }
-}
-
-/**
- * Returns `true` if this is considered Japanese punctuation.
- */
-fun Char.isJapanesePunctuation(): Boolean = this.toInt().let { charCode ->
-    Constants.JA_PUNCTUATION_RANGES.any { range -> charCode in range }
-}

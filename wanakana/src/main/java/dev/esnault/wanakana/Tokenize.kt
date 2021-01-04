@@ -1,12 +1,12 @@
 package dev.esnault.wanakana
 
-import dev.esnault.wanakana.extension.isEnglishPunctuation
 import dev.esnault.wanakana.extension.isHiragana
 import dev.esnault.wanakana.extension.isJapanese
-import dev.esnault.wanakana.extension.isJapanesePunctuation
 import dev.esnault.wanakana.extension.isKanji
 import dev.esnault.wanakana.extension.isKatakana
 import dev.esnault.wanakana.extension.isRomaji
+import dev.esnault.wanakana.utils.isEnglishPunctuation
+import dev.esnault.wanakana.utils.isJapanesePunctuation
 
 /**
  * Type of text token.
