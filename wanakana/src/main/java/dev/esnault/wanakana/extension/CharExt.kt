@@ -1,6 +1,6 @@
 package dev.esnault.wanakana.extension
 
-import dev.esnault.wanakana.Constants
+import dev.esnault.wanakana.utils.Constants
 import dev.esnault.wanakana.utils.isLongDash
 
 /**

@@ -1,4 +1,4 @@
-package dev.esnault.wanakana
+package dev.esnault.wanakana.utils
 
 
 /**

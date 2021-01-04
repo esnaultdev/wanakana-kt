@@ -1,7 +1,5 @@
 package dev.esnault.wanakana.utils
 
-import dev.esnault.wanakana.Constants
-
 
 /**
  * Returns `true` if this is '・'.
