@@ -26,6 +26,7 @@ import kotlin.text.Regex;
  * Java users.
  */
 class JavaInterfaceTest {
+    @Nested
     @DisplayName("toHiragana()")
     class ToHiraganaTest {
         @Test
@@ -47,6 +48,7 @@ class JavaInterfaceTest {
         }
     }
 
+    @Nested
     @DisplayName("toKatakana()")
     class ToKatakanaTest {
         @Test
@@ -68,6 +70,7 @@ class JavaInterfaceTest {
         }
     }
 
+    @Nested
     @DisplayName("toKana()")
     class ToKanaTest {
         @Test
@@ -89,6 +92,7 @@ class JavaInterfaceTest {
         }
     }
 
+    @Nested
     @DisplayName("toRomaji()")
     class ToRomajiTest {
         @Test
@@ -99,8 +103,8 @@ class JavaInterfaceTest {
 
         @Test
         void allParameters() {
-            String result = Wanakana.toRomaji("ONAJI", IMEMode.DISABLED, true);
-            Assert.assertEquals("オナジ", result);
+            String result = Wanakana.toRomaji("オナジ", IMEMode.DISABLED, true);
+            Assert.assertEquals("ONAJI", result);
         }
 
         @Test
@@ -110,6 +114,7 @@ class JavaInterfaceTest {
         }
     }
 
+    @Nested
     @DisplayName("stripOkurigana()")
     class StripOkuriganaTest {
         @Test
@@ -125,6 +130,7 @@ class JavaInterfaceTest {
         }
     }
 
+    @Nested
     @DisplayName("tokenize()")
     class TokenizeTest {
         @Test
@@ -145,6 +151,7 @@ class JavaInterfaceTest {
         }
     }
 
+    @Nested
     @DisplayName("tokenizeWithType()")
     class TokenizeWithTypeTest {
         @Test
