@@ -22,7 +22,7 @@ inline fun String.isHiragana(): Boolean =
 /**
  * Returns `true` if this is [Katakana](https://en.wikipedia.org/wiki/Katakana).
  *
- * See [dev.esnault.wanakana.isKatakana].
+ * See [dev.esnault.wanakana.isKatakana] for more details.
  */
 fun String.isKatakana(): Boolean =
     dev.esnault.wanakana.isKatakana(this)
@@ -31,7 +31,7 @@ fun String.isKatakana(): Boolean =
 /**
  * Returns `true` if this is [Kanji](https://en.wikipedia.org/wiki/Kanji).
  *
- * See [dev.esnault.wanakana.isKana].
+ * See [dev.esnault.wanakana.isKana] for more details.
  */
 fun String.isKanji(): Boolean =
     dev.esnault.wanakana.isKanji(this)
@@ -39,7 +39,7 @@ fun String.isKanji(): Boolean =
 /**
  * Returns `true` if this only includes Kanji, Kana, zenkaku numbers, and JA punctuation/symbols.
  *
- * See [dev.esnault.wanakana.isJapanese].
+ * See [dev.esnault.wanakana.isJapanese] for more details.
  */
 fun String.isJapanese(allowed: Regex? = null): Boolean =
     dev.esnault.wanakana.isJapanese(this, allowed)
@@ -47,7 +47,7 @@ fun String.isJapanese(allowed: Regex? = null): Boolean =
 /**
  * Returns `true` if this contains a mix of Romaji and Kana.
  *
- * See [dev.esnault.wanakana.isMixed].
+ * See [dev.esnault.wanakana.isMixed] for more details.
  */
 fun String.isMixed(passKanji: Boolean = true): Boolean =
     dev.esnault.wanakana.isMixed(this, passKanji)
@@ -55,7 +55,7 @@ fun String.isMixed(passKanji: Boolean = true): Boolean =
 /**
  * Returns `true` if this is Romaji (allowing Hepburn romanisation).
  *
- * See [dev.esnault.wanakana.isRomaji].
+ * See [dev.esnault.wanakana.isRomaji] for more details.
  */
 fun String.isRomaji(allowed: Regex? = null): Boolean =
     dev.esnault.wanakana.isRomaji(this, allowed)

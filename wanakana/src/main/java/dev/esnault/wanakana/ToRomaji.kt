@@ -8,7 +8,10 @@ import dev.esnault.wanakana.utils.safeUpperCase
 
 
 /**
- * Converts kana to romaji.
+ * Converts kana to romaji (Hepburn romanisation).
+ *
+ * See [Romaji](https://en.wikipedia.org/wiki/Romaji).
+ * See [Hepburn romanisation](https://en.wikipedia.org/wiki/Hepburn_romanization).
  *
  * @param input the kana text input.
  * @param imeMode if enabled, handles conversion while the text is being typed, defaults to
@@ -42,17 +45,17 @@ fun toRomaji(
         }
 }
 
-private fun splitIntoRomaji(input: String, imeMode: IMEMode): List<ConversionToken> {
-    val map = kanaToHepburnMap
-    val hiragana = katakanaToHiragana(input, true)
-    return applyMapping(hiragana, map, imeMode == IMEMode.DISABLED)
-}
-
 /**
- * Converts kana to romaji.
+ * Converts kana to romaji (Hepburn romanisation).
  *
  * See [toRomaji] for more details.
  */
 fun toRomaji(input: String, config: Config = Config.DEFAULT): String {
     return toRomaji(input, config.imeMode, config.upcaseKatakana)
+}
+
+private fun splitIntoRomaji(input: String, imeMode: IMEMode): List<ConversionToken> {
+    val map = kanaToHepburnMap
+    val hiragana = katakanaToHiragana(input, true)
+    return applyMapping(hiragana, map, imeMode == IMEMode.DISABLED)
 }
