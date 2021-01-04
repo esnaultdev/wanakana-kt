@@ -58,6 +58,13 @@ data class Config(
          */
         @JvmField
         val DEFAULT = Config()
+
+        /**
+         * Default configuration for IME Mode, using [IMEMode.ENABLED].
+         * See the [Config] documentation for other default values.
+         */
+        @JvmField
+        val DEFAULT_IME = Config(imeMode = IMEMode.ENABLED)
     }
 
     /**
