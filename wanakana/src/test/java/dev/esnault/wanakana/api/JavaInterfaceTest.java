@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dev.esnault.wanakana.Config;
+import dev.esnault.wanakana.ConfigBuilder;
 import dev.esnault.wanakana.IMEMode;
 import dev.esnault.wanakana.TokenType;
 import dev.esnault.wanakana.TypedToken;
@@ -263,24 +264,24 @@ class JavaInterfaceTest {
             Assert.assertEquals(expected, config);
         }
 
-        /*
         @Test
         void createConfigWithUpcaseKatakana() {
-            // TODO improve this, this is quite horrible.
-            Config config = Config(upcaseKatakana = true);
+            Config config = new ConfigBuilder()
+                    .upcaseKatakana(true)
+                    .build();
             Config expected = new Config(false, false, true, IMEMode.DISABLED);
             Assert.assertEquals(expected, config);
         }
 
         @Test
         void updateConfigWithUpcaseKatakana() {
-            // TODO improve this, this is quite horrible.
             Config config = Config.DEFAULT;
-            Config newConfig = config.copy(upcaseKatakana = true);
-            Config expected = Config(false, false, true, IMEMode.DISABLED);
+            Config newConfig = config.update()
+                    .upcaseKatakana(true)
+                    .build();
+            Config expected = new Config(false, false, true, IMEMode.DISABLED);
             Assert.assertEquals(expected, newConfig);
         }
-        */
     }
 
     /*

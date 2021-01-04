@@ -10,13 +10,16 @@ package dev.esnault.wanakana
 enum class IMEMode {
     /** Disabled, all the text will be converted if possible. */
     DISABLED,
+
     /**
      * Enabled, the end of the text will not be converted if ambiguous, allowing it to be
      * disambiguated later by new characters.
      */
     ENABLED,
+
     /** [ENABLED], with the kana conversion always using hiragana. */
     TO_HIRAGANA,
+
     /** [ENABLED], with the kana conversion always using katakana. */
     TO_KATAKANA
 }
@@ -56,4 +59,86 @@ data class Config(
         @JvmField
         val DEFAULT = Config()
     }
+
+    /**
+     * Returns a [ConfigBuilder] from this [Config] to update it.
+     * This is meant to be used from Java, as Kotlin can use [copy] and named parameters.
+     */
+    fun update(): ConfigBuilder = ConfigBuilder(
+        useObsoleteKana = useObsoleteKana,
+        passRomaji = passRomaji,
+        upcaseKatakana = upcaseKatakana,
+        imeMode = imeMode
+    )
+}
+
+/**
+ * A builder to construct and update a [Config].
+ * This is meant to be used from Java, as Kotlin can use [Config.copy] and named parameters to build
+ * a [Config] object.
+ */
+class ConfigBuilder(
+    useObsoleteKana: Boolean = false,
+    passRomaji: Boolean = false,
+    upcaseKatakana: Boolean = false,
+    imeMode: IMEMode = IMEMode.DISABLED
+) {
+
+    var useObsoleteKana: Boolean = useObsoleteKana
+        private set
+    var passRomaji: Boolean = passRomaji
+        private set
+    var upcaseKatakana: Boolean = upcaseKatakana
+        private set
+    var imeMode: IMEMode = imeMode
+        private set
+
+    /**
+     * Builds a [Config] from this builder.
+     */
+    fun build(): Config = Config(
+        useObsoleteKana = useObsoleteKana,
+        passRomaji = passRomaji,
+        upcaseKatakana = upcaseKatakana,
+        imeMode = imeMode
+    )
+
+    /**
+     * Sets [useObsoleteKana].
+     * If `true`, obsolete kanas (ゐ, ゑ, ヰ and ヱ) will be used when converting romaji to kana.
+     * Applies to [toKana], [toHiragana] and [toKatakana].
+     * Defaults to `false`.
+     */
+    fun useObsoleteKana(useObsoleteKana: Boolean): ConfigBuilder =
+        apply { this.useObsoleteKana = useObsoleteKana }
+
+    /**
+     * Sets [passRomaji].
+     * If `true`, romaji will be kept as is during conversion. This means that only kanas (and
+     * Japanese punctuation) will be converted.
+     * Applies to [toHiragana] and [toKatakana].
+     * Defaults to `false`.
+     */
+    fun passRomaji(passRomaji: Boolean): ConfigBuilder =
+        apply { this.passRomaji = passRomaji }
+
+    /**
+     * Sets [upcaseKatakana].
+     * If `true`, katakana will be converted as uppercase romaji.
+     * Applies to [toRomaji].
+     * Defaults to `false`.
+     */
+    fun upcaseKatakana(upcaseKatakana: Boolean): ConfigBuilder =
+        apply { this.upcaseKatakana = upcaseKatakana }
+
+    /**
+     * Sets the [imeMode].
+     * If not [IMEMode.DISABLED], allows the conversion to be performed while typed. This means that
+     * the last characters of the input might not be converted if ambiguous to allow later
+     * conversion.
+     * Applies to [toRomaji], [toKana], [toHiragana] and [toKatakana].
+     * Defaults to [IMEMode.DISABLED].
+     */
+    fun imeMode(imeMode: IMEMode): ConfigBuilder =
+        apply { this.imeMode = imeMode }
 }
