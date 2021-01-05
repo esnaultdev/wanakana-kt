@@ -40,26 +40,36 @@ fun toKana(
     useObsoleteKana: Boolean = false
 ): String {
     val dummyImeText = ImeText(input, selection = -1..-1)
-    return toKana(dummyImeText, imeMode, useObsoleteKana).text
+    return toKanaIme(dummyImeText, imeMode, useObsoleteKana).text
 }
 
 /**
  * Converts Romaji to Kana.
  * Lowercase text will result in Hiragana and uppercase text will result in Katakana.
  *
- * See [toKana] for more details.
+ * @param input the text to convert to Kana.
+ * @param config optional configuration of the conversion. Defaults to [Config.DEFAULT].
+ * @return the converted text.
+ *
+ * See [toKana] for more details and examples.
  */
 fun toKana(input: String, config: Config = Config.DEFAULT): String {
     return toKana(input, config.imeMode, config.useObsoleteKana)
 }
 
 /**
- * Converts Romaji to Kana.
+ * Converts Romaji to Kana and preserves the cursor/selection.
  * Lowercase text will result in Hiragana and uppercase text will result in Katakana.
  *
- * // TODO Documentation
+ * @param input the text to convert to Kana, with cursor/selection.
+ * @param imeMode if enabled, handles conversion while the text is being typed, defaults to
+ * [IMEMode.ENABLED].
+ * @param useObsoleteKana if `true` obsolete kanas will be used (ゐゑヰヱ), defaults to `false`.
+ * @return the converted text, with cursor/selection.
+ *
+ * See [toKana] for more details and examples.
  */
-fun toKana(
+fun toKanaIme(
     input: ImeText,
     imeMode: IMEMode = IMEMode.ENABLED,
     useObsoleteKana: Boolean = false
@@ -91,13 +101,17 @@ fun toKana(
 }
 
 /**
- * Converts Romaji to Kana.
+ * Converts Romaji to Kana and preserves the cursor/selection.
  * Lowercase text will result in Hiragana and uppercase text will result in Katakana.
  *
- * See [toKana] for more details.
+ * @param input the text to convert to Kana, with cursor/selection.
+ * @param config optional configuration of the conversion. Defaults to [Config.DEFAULT_IME].
+ * @return the converted text, with cursor/selection.
+ *
+ * See [toKana] for more details and examples.
  */
-fun toKana(imeText: ImeText, config: Config = Config.DEFAULT_IME): ImeText {
-    return toKana(imeText, config.imeMode, config.useObsoleteKana)
+fun toKanaIme(input: ImeText, config: Config = Config.DEFAULT_IME): ImeText {
+    return toKanaIme(input, config.imeMode, config.useObsoleteKana)
 }
 
 private fun splitIntoConvertedKana(

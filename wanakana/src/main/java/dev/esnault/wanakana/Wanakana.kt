@@ -1,5 +1,7 @@
 package dev.esnault.wanakana
 
+import dev.esnault.wanakana.utils.ImeText
+
 
 object Wanakana {
 
@@ -172,6 +174,28 @@ object Wanakana {
     @JvmStatic
     fun toKana(input: String, config: Config = Config.DEFAULT): String =
         dev.esnault.wanakana.toKana(input, config)
+
+    /**
+     * Converts Romaji to Kana, and preserves the cursor/selection
+     *
+     * See [dev.esnault.wanakana.toKanaIme] for more details.
+     */
+    @JvmStatic
+    @JvmOverloads
+    fun toKanaIme(
+        input: ImeText,
+        imeMode: IMEMode = IMEMode.ENABLED,
+        useObsoleteKana: Boolean = false
+    ): ImeText = dev.esnault.wanakana.toKanaIme(input, imeMode, useObsoleteKana)
+
+    /**
+     * Converts Romaji to Kana, and preserves the cursor/selection
+     *
+     * See [dev.esnault.wanakana.toKanaIme] for more details.
+     */
+    @JvmStatic
+    fun toKanaIme(input: ImeText, config: Config = Config.DEFAULT_IME): ImeText =
+        dev.esnault.wanakana.toKanaIme(input, config)
 
     /**
      * Converts input to [Hiragana](https://en.wikipedia.org/wiki/Hiragana).

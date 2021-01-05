@@ -11,4 +11,15 @@ package dev.esnault.wanakana.utils
 data class ImeText(
     val text: String,
     val selection: IntRange
-)
+) {
+
+    /**
+     * Secondary constructor (meant for Java).
+     *
+     * @param text the typed text.
+     * @param start the cursor/selection start, or -1 if there is no cursor/selection.
+     * @param end the cursor/selection end (inclusive), or -1 if there is no cursor/selection. If
+     * the [end] is equals to the [start], it's a cursor, otherwise it's a selection.
+     */
+    constructor(text: String, start: Int, end: Int) : this(text, start..end)
+}

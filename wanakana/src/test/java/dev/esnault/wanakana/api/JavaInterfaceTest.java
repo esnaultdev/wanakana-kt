@@ -16,6 +16,7 @@ import dev.esnault.wanakana.IMEMode;
 import dev.esnault.wanakana.TokenType;
 import dev.esnault.wanakana.TypedToken;
 import dev.esnault.wanakana.Wanakana;
+import dev.esnault.wanakana.utils.ImeText;
 import dev.esnault.wanakana.utils.MappingBuilder;
 import dev.esnault.wanakana.utils.MappingTree;
 import kotlin.text.Regex;
@@ -26,6 +27,11 @@ import kotlin.text.Regex;
  * Java users.
  */
 class JavaInterfaceTest {
+
+    private static ImeText simpleIme(String text) {
+        return new ImeText(text, -1, -1);
+    }
+
     @Nested
     @DisplayName("toHiragana()")
     class ToHiraganaTest {
@@ -89,6 +95,28 @@ class JavaInterfaceTest {
         void config() {
             String result = Wanakana.toKana("onaji", Config.DEFAULT);
             Assert.assertEquals("おなじ", result);
+        }
+    }
+
+    @Nested
+    @DisplayName("toKanaIme()")
+    class ToKanaImeTest {
+        @Test
+        void minimalInput() {
+            ImeText result = Wanakana.toKanaIme(simpleIme("onaji"));
+            Assert.assertEquals(simpleIme("おなじ"), result);
+        }
+
+        @Test
+        void allParameters() {
+            ImeText result = Wanakana.toKanaIme(simpleIme("onawi"), IMEMode.DISABLED, true);
+            Assert.assertEquals(simpleIme("おなゐ"), result);
+        }
+
+        @Test
+        void config() {
+            ImeText result = Wanakana.toKanaIme(simpleIme("onaji"), Config.DEFAULT);
+            Assert.assertEquals(simpleIme("おなじ"), result);
         }
     }
 

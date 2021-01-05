@@ -23,10 +23,12 @@ import dev.esnault.wanakana.isRomaji
 import dev.esnault.wanakana.stripOkurigana
 import dev.esnault.wanakana.toHiragana
 import dev.esnault.wanakana.toKana
+import dev.esnault.wanakana.toKanaIme
 import dev.esnault.wanakana.toKatakana
 import dev.esnault.wanakana.toRomaji
 import dev.esnault.wanakana.tokenize
 import dev.esnault.wanakana.tokenizeWithType
+import dev.esnault.wanakana.utils.ImeText
 import dev.esnault.wanakana.utils.mapping
 import dev.esnault.wanakana.utils.mappingTreeOf
 import org.junit.jupiter.api.DisplayName
@@ -112,6 +114,26 @@ class KotlinInterfaceTest {
             }
             testEquals(name = "config - named", expected = "おなじ") {
                 toKana(input = "onaji", config = Config.DEFAULT)
+            }
+        }
+
+        @TestFactory
+        @DisplayName("toKanaIme()")
+        fun toKanaImeTest() = dynamicTests {
+            testEquals(name = "minimal input", expected = simpleIme("おなじ")) {
+                toKanaIme(simpleIme("onaji"))
+            }
+            testEquals(name = "all parameters", expected = simpleIme("おなゐ")) {
+                toKanaIme(simpleIme("onawi"), IMEMode.DISABLED, true)
+            }
+            testEquals(name = "all parameters - named", expected = simpleIme("おなゐ")) {
+                toKanaIme(input = simpleIme("onawi"), imeMode = IMEMode.DISABLED, useObsoleteKana = true)
+            }
+            testEquals(name = "config", expected = simpleIme("おなじ")) {
+                toKanaIme(simpleIme("onaji"), Config.DEFAULT)
+            }
+            testEquals(name = "config - named", expected = simpleIme("おなじ")) {
+                toKanaIme(input = simpleIme("onaji"), config = Config.DEFAULT)
             }
         }
 
@@ -328,6 +350,26 @@ class KotlinInterfaceTest {
             }
             testEquals(name = "config - named", expected = "おなじ") {
                 Wanakana.toKana(input = "onaji", config = Config.DEFAULT)
+            }
+        }
+
+        @TestFactory
+        @DisplayName("toKanaIme()")
+        fun toKanaImeTest() = dynamicTests {
+            testEquals(name = "minimal input", expected = simpleIme("おなじ")) {
+                Wanakana.toKanaIme(simpleIme("onaji"))
+            }
+            testEquals(name = "all parameters", expected = simpleIme("おなゐ")) {
+                Wanakana.toKanaIme(simpleIme("onawi"), IMEMode.DISABLED, true)
+            }
+            testEquals(name = "all parameters - named", expected = simpleIme("おなゐ")) {
+                Wanakana.toKanaIme(input = simpleIme("onawi"), imeMode = IMEMode.DISABLED, useObsoleteKana = true)
+            }
+            testEquals(name = "config", expected = simpleIme("おなじ")) {
+                Wanakana.toKanaIme(simpleIme("onaji"), Config.DEFAULT)
+            }
+            testEquals(name = "config - named", expected = simpleIme("おなじ")) {
+                Wanakana.toKanaIme(input = simpleIme("onaji"), config = Config.DEFAULT)
             }
         }
 
@@ -562,3 +604,5 @@ class KotlinInterfaceTest {
         assertEquals(expected = expected, actual = mapping)
     }
 }
+
+private fun simpleIme(text: String): ImeText = ImeText(text, -1..-1)

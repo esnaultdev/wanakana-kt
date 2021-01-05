@@ -5,14 +5,15 @@ import android.text.InputType
 import android.text.TextWatcher
 import android.widget.EditText
 import dev.esnault.wanakana.Config
-import dev.esnault.wanakana.toKana
+import dev.esnault.wanakana.toKanaIme
 import dev.esnault.wanakana.utils.ImeText
 
 
 object WanakanaAndroid {
 
     /**
-     * Binds Wanakana to an [editText] to automagically convert the typed text.
+     * Binds Wanakana to an [editText] to automagically convert the typed text to kana.
+     * Uses [toKanaIme] for conversion.
      */
     @JvmStatic
     @JvmOverloads
@@ -42,7 +43,7 @@ object WanakanaAndroid {
 
                 val selection = editText.selectionStart..editText.selectionEnd
                 val imeText = ImeText(text, selection)
-                val kanaText = toKana(imeText, config)
+                val kanaText = toKanaIme(imeText, config)
                 if (kanaText.text != text) {
                     previousText = kanaText.text
                     editText.setText(kanaText.text)
