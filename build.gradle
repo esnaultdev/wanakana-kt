@@ -1,17 +1,25 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     ext.kotlin_version = "1.4.20"
+    ext.dokka_version = "1.4.20"
+
     repositories {
+        gradlePluginPortal()
         google()
         jcenter()
     }
     dependencies {
         classpath "com.android.tools.build:gradle:4.2.0-beta02"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:$dokka_version"
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
+}
+
+plugins {
+    id("org.jetbrains.dokka") version "$dokka_version"
 }
 
 allprojects {
@@ -23,4 +31,8 @@ allprojects {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+dokkaGfmMultiModule.configure {
+    outputDirectory = new File("${projectDir}/docs")
 }
