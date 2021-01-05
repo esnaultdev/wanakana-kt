@@ -6,4 +6,4 @@ import dev.esnault.wanakana.utils.Constants
 
 internal fun isKanji(input: String): Boolean = input.all(Char::isKanji)
 
-fun isKanji(input: Char): Boolean = input.toInt() in Constants.KANJI_RANGE
+internal fun isKanji(input: Char): Boolean = input.toInt() in Constants.KANJI_RANGE
