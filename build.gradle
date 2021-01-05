@@ -33,6 +33,7 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-dokkaGfmMultiModule.configure {
+dokkaHtmlMultiModule.configure {
     outputDirectory = new File("${projectDir}/docs")
+    moduleName.set("WanaKana Kt")
 }

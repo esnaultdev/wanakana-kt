@@ -17,8 +17,16 @@ TODO Deploy the libraries to JCenter.
 
 ## Documentation
 
-TODO Deploy documentation using Dokka.
-[Extended API reference](http://www.wanakana.com/docs/global.html)
+- [Wanakana](https://github.com/esnaultdev/wanakana-kt/blob/master/wanakana/src/main/java/dev/esnault/wanakana/Wanakana.kt)
+- [WanakanaAndroid](https://github.com/esnaultdev/wanakana-kt/blob/master/wanakana-android/src/main/java/dev/esnault/wanakana/android/WanakanaAndroid.kt)
+
+<!--
+  TODO Generate the documentation using Dokka once Dokka is more stable.
+  Right now it's not stable when using `./gradlew dokkaHtmlMultiModule`:
+  - lack of `index.html`
+  - broken links for the root `-modules.html` file
+  See https://github.com/Kotlin/dokka/issues/1302
+-->
 
 ## Quick Reference
 
