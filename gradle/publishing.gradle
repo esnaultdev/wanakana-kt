@@ -1,0 +1,13 @@
+ext {
+    artifactVersion = '1.0.0'
+    artifactIdAndroid = 'wanakana-android'
+    artifactIdCore = 'wanakana-core'
+    publishGroupId = 'dev.esnault.wanakana'
+    publishRepo = 'Maven'
+    githubRepoUrl = 'https://github.com/esnaultdev/wanakana-kt'
+
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    bintrayUser = properties.getProperty('bintray.user')
+    bintrayApiKey = properties.getProperty('bintray.apiKey')
+}

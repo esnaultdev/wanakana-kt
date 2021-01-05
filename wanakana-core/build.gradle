@@ -2,6 +2,8 @@ plugins {
     id 'java-library'
     id 'kotlin'
     id 'org.jetbrains.dokka'
+    id 'maven-publish'
+    id("com.jfrog.bintray") version "1.8.5"
 }
 
 java {
@@ -29,4 +31,36 @@ dependencies {
     // JUnit 5
     testImplementation "org.junit.jupiter:junit-jupiter-api:5.7.0"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.7.0"
+}
+
+
+apply from: "$rootDir/gradle/publishing.gradle"
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = publishGroupId
+            artifactId = artifactIdCore
+            version = artifactVersion
+
+            from components.java
+        }
+    }
+}
+
+bintray {
+    user = bintrayUser
+    key = bintrayApiKey
+    publications = ['maven']
+    pkg {
+        repo = publishRepo
+        name = artifactIdCore
+        licenses = ['MIT']
+        desc = "Kotlin port of WanaKana, a library for detecting and transliterating Hiragana <--> Katakana <--> Romaji"
+        vcsUrl = githubRepoUrl
+
+        version {
+            name = artifactVersion
+        }
+    }
 }
