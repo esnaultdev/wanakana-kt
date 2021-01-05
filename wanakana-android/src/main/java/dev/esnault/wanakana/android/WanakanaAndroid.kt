@@ -54,6 +54,8 @@ object WanakanaAndroid {
         }
 
         editText.addTextChangedListener(textWatcher)
+        // Convert any existing text during the binding.
+        textWatcher.afterTextChanged(editText.text)
         return Binding(editText, textWatcher)
     }
 
