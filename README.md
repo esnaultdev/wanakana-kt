@@ -22,9 +22,11 @@ implementation 'dev.esnault.wanakana:wanakana-android:1.0.0'
 implementation 'dev.esnault.wanakana:wanakana-core:1.0.0'
 ```
 
+The artifacts are available on jCenter, make sure that your buildscript repositories include jCenter.
+
 ## Documentation
 
-- [Wanakana](https://github.com/esnaultdev/wanakana-kt/blob/master/wanakana/src/main/java/dev/esnault/wanakana/Wanakana.kt)
+- [Wanakana](https://github.com/esnaultdev/wanakana-kt/blob/master/wanakana-core/src/main/java/dev/esnault/wanakana/core/Wanakana.kt)
 - [WanakanaAndroid](https://github.com/esnaultdev/wanakana-kt/blob/master/wanakana-android/src/main/java/dev/esnault/wanakana/android/WanakanaAndroid.kt)
 
 <!--
