@@ -1,5 +1,6 @@
 package dev.esnault.wanakana
 
+import dev.esnault.wanakana.Wanakana.toKana
 import dev.esnault.wanakana.utils.ImeText
 
 
@@ -253,6 +254,42 @@ object Wanakana {
     @JvmStatic
     fun toRomaji(input: String, config: Config = Config.DEFAULT): String =
         dev.esnault.wanakana.toRomaji(input, config)
+
+    /**
+     * Converts kana to romaji (Hepburn romanisation), and preserves the cursor/selection.
+     *
+     * See [Romaji](https://en.wikipedia.org/wiki/Romaji).
+     * See [Hepburn romanisation](https://en.wikipedia.org/wiki/Hepburn_romanization).
+     *
+     * @param input the kana text input.
+     * @param imeMode if enabled, handles conversion while the text is being typed, defaults to
+     * [IMEMode.ENABLED].
+     * @param upcaseKatakana if `true`, katakana will be converted to uppercase, defaults to
+     * `false`.
+     * @return the converted text.
+     *
+     * See [toRomaji] for more details.
+     */
+    @JvmStatic
+    @JvmOverloads
+    fun toRomajiIme(
+        input: ImeText,
+        imeMode: IMEMode = IMEMode.ENABLED,
+        upcaseKatakana: Boolean = false
+    ): ImeText = dev.esnault.wanakana.toRomajiIme(input, imeMode, upcaseKatakana)
+
+    /**
+     * Converts kana to romaji (Hepburn romanisation), and preserves the cursor/selection.
+     *
+     * @param input the kana text input.
+     * @param config optional configuration of the conversion. Defaults to [Config.DEFAULT_IME].
+     * @return the converted text.
+     *
+     * See [toRomaji] for more details.
+     */
+    @JvmStatic
+    fun toRomajiIme(input: ImeText, config: Config = Config.DEFAULT_IME): ImeText =
+        dev.esnault.wanakana.toRomajiIme(input, config)
 
     /**
      * Converts Romaji to Kana.

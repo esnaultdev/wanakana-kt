@@ -143,6 +143,28 @@ class JavaInterfaceTest {
     }
 
     @Nested
+    @DisplayName("toRomajiIme()")
+    class ToRomajiImeTest {
+        @Test
+        void minimalInput() {
+            ImeText result = Wanakana.toRomajiIme(simpleIme("おなじ"));
+            Assert.assertEquals(simpleIme("onaじ"), result);
+        }
+
+        @Test
+        void allParameters() {
+            ImeText result = Wanakana.toRomajiIme(simpleIme("オナジ"), IMEMode.DISABLED, true);
+            Assert.assertEquals(simpleIme("ONAJI"), result);
+        }
+
+        @Test
+        void config() {
+            ImeText result = Wanakana.toRomajiIme(simpleIme("おなじ"), Config.DEFAULT);
+            Assert.assertEquals(simpleIme("onaji"), result);
+        }
+    }
+
+    @Nested
     @DisplayName("stripOkurigana()")
     class StripOkuriganaTest {
         @Test

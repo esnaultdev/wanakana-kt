@@ -136,13 +136,41 @@ class KotlinInterfaceTest {
                 Wanakana.toRomaji("オナジ", IMEMode.DISABLED, true)
             }
             testEquals(name = "all parameters - named", expected = "ONAJI") {
-                Wanakana.toRomaji(input = "オナジ", imeMode = IMEMode.DISABLED, upcaseKatakana = true)
+                Wanakana.toRomaji(
+                    input = "オナジ",
+                    imeMode = IMEMode.DISABLED,
+                    upcaseKatakana = true
+                )
             }
             testEquals(name = "config", expected = "onaji") {
                 Wanakana.toRomaji("おなじ", Config.DEFAULT)
             }
             testEquals(name = "config - named", expected = "onaji") {
                 Wanakana.toRomaji(input = "おなじ", config = Config.DEFAULT)
+            }
+        }
+
+        @TestFactory
+        @DisplayName("toRomajiIme()")
+        fun toRomajiImeTest() = dynamicTests {
+            testEquals(name = "minimal input", expected = simpleIme("onaじ")) {
+                Wanakana.toRomajiIme(simpleIme("おなじ"))
+            }
+            testEquals(name = "all parameters", expected = simpleIme("ONAJI")) {
+                Wanakana.toRomajiIme(simpleIme("オナジ"), IMEMode.DISABLED, true)
+            }
+            testEquals(name = "all parameters - named", expected = simpleIme("ONAJI")) {
+                Wanakana.toRomajiIme(
+                    input = simpleIme("オナジ"),
+                    imeMode = IMEMode.DISABLED,
+                    upcaseKatakana = true
+                )
+            }
+            testEquals(name = "config", expected = simpleIme("onaji")) {
+                Wanakana.toRomajiIme(simpleIme("おなじ"), Config.DEFAULT)
+            }
+            testEquals(name = "config - named", expected = simpleIme("onaji")) {
+                Wanakana.toRomajiIme(input = simpleIme("おなじ"), config = Config.DEFAULT)
             }
         }
 
