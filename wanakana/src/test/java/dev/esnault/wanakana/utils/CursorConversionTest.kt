@@ -177,4 +177,32 @@ class CursorConversionTest {
         // Then
         assertEquals(expected = 1..4, actual = newSelection)
     }
+
+    @Test
+    fun middleConversionInMiddleOfInput() {
+        // "のn|nの" -> "のん|の"
+        // Given
+        val tokens = listOf(
+            ConversionToken(0, 1, "の"),
+            ConversionToken(1, 3, "ん"),
+            ConversionToken(3, 4, "の"),
+        )
+        val selection = 2..2
+        // When
+        val newSelection = matchSelection(selection, tokens)
+        // Then
+        assertEquals(expected = 2..2, actual = newSelection)
+    }
+
+    @Test
+    fun middleConversionAtEndOfInput() {
+        // "n|n" -> "ん|"
+        // Given
+        val tokens = listOf(ConversionToken(0, 2, "ん"))
+        val selection = 1..1
+        // When
+        val newSelection = matchSelection(selection, tokens)
+        // Then
+        assertEquals(expected = 1..1, actual = newSelection)
+    }
 }

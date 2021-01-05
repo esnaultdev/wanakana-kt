@@ -19,20 +19,33 @@ internal fun matchSelection(selection: IntRange, tokens: List<ConversionToken>):
             newFirst = currentSize
         }
         if (selection.last == tokenStart) {
-            return newFirst..currentSize
+            return correctRange(newFirst, currentSize, selection)
         }
 
         currentSize += token.value?.length ?: (tokenEnd - tokenStart)
 
         if (selection.last < tokenEnd) {
-            return newFirst..currentSize
+            return correctRange(newFirst, currentSize, selection)
         }
     }
 
     // The end of the selection is at the end of the new text.
     return if (newFirst != -1) {
-        newFirst..currentSize
+        correctRange(newFirst, currentSize, selection)
     } else {
         currentSize..currentSize
+    }
+}
+
+
+@Suppress("NOTHING_TO_INLINE")
+private inline fun correctRange(newFirst: Int, newLast: Int, selection: IntRange): IntRange {
+    return if (selection.first == selection.last) {
+        // If the original selection was a cursor, we need to output a cursor too.
+        // Depending on the original placement of the cursor, newFirst could create a selection.
+        // Let's just return a cursor to the right.
+        newLast..newLast
+    } else {
+        newFirst..newLast
     }
 }
