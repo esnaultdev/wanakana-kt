@@ -1,11 +1,13 @@
 package dev.esnault.wanakana
 
 import dev.esnault.wanakana.utils.ConversionToken
+import dev.esnault.wanakana.utils.ImeText
 import dev.esnault.wanakana.utils.MappingTree
 import dev.esnault.wanakana.utils.applyMapping
 import dev.esnault.wanakana.utils.hiraganaToKatakana
 import dev.esnault.wanakana.utils.isEnglishUpperCase
 import dev.esnault.wanakana.utils.kanaImeMode
+import dev.esnault.wanakana.utils.matchSelection
 import dev.esnault.wanakana.utils.romajiToKanaMap
 import dev.esnault.wanakana.utils.safeLowerCase
 import dev.esnault.wanakana.utils.useObsoleteKana
@@ -37,26 +39,8 @@ fun toKana(
     imeMode: IMEMode = IMEMode.DISABLED,
     useObsoleteKana: Boolean = false
 ): String {
-    if (input.isEmpty()) return input
-
-    val map = createRomajiToKanaMap(imeMode, useObsoleteKana)
-
-    val enforceHiragana = imeMode == IMEMode.TO_HIRAGANA
-    val enforceKatakanaMode = imeMode == IMEMode.TO_KATAKANA
-
-    // throw away the substring index information and just concatenate all the kana
-    return splitIntoConvertedKana(input, map, imeMode)
-        .joinToString(separator = "") { token ->
-            val kana = token.value
-            if (kana == null) {
-                // haven't converted the end of the string, since we are in IME mode
-                return@joinToString input.slice(token.range)
-            }
-
-            val enforceKatakana = enforceKatakanaMode
-                    || input.slice(token.range).all { it.isEnglishUpperCase() }
-            if (enforceHiragana || !enforceKatakana) kana else hiraganaToKatakana(kana)
-        }
+    val dummyImeText = ImeText(input, selection = -1..-1)
+    return toKana(dummyImeText, imeMode, useObsoleteKana).text
 }
 
 /**
@@ -67,6 +51,53 @@ fun toKana(
  */
 fun toKana(input: String, config: Config = Config.DEFAULT): String {
     return toKana(input, config.imeMode, config.useObsoleteKana)
+}
+
+/**
+ * Converts Romaji to Kana.
+ * Lowercase text will result in Hiragana and uppercase text will result in Katakana.
+ *
+ * // TODO Documentation
+ */
+fun toKana(
+    input: ImeText,
+    imeMode: IMEMode = IMEMode.ENABLED,
+    useObsoleteKana: Boolean = false
+): ImeText {
+    val inputText = input.text
+    if (inputText.isEmpty()) return input
+
+    val map = createRomajiToKanaMap(imeMode, useObsoleteKana)
+
+    val enforceHiragana = imeMode == IMEMode.TO_HIRAGANA
+    val enforceKatakanaMode = imeMode == IMEMode.TO_KATAKANA
+
+    val tokens: List<ConversionToken> = splitIntoConvertedKana(inputText, map, imeMode)
+    val newSelection = matchSelection(input.selection, tokens)
+
+    // throw away the substring index information and just concatenate all the kana
+    val newText: String = tokens.joinToString(separator = "") { token ->
+        val kana = token.value
+        if (kana == null) {
+            // haven't converted the end of the string, since we are in IME mode
+            return@joinToString inputText.slice(token.range)
+        }
+
+        val enforceKatakana = enforceKatakanaMode
+                || inputText.slice(token.range).all { it.isEnglishUpperCase() }
+        if (enforceHiragana || !enforceKatakana) kana else hiraganaToKatakana(kana)
+    }
+    return ImeText(text = newText, selection = newSelection)
+}
+
+/**
+ * Converts Romaji to Kana.
+ * Lowercase text will result in Hiragana and uppercase text will result in Katakana.
+ *
+ * See [toKana] for more details.
+ */
+fun toKana(imeText: ImeText, config: Config = Config.DEFAULT_IME): ImeText {
+    return toKana(imeText, config.imeMode, config.useObsoleteKana)
 }
 
 private fun splitIntoConvertedKana(

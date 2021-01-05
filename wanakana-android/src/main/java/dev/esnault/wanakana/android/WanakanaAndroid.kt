@@ -6,6 +6,7 @@ import android.text.TextWatcher
 import android.widget.EditText
 import dev.esnault.wanakana.Config
 import dev.esnault.wanakana.toKana
+import dev.esnault.wanakana.utils.ImeText
 
 
 object WanakanaAndroid {
@@ -39,11 +40,13 @@ object WanakanaAndroid {
                     return
                 }
 
-                val kanaText = toKana(text, config)
-                if (kanaText != text) {
-                    previousText = kanaText
-                    editText.setText(kanaText)
-                    // TODO Preserve selection
+                val selection = editText.selectionStart..editText.selectionEnd
+                val imeText = ImeText(text, selection)
+                val kanaText = toKana(imeText, config)
+                if (kanaText.text != text) {
+                    previousText = kanaText.text
+                    editText.setText(kanaText.text)
+                    editText.setSelection(kanaText.selection.first, kanaText.selection.last)
                 } else {
                     previousText = text
                 }

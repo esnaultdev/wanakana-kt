@@ -89,7 +89,7 @@ class ToKatakanaTest {
     @DisplayName("IMEMode")
     inner class IMEModeTest {
         @TestFactory
-        @DisplayName("Without IME Mode")
+        @DisplayName("Without IME mode")
         fun withoutIMEMode() = dynamicTests {
             testKata(
                 name = "solo n is transliterated regardless of following chars",
@@ -109,7 +109,7 @@ class ToKatakanaTest {
         }
 
         @TestFactory
-        @DisplayName("With IME Mode")
+        @DisplayName("With IME mode")
         fun withIMEMode() = dynamicTests {
             fun testWithIME(name: String, input: String, expected: String) =
                 testEquals(name = name, expected = expected) {

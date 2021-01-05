@@ -60,7 +60,7 @@ data class Config(
         val DEFAULT = Config()
 
         /**
-         * Default configuration for IME Mode, using [IMEMode.ENABLED].
+         * Default configuration for IME mode, using [IMEMode.ENABLED].
          * See the [Config] documentation for other default values.
          */
         @JvmField
