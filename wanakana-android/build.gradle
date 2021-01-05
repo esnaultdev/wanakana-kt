@@ -33,7 +33,7 @@ android {
 }
 
 dependencies {
-    api project(":wanakana")
+    api project(':wanakana-core')
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.2.0'
