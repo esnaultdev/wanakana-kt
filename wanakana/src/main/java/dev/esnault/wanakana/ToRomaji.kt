@@ -7,24 +7,7 @@ import dev.esnault.wanakana.utils.katakanaToHiragana
 import dev.esnault.wanakana.utils.safeUpperCase
 
 
-/**
- * Converts kana to romaji (Hepburn romanisation).
- *
- * See [Romaji](https://en.wikipedia.org/wiki/Romaji).
- * See [Hepburn romanisation](https://en.wikipedia.org/wiki/Hepburn_romanization).
- *
- * @param input the kana text input.
- * @param imeMode if enabled, handles conversion while the text is being typed, defaults to
- * [IMEMode.DISABLED].
- * @param upcaseKatakana if `true`, katakana will be converted to uppercase, defaults to `false`.
- * @return the converted text.
- *
- * For example:
- * - `toRomaji("ひらがな　カタカナ")` => `"hiragana katakana"`
- * - `toRomaji("げーむ　ゲーム")` => `"ge-mu geemu"`
- * - `toRomaji("ひらがな　カタカナ", upcaseKatakana = true)` => `"hiragana KATAKANA"`
- */
-fun toRomaji(
+internal fun toRomaji(
     input: String,
     imeMode: IMEMode = IMEMode.DISABLED,
     upcaseKatakana: Boolean = false
@@ -45,12 +28,8 @@ fun toRomaji(
         }
 }
 
-/**
- * Converts kana to romaji (Hepburn romanisation).
- *
- * See [toRomaji] for more details.
- */
-fun toRomaji(input: String, config: Config = Config.DEFAULT): String {
+
+internal fun toRomaji(input: String, config: Config = Config.DEFAULT): String {
     return toRomaji(input, config.imeMode, config.upcaseKatakana)
 }
 

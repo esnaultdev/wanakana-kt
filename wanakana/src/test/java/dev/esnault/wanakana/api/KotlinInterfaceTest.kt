@@ -5,6 +5,21 @@ import dev.esnault.wanakana.IMEMode
 import dev.esnault.wanakana.TokenType
 import dev.esnault.wanakana.TypedToken
 import dev.esnault.wanakana.Wanakana
+import dev.esnault.wanakana.Wanakana.isHiragana
+import dev.esnault.wanakana.Wanakana.isJapanese
+import dev.esnault.wanakana.Wanakana.isKana
+import dev.esnault.wanakana.Wanakana.isKanji
+import dev.esnault.wanakana.Wanakana.isKatakana
+import dev.esnault.wanakana.Wanakana.isMixed
+import dev.esnault.wanakana.Wanakana.isRomaji
+import dev.esnault.wanakana.Wanakana.stripOkurigana
+import dev.esnault.wanakana.Wanakana.toHiragana
+import dev.esnault.wanakana.Wanakana.toKana
+import dev.esnault.wanakana.Wanakana.toKanaIme
+import dev.esnault.wanakana.Wanakana.toKatakana
+import dev.esnault.wanakana.Wanakana.toRomaji
+import dev.esnault.wanakana.Wanakana.tokenize
+import dev.esnault.wanakana.Wanakana.tokenizeWithType
 import dev.esnault.wanakana.dynamicTests
 import dev.esnault.wanakana.extension.isHiragana
 import dev.esnault.wanakana.extension.isJapanese
@@ -13,21 +28,6 @@ import dev.esnault.wanakana.extension.isKanji
 import dev.esnault.wanakana.extension.isKatakana
 import dev.esnault.wanakana.extension.isMixed
 import dev.esnault.wanakana.extension.isRomaji
-import dev.esnault.wanakana.isHiragana
-import dev.esnault.wanakana.isJapanese
-import dev.esnault.wanakana.isKana
-import dev.esnault.wanakana.isKanji
-import dev.esnault.wanakana.isKatakana
-import dev.esnault.wanakana.isMixed
-import dev.esnault.wanakana.isRomaji
-import dev.esnault.wanakana.stripOkurigana
-import dev.esnault.wanakana.toHiragana
-import dev.esnault.wanakana.toKana
-import dev.esnault.wanakana.toKanaIme
-import dev.esnault.wanakana.toKatakana
-import dev.esnault.wanakana.toRomaji
-import dev.esnault.wanakana.tokenize
-import dev.esnault.wanakana.tokenizeWithType
 import dev.esnault.wanakana.utils.ImeText
 import dev.esnault.wanakana.utils.mapping
 import dev.esnault.wanakana.utils.mappingTreeOf
@@ -127,7 +127,11 @@ class KotlinInterfaceTest {
                 toKanaIme(simpleIme("onawi"), IMEMode.DISABLED, true)
             }
             testEquals(name = "all parameters - named", expected = simpleIme("おなゐ")) {
-                toKanaIme(input = simpleIme("onawi"), imeMode = IMEMode.DISABLED, useObsoleteKana = true)
+                toKanaIme(
+                    input = simpleIme("onawi"),
+                    imeMode = IMEMode.DISABLED,
+                    useObsoleteKana = true
+                )
             }
             testEquals(name = "config", expected = simpleIme("おなじ")) {
                 toKanaIme(simpleIme("onaji"), Config.DEFAULT)
@@ -363,7 +367,11 @@ class KotlinInterfaceTest {
                 Wanakana.toKanaIme(simpleIme("onawi"), IMEMode.DISABLED, true)
             }
             testEquals(name = "all parameters - named", expected = simpleIme("おなゐ")) {
-                Wanakana.toKanaIme(input = simpleIme("onawi"), imeMode = IMEMode.DISABLED, useObsoleteKana = true)
+                Wanakana.toKanaIme(
+                    input = simpleIme("onawi"),
+                    imeMode = IMEMode.DISABLED,
+                    useObsoleteKana = true
+                )
             }
             testEquals(name = "config", expected = simpleIme("おなじ")) {
                 Wanakana.toKanaIme(simpleIme("onaji"), Config.DEFAULT)

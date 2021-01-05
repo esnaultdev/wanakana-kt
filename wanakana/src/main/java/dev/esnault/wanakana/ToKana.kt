@@ -12,29 +12,7 @@ import dev.esnault.wanakana.utils.romajiToKanaMap
 import dev.esnault.wanakana.utils.safeLowerCase
 import dev.esnault.wanakana.utils.useObsoleteKana
 
-/**
- * Converts Romaji to Kana.
- * Lowercase text will result in Hiragana and uppercase text will result in Katakana.
- *
- * @param input the text to convert to Kana.
- * @param imeMode if enabled, handles conversion while the text is being typed, defaults to
- * [IMEMode.DISABLED].
- * @param useObsoleteKana if `true` obsolete kanas will be used (ゐゑヰヱ), defaults to `false`.
- * @return the converted text.
- *
- * See [Romaji](https://en.wikipedia.org/wiki/Romaji).
- * See [Kana](https://en.wikipedia.org/wiki/Kana).
- * See [Hiragana](https://en.wikipedia.org/wiki/Hiragana).
- * See [Katakana](https://en.wikipedia.org/wiki/Katakana).
- *
- * For example:
- * - `toKana("onaji BUTTSUUJI")` => `"おなじ ブッツウジ"`
- * - `toKana("ONAJI buttsuuji")` => `"オナジ ぶっつうじ"`
- * - `toKana("座禅‘zazen’スタイル")` => `"座禅「ざぜん」スタイル"`
- * - `toKana("batsuge-mu")` => `"ばつげーむ"`
- * - `toKana("!?.:/,~-‘’“”[](){}")` => `"！？。：・、〜ー「」『』［］（）｛｝"`
- */
-fun toKana(
+internal fun toKana(
     input: String,
     imeMode: IMEMode = IMEMode.DISABLED,
     useObsoleteKana: Boolean = false
@@ -43,33 +21,11 @@ fun toKana(
     return toKanaIme(dummyImeText, imeMode, useObsoleteKana).text
 }
 
-/**
- * Converts Romaji to Kana.
- * Lowercase text will result in Hiragana and uppercase text will result in Katakana.
- *
- * @param input the text to convert to Kana.
- * @param config optional configuration of the conversion. Defaults to [Config.DEFAULT].
- * @return the converted text.
- *
- * See [toKana] for more details and examples.
- */
-fun toKana(input: String, config: Config = Config.DEFAULT): String {
+internal fun toKana(input: String, config: Config = Config.DEFAULT): String {
     return toKana(input, config.imeMode, config.useObsoleteKana)
 }
 
-/**
- * Converts Romaji to Kana and preserves the cursor/selection.
- * Lowercase text will result in Hiragana and uppercase text will result in Katakana.
- *
- * @param input the text to convert to Kana, with cursor/selection.
- * @param imeMode if enabled, handles conversion while the text is being typed, defaults to
- * [IMEMode.ENABLED].
- * @param useObsoleteKana if `true` obsolete kanas will be used (ゐゑヰヱ), defaults to `false`.
- * @return the converted text, with cursor/selection.
- *
- * See [toKana] for more details and examples.
- */
-fun toKanaIme(
+internal fun toKanaIme(
     input: ImeText,
     imeMode: IMEMode = IMEMode.ENABLED,
     useObsoleteKana: Boolean = false
@@ -100,17 +56,7 @@ fun toKanaIme(
     return ImeText(text = newText, selection = newSelection)
 }
 
-/**
- * Converts Romaji to Kana and preserves the cursor/selection.
- * Lowercase text will result in Hiragana and uppercase text will result in Katakana.
- *
- * @param input the text to convert to Kana, with cursor/selection.
- * @param config optional configuration of the conversion. Defaults to [Config.DEFAULT_IME].
- * @return the converted text, with cursor/selection.
- *
- * See [toKana] for more details and examples.
- */
-fun toKanaIme(input: ImeText, config: Config = Config.DEFAULT_IME): ImeText {
+internal fun toKanaIme(input: ImeText, config: Config = Config.DEFAULT_IME): ImeText {
     return toKanaIme(input, config.imeMode, config.useObsoleteKana)
 }
 

@@ -3,24 +3,11 @@ package dev.esnault.wanakana
 import dev.esnault.wanakana.extension.isKana
 import dev.esnault.wanakana.extension.isKanji
 
-/**
- * Strips [Okurigana](https://en.wikipedia.org/wiki/Okurigana).
- *
- * @param [input] the input text.
- * @param [leading] if `true`, strips leading okurigana instead of trailing okurigana, defaults to
- * `false`.
- * @param [matchKanji] optional kanji representation of the text, to help strip okurigana from a
- * kana input.
- * @return the text with okurigana removed.
- * 
- * For example:
- * - `stripOkurigana("踏み込む")` => `"踏み込"`
- * - `stripOkurigana("お祝い")` => `"お祝"`
- * - `stripOkurigana("お腹", leading = true)` => `"腹"`
- * - `stripOkurigana("ふみこむ", matchKanji = "踏み込む")` => `"ふみこ"`
- * - `stripOkurigana("おみまい", matchKanji = "お祝い", leading = true)` => `"みまい"`
- */
-fun stripOkurigana(input: String, leading: Boolean = false, matchKanji: String? = null): String {
+internal fun stripOkurigana(
+    input: String,
+    leading: Boolean = false,
+    matchKanji: String? = null
+): String {
     if (
         input.isEmpty() ||
         !isJapanese(input) ||

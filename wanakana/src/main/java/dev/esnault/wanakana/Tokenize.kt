@@ -33,72 +33,10 @@ data class TypedToken(
     val type: TokenType
 )
 
-/**
- * Splits input into a list of strings separated by opinionated [TokenType]s.
- * @param input the text to tokenize.
- * @param compact if `true`, then many same-language tokens are combined (spaces + text, kanji +
- * kana, numeral + punctuation). Defaults to `false`.
- * @return the text split into [String] tokens.
- *
- * For example:
- * - `tokenize("ふふフフ")` => `["ふふ", "フフ"]`
- * - `tokenize("感じ")` => `["感", "じ"]`
- * - `tokenize("truly 私は悲しい")` => ["truly", " ", "私", "は", "悲", "しい"]`
- * - `tokenize("truly 私は悲しい", compact = true)` => ["truly ", "私は悲しい"]`
- * - `tokenize("5romaji here...!?漢字ひらがなカタ　カナ４「ＳＨＩＯ」。！")`
- *   => `[ "5", "romaji", " ", "here", "...!?", "漢字", "ひらがな", "カタ", "　", "カナ", "４", "「", "ＳＨＩＯ", "」。！"]`
- * - `tokenize("5romaji here...!?漢字ひらがなカタ　カナ４「ＳＨＩＯ」。！", compact = true)`
- *   => `[ "5", "romaji here", "...!?", "漢字ひらがなカタ　カナ", "４「", "ＳＨＩＯ", "」。！"]`
- */
-fun tokenize(input: String, compact: Boolean = false): List<String> =
+internal fun tokenize(input: String, compact: Boolean = false): List<String> =
     tokenizeWithType(input, compact).map(TypedToken::value)
 
-/**
- * Splits input into a list of tokens separated by opinionated [TokenType]s.
- * @param input the text to tokenize.
- * @param compact if `true`, then many same-language tokens are combined (spaces + text, kanji +
- * kana, numeral + punctuation). Defaults to `false`.
- * @return the text split into [TypedToken]s.
- *
- * For example:
- * - `tokenize('5romaji here...!?漢字ひらがなカタ　カナ４「ＳＨＩＯ」。！ لنذهب')` =>
- * ```
- * [
- *  { type: 'englishNumeral', value: '5' },
- *  { type: 'en', value: 'romaji' },
- *  { type: 'space', value: ' ' },
- *  { type: 'en', value: 'here' },
- *  { type: 'englishPunctuation', value: '...!?' },
- *  { type: 'kanji', value: '漢字' },
- *  { type: 'hiragana', value: 'ひらがな' },
- *  { type: 'katakana', value: 'カタ' },
- *  { type: 'space', value: '　' },
- *  { type: 'katakana', value: 'カナ' },
- *  { type: 'japaneseNumeral', value: '４' },
- *  { type: 'japanesePunctuation', value: '「' },
- *  { type: 'ja', value: 'ＳＨＩＯ' },
- *  { type: 'japanesePunctuation', value: '」。！' },
- *  { type: 'space', value: ' ' },
- *  { type: 'other', value: 'لنذهب' }
- * ]
- * ```
- *
- * - `tokenize('5romaji here...!?漢字ひらがなカタ　カナ４「ＳＨＩＯ」。！ لنذهب', compact = true)` =>
- * ```
- * [
- *  { type: 'other', value: '5' },
- *  { type: 'en', value: 'romaji here' },
- *  { type: 'other', value: '...!?' },
- *  { type: 'ja', value: '漢字ひらがなカタ　カナ' },
- *  { type: 'other', value: '４「' },
- *  { type: 'ja', value: 'ＳＨＩＯ' },
- *  { type: 'other', value: '」。！' },
- *  { type: 'en', value: ' ' },
- *  { type: 'other', value: 'لنذهب' }
- * ]
- * ```
- */
-fun tokenizeWithType(input: String, compact: Boolean = false): List<TypedToken> {
+internal fun tokenizeWithType(input: String, compact: Boolean = false): List<TypedToken> {
     if (input.isEmpty()) return emptyList()
 
     var currentValue: String

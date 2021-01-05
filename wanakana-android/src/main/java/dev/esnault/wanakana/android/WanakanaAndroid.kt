@@ -5,7 +5,7 @@ import android.text.InputType
 import android.text.TextWatcher
 import android.widget.EditText
 import dev.esnault.wanakana.Config
-import dev.esnault.wanakana.toKanaIme
+import dev.esnault.wanakana.Wanakana.toKanaIme
 import dev.esnault.wanakana.utils.ImeText
 
 
