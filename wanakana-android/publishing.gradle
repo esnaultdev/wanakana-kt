@@ -1,0 +1,56 @@
+apply from: "$rootDir/gradle/publishing.gradle"
+
+def description = "Android bindings for WanaKana, a library for detecting and transliterating Hiragana, Katakana and Romaji."
+def publishArtifactId = 'wanakana-android'
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier "sources"
+}
+
+task javadocJar(type: Jar, dependsOn: dokkaJavadoc) {
+    archiveClassifier.set('javadoc')
+    from "$buildDir/dokka/javadoc"
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+
+                groupId = publishGroupId
+                artifactId = publishArtifactId
+                version = artifactVersion
+
+                artifact sourcesJar
+                artifact javadocJar
+
+                pom.withXml {
+                    def root = asNode()
+                    root.appendNode('description', description)
+                    root.appendNode('name', "$publishGroupId:$publishArtifactId")
+                    root.appendNode('url', githubRepoUrl)
+                    root.children().last() + pomConfig
+                }
+            }
+        }
+    }
+}
+
+bintray {
+    user = bintrayUser
+    key = bintrayApiKey
+    publications = ['release']
+    pkg {
+        repo = publishRepo
+        name = publishArtifactId
+        licenses = ['MIT']
+        desc = description
+        vcsUrl = githubRepoUrl
+
+        version {
+            name = artifactVersion
+        }
+    }
+}

@@ -45,35 +45,4 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 }
 
-apply from: "$rootDir/gradle/publishing.gradle"
-
-afterEvaluate {
-    publishing {
-        publications {
-            release(MavenPublication) {
-                from components.release
-
-                groupId = publishGroupId
-                artifactId = artifactIdAndroid
-                version = artifactVersion
-            }
-        }
-    }
-}
-
-bintray {
-    user = bintrayUser
-    key = bintrayApiKey
-    publications = ['release']
-    pkg {
-        repo = publishRepo
-        name = artifactIdAndroid
-        licenses = ['MIT']
-        desc = "Android bindings for WanaKana, a library for detecting and transliterating Hiragana, Katakana and Romaji"
-        vcsUrl = githubRepoUrl
-
-        version {
-            name = artifactVersion
-        }
-    }
-}
+apply from: "publishing.gradle"

@@ -1,13 +1,35 @@
 ext {
     artifactVersion = '1.0.0'
-    artifactIdAndroid = 'wanakana-android'
-    artifactIdCore = 'wanakana-core'
     publishGroupId = 'dev.esnault.wanakana'
     publishRepo = 'Maven'
-    githubRepoUrl = 'https://github.com/esnaultdev/wanakana-kt'
+    githubRepoName = 'esnaultdev/wanakana-kt'
+    githubRepoUrl = "https://github.com/$githubRepoName"
 
     Properties properties = new Properties()
     properties.load(project.rootProject.file('local.properties').newDataInputStream())
     bintrayUser = properties.getProperty('bintray.user')
     bintrayApiKey = properties.getProperty('bintray.apiKey')
+
+    pomConfig = {
+        licenses {
+            license {
+                name "The MIT License (MIT)"
+                url "https://github.com/esnaultdev/wanakana-kt/blob/master/LICENSE"
+                distribution "repo"
+            }
+        }
+        developers {
+            developer {
+                id "esnaultdev"
+                name "Matthieu Esnault"
+                email "matthieu.esn0@gmail.com"
+            }
+        }
+
+        scm {
+            url githubRepoUrl
+            connection "scm:git:git://github.com/${githubRepoName}.git"
+            developerConnection "scm:git:ssh://github.com:${githubRepoName}.git"
+        }
+    }
 }
