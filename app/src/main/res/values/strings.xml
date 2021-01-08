@@ -3,4 +3,5 @@
 
     <string name="bind">Bind</string>
     <string name="unbind">Unbind</string>
+    <string name="listener">Listener</string>
 </resources>

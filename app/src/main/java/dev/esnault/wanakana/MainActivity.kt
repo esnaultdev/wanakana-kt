@@ -4,12 +4,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import dev.esnault.wanakana.android.WanakanaAndroid
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var editText: EditText
     private lateinit var bindButton: Button
+    private lateinit var listenerTextView: TextView
     private var binding: WanakanaAndroid.Binding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,6 +20,7 @@ class MainActivity : AppCompatActivity() {
 
         editText = findViewById(R.id.editText)
         bindButton = findViewById(R.id.bindButton)
+        listenerTextView = findViewById(R.id.listener)
 
         bindButton.setOnClickListener {
             toggleBinding()
@@ -34,7 +37,9 @@ class MainActivity : AppCompatActivity() {
             this.binding = null
             bindButton.setText(R.string.bind)
         } else {
-            this.binding = WanakanaAndroid.bind(editText)
+            this.binding = WanakanaAndroid.bind(editText).apply {
+                addListener(initialize = true) { text -> listenerTextView.text = text }
+            }
             bindButton.setText(R.string.unbind)
         }
     }

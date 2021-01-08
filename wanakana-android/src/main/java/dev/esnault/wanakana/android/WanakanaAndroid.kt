@@ -72,8 +72,13 @@ object WanakanaAndroid {
 
         /**
          * Adds a [listener] to be notified of text changes.
+         * @param initialize if `true`, the [listener] will be called with the current value.
          */
-        fun addListener(listener: Listener) = listeners.add(listener)
+        @JvmOverloads
+        fun addListener(initialize: Boolean = false, listener: Listener) {
+            listeners.add(listener)
+            if (initialize) listener.afterTextChanged(editText.text?.toString())
+        }
 
         /**
          * Removes a previously added [listener], it won't be notified of text changes anymore.
