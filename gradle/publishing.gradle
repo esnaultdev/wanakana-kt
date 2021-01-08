@@ -1,5 +1,5 @@
 ext {
-    artifactVersion = '1.0.0'
+    artifactVersion = '1.1.0'
     publishGroupId = 'dev.esnault.wanakana'
     publishRepo = 'Maven'
     githubRepoName = 'esnaultdev/wanakana-kt'

@@ -15,11 +15,11 @@ Visit the [website](http://www.wanakana.com) to see WanaKana in action (JS versi
 
 ```
 // Android bindings
-implementation 'dev.esnault.wanakana:wanakana-android:1.0.0'
+implementation 'dev.esnault.wanakana:wanakana-android:1.1.0'
 
 // Conversion and detection
 // You don't need to include this if you use wanakana-android.
-implementation 'dev.esnault.wanakana:wanakana-core:1.0.0'
+implementation 'dev.esnault.wanakana:wanakana-core:1.1.0'
 ```
 
 The artifacts are available on jCenter, make sure that your buildscript repositories include jCenter.
