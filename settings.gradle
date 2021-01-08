@@ -1,4 +1,4 @@
 rootProject.name = "wanakana-kt"
-include ':app'
+include ':demo'
 include ':wanakana-core'
 include ':wanakana-android'
