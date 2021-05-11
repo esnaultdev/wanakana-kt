@@ -238,5 +238,5 @@ internal fun useObsoleteKana(map: MappingTree): MappingTree {
 
 internal fun kanaImeMode(map: MappingTree): MappingTree {
     val customNMapping = mapping { "nn" to 'ん'; "n " to 'ん' }
-    return customNMapping.mergeWith(map)
+    return map.mergeWith(customNMapping)
 }
