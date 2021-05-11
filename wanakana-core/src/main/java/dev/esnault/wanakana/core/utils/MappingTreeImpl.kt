@@ -113,12 +113,24 @@ private fun MappingTree.equalsImpl(other: Any?): Boolean {
     return true
 }
 
-private fun MappingTree.toStringImpl(): String = buildString {
-    append("<${value ?: ""}> [")
-    subTrees?.entries?.sortedBy { it.key }?.forEach { (key, value) ->
-        append("$key: $value")
+private fun MappingTree.toStringImpl(): String {
+    val prefix = if (value != null) {
+        "{\"\": \"$value\","
+    } else {
+        "{"
     }
-    append("]")
+    val entries = subTrees?.entries?.sortedBy { it.key }.orEmpty()
+    return entries.joinToString(
+        prefix = prefix,
+        postfix = "}",
+        separator = ","
+    ) { (key, subTree) ->
+        if (subTree.subTrees.isNullOrEmpty()) {
+            "\"$key\": \"${subTree.value ?: ""}\""
+        } else {
+            "\"$key\": $subTree"
+        }
+    }
 }
 
 @Suppress("NOTHING_TO_INLINE")
