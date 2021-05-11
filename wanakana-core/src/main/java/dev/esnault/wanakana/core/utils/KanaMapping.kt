@@ -12,6 +12,10 @@ internal data class ConversionToken(
     val value: String?
 ) {
     val range: IntRange = start until end
+
+    /** Returns a new [ConversionToken] with its range shifted by [amount].
+     */
+    fun shift(amount: Int) = copy(start = start + amount, end = end + amount)
 }
 
 

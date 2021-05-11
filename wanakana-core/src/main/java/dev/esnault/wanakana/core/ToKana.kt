@@ -37,7 +37,22 @@ internal fun toKanaIme(
     val enforceHiragana = imeMode == IMEMode.TO_HIRAGANA
     val enforceKatakanaMode = imeMode == IMEMode.TO_KATAKANA
 
-    val tokens: List<ConversionToken> = splitIntoConvertedKana(input.text, map, imeMode)
+    // If we have a cursor that is not at the edge of the text, we need to split the input to avoid
+    // converting a single n too early.
+    val needToSplit = input.selection.first == input.selection.last &&
+        input.selection.first > 0 && input.selection.first != input.text.length
+
+    val tokens: List<ConversionToken> = if (!needToSplit) {
+        splitIntoConvertedKana(input.text, map, imeMode)
+    } else {
+        val cursor = input.selection.first
+        val inputStart = input.text.take(cursor)
+        val inputEnd = input.text.drop(cursor)
+        val startTokens = splitIntoConvertedKana(inputStart, map, imeMode)
+        val endTokens = splitIntoConvertedKana(inputEnd, map, imeMode)
+            .map { token -> token.shift(cursor) }
+        startTokens + endTokens
+    }
     val newSelection = matchSelection(input.selection, tokens)
 
     // throw away the substring index information and just concatenate all the kana
