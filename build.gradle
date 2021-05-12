@@ -6,7 +6,7 @@ buildscript {
     repositories {
         gradlePluginPortal()
         google()
-        jcenter()
+        mavenCentral()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.0.0-alpha15'
@@ -25,7 +25,7 @@ plugins {
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 }
 
