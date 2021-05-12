@@ -279,6 +279,7 @@ class MappingBuilder(internal val tree: MutableMappingTree = mutableMappingTreeO
         return this@MappingBuilder
     }
 
+    @Suppress("UNUSED_PARAMETER")
     inline infix fun <reified A, reified B> A.to(value: B) {
         // Invalid types, we can't add them to the mapping.
         // Since there is an infix `to` as part of the stdlib, it will still compile. Let's throw
