@@ -3,9 +3,11 @@ package dev.esnault.wanakana.core
 import dev.esnault.wanakana.core.Wanakana.toKana
 import dev.esnault.wanakana.core.utils.ImeText
 
-
+/**
+ * Core Wanakana functions.
+ */
 object Wanakana {
-    // Writing system checks (String + Char)
+    // region Writing system checks (String + Char)
 
     /**
      * Returns `true` if [input] is Romaji (allowing Hepburn romanisation).
@@ -214,7 +216,9 @@ object Wanakana {
     fun isKanji(input: Char): Boolean =
         dev.esnault.wanakana.core.isKanji(input)
 
-    // Conversion
+    // endregion
+
+    // region Conversion
 
     /**
      * Converts kana to romaji (Hepburn romanisation).
@@ -445,7 +449,9 @@ object Wanakana {
     fun toKatakana(input: String, config: Config = Config.DEFAULT): String =
         dev.esnault.wanakana.core.toKatakana(input, config)
 
-    // Other utils
+    // endregion
+
+    // region Other utils
 
     /**
      * Strips [Okurigana](https://en.wikipedia.org/wiki/Okurigana).
@@ -543,4 +549,6 @@ object Wanakana {
     @JvmOverloads
     fun tokenizeWithType(input: String, compact: Boolean = false): List<TypedToken> =
         dev.esnault.wanakana.core.tokenizeWithType(input, compact)
+
+    // endregion
 }

@@ -8,7 +8,9 @@ import dev.esnault.wanakana.core.Config
 import dev.esnault.wanakana.core.Wanakana.toKanaIme
 import dev.esnault.wanakana.core.utils.ImeText
 
-
+/**
+ * Wanakana bindings for Android.
+ */
 object WanakanaAndroid {
 
     /**
