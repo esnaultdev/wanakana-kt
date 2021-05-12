@@ -3,13 +3,13 @@
 <h4>Kotlin utility library for detecting and transliterating Hiragana, Katakana, and Romaji</h4>
 </div>
 
-Ported from [WaniKani/WanaKana](https://github.com/WaniKani/WanaKana) v4.0.2.
+Ported from [WaniKani/WanaKana][wanakana-repo] v4.0.2.
 
 This library is written in Kotlin, but it can be used from Java.
 
 ## Demo
 
-Visit the [website](http://www.wanakana.com) to see WanaKana in action (JS version).
+Visit the [website][wanakana-website] to see WanaKana in action (JS version).
 
 ## Usage
 
@@ -26,21 +26,14 @@ The artifacts are available on jCenter, make sure that your buildscript reposito
 
 ## Documentation
 
-- [Wanakana](https://github.com/esnaultdev/wanakana-kt/blob/master/wanakana-core/src/main/java/dev/esnault/wanakana/core/Wanakana.kt)
-- [WanakanaAndroid](https://github.com/esnaultdev/wanakana-kt/blob/master/wanakana-android/src/main/java/dev/esnault/wanakana/android/WanakanaAndroid.kt)
-
-<!--
-  TODO Generate the documentation using Dokka once Dokka is more stable.
-  Right now it's not stable when using `./gradlew dokkaHtmlMultiModule`:
-  - lack of `index.html`
-  - broken links for the root `-modules.html` file
-  See https://github.com/Kotlin/dokka/issues/1302
--->
+- [Index][docs-index]
+  - [Wanakana (core functions)][docs-wanakana]
+  - [WanakanaAndroid (Android bindings)][docs-wanakana-android]
 
 ## Quick Reference
 
 ```kotlin
-/*** DOM HELPERS ***/
+/*** ANDROID BINDINGS ***/
 // Automatically converts text using a TextWatcher.
 // Uses `toKanaIme()` as converter by default
 val binding = WanakanaAndroid.bind(editText)
@@ -126,7 +119,16 @@ Wanakana.tokenize("I said 私はすごく悲しい", compact = true)
 | String detection | `false` if the input is empty | `true` if the input is empty<br/>(matches the behavior of `String::all`) |
 | Detailed tokenize | tokenize(input, { detailed: true }) | tokenizeWithType(input) |
 
+Custom mappings are not implemented yet.
+
 ## Credits
 
-Original JavaScript library sponsored by [Tofugu](http://www.tofugu.com) &
-[WaniKani](http://www.wanikani.com).
+Original JavaScript library sponsored by [Tofugu][tofugu] & [WaniKani][wanikani].
+
+[wanakana-repo]: https://github.com/WaniKani/WanaKana
+[wanakana-website]: http://www.wanakana.com
+[wanikani]: http://www.wanikani.com
+[tofugu]: http://www.tofugu.com
+[docs-index]: https://esnaultdev.github.io/wanakana-kt/wanakana-core/index.html
+[docs-wanakana]: https://esnaultdev.github.io/wanakana-kt/wanakana-core/wanakana-core/dev.esnault.wanakana.core/-wanakana/index.html
+[docs-wanakana-android]: https://esnaultdev.github.io/wanakana-kt/wanakana-android/wanakana-android/dev.esnault.wanakana.android/-wanakana-android/index.html
