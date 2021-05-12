@@ -7,7 +7,7 @@ package dev.esnault.wanakana.core
  * later conversion.
  * For the mapping from romaji to kana, this also updates the mapping for "n".
  */
-enum class IMEMode {
+public enum class IMEMode {
     /** Disabled, all the text will be converted if possible. */
     DISABLED,
 
@@ -45,33 +45,33 @@ enum class IMEMode {
  * Applies to [toRomaji], [toKana], [toHiragana] and [toKatakana].
  * Defaults to [IMEMode.DISABLED].
  */
-data class Config(
+public data class Config(
     val useObsoleteKana: Boolean = false,
     val passRomaji: Boolean = false,
     val upcaseKatakana: Boolean = false,
     val imeMode: IMEMode = IMEMode.DISABLED
 ) {
-    companion object {
+    public companion object {
         /**
          * Default configuration.
          * See the [Config] documentation for the default values.
          */
         @JvmField
-        val DEFAULT = Config()
+        public val DEFAULT: Config = Config()
 
         /**
          * Default configuration for IME mode, using [IMEMode.ENABLED].
          * See the [Config] documentation for other default values.
          */
         @JvmField
-        val DEFAULT_IME = Config(imeMode = IMEMode.ENABLED)
+        public val DEFAULT_IME: Config = Config(imeMode = IMEMode.ENABLED)
     }
 
     /**
      * Returns a [ConfigBuilder] from this [Config] to update it.
      * This is meant to be used from Java, as Kotlin can use [copy] and named parameters.
      */
-    fun update(): ConfigBuilder = ConfigBuilder(
+    public fun update(): ConfigBuilder = ConfigBuilder(
         useObsoleteKana = useObsoleteKana,
         passRomaji = passRomaji,
         upcaseKatakana = upcaseKatakana,
@@ -84,26 +84,26 @@ data class Config(
  * This is meant to be used from Java, as Kotlin can use [Config.copy] and named parameters to build
  * a [Config] object.
  */
-class ConfigBuilder(
+public class ConfigBuilder(
     useObsoleteKana: Boolean = false,
     passRomaji: Boolean = false,
     upcaseKatakana: Boolean = false,
     imeMode: IMEMode = IMEMode.DISABLED
 ) {
 
-    var useObsoleteKana: Boolean = useObsoleteKana
+    public var useObsoleteKana: Boolean = useObsoleteKana
         private set
-    var passRomaji: Boolean = passRomaji
+    public var passRomaji: Boolean = passRomaji
         private set
-    var upcaseKatakana: Boolean = upcaseKatakana
+    public var upcaseKatakana: Boolean = upcaseKatakana
         private set
-    var imeMode: IMEMode = imeMode
+    public var imeMode: IMEMode = imeMode
         private set
 
     /**
      * Builds a [Config] from this builder.
      */
-    fun build(): Config = Config(
+    public fun build(): Config = Config(
         useObsoleteKana = useObsoleteKana,
         passRomaji = passRomaji,
         upcaseKatakana = upcaseKatakana,
@@ -116,7 +116,7 @@ class ConfigBuilder(
      * Applies to [toKana], [toHiragana] and [toKatakana].
      * Defaults to `false`.
      */
-    fun useObsoleteKana(useObsoleteKana: Boolean): ConfigBuilder =
+    public fun useObsoleteKana(useObsoleteKana: Boolean): ConfigBuilder =
         apply { this.useObsoleteKana = useObsoleteKana }
 
     /**
@@ -126,7 +126,7 @@ class ConfigBuilder(
      * Applies to [toHiragana] and [toKatakana].
      * Defaults to `false`.
      */
-    fun passRomaji(passRomaji: Boolean): ConfigBuilder =
+    public fun passRomaji(passRomaji: Boolean): ConfigBuilder =
         apply { this.passRomaji = passRomaji }
 
     /**
@@ -135,7 +135,7 @@ class ConfigBuilder(
      * Applies to [toRomaji].
      * Defaults to `false`.
      */
-    fun upcaseKatakana(upcaseKatakana: Boolean): ConfigBuilder =
+    public fun upcaseKatakana(upcaseKatakana: Boolean): ConfigBuilder =
         apply { this.upcaseKatakana = upcaseKatakana }
 
     /**
@@ -146,6 +146,6 @@ class ConfigBuilder(
      * Applies to [toRomaji], [toKana], [toHiragana] and [toKatakana].
      * Defaults to [IMEMode.DISABLED].
      */
-    fun imeMode(imeMode: IMEMode): ConfigBuilder =
+    public fun imeMode(imeMode: IMEMode): ConfigBuilder =
         apply { this.imeMode = imeMode }
 }

@@ -11,7 +11,7 @@ import dev.esnault.wanakana.core.utils.isJapanesePunctuation
 /**
  * Type of text token.
  */
-enum class TokenType(val value: String) {
+public enum class TokenType(public val value: String) {
     EN("en"),
     JA("ja"),
     EN_NUM("englishNumeral"),
@@ -28,7 +28,7 @@ enum class TokenType(val value: String) {
 /**
  * A text token [value] with its associated [type].
  */
-data class TypedToken(
+public data class TypedToken(
     val value: String,
     val type: TokenType
 )

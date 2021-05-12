@@ -3,47 +3,47 @@ package dev.esnault.wanakana.core.extension
 /**
  * Returns `true` if this is [Hiragana](https://en.wikipedia.org/wiki/Hiragana).
  *
- * See [dev.esnault.wanakana.Wanakana.isHiragana] for more details.
+ * See [dev.esnault.wanakana.core.Wanakana.isHiragana] for more details.
  */
-fun Char.isHiragana(): Boolean =
+public fun Char.isHiragana(): Boolean =
     dev.esnault.wanakana.core.isHiragana(this)
 
 /**
  * Returns `true` if this is [Katakana](https://en.wikipedia.org/wiki/Katakana).
  *
- * See [dev.esnault.wanakana.Wanakana.isKatakana] for more details.
+ * See [dev.esnault.wanakana.core.Wanakana.isKatakana] for more details.
  */
-fun Char.isKatakana(): Boolean =
+public fun Char.isKatakana(): Boolean =
     dev.esnault.wanakana.core.isKatakana(this)
 
 /**
  * Returns `true` if this is [Kana](https://en.wikipedia.org/wiki/Kana).
  *
- * See [dev.esnault.wanakana.Wanakana.isKana] for more details.
+ * See [dev.esnault.wanakana.core.Wanakana.isKana] for more details.
  */
-fun Char.isKana(): Boolean =
+public fun Char.isKana(): Boolean =
     dev.esnault.wanakana.core.isKana(this)
 
 /**
  * Returns `true` if this is a CJK ideograph (kanji).
  *
- * See [dev.esnault.wanakana.Wanakana.isKanji] for more details.
+ * See [dev.esnault.wanakana.core.Wanakana.isKanji] for more details.
  */
-fun Char.isKanji(): Boolean =
+public fun Char.isKanji(): Boolean =
     dev.esnault.wanakana.core.isKanji(this)
 
 /**
  * Returns `true` if this is Romaji (allowing Hepburn romanisation).
  *
- * See [dev.esnault.wanakana.Wanakana.isRomaji] for more details.
+ * See [dev.esnault.wanakana.core.Wanakana.isRomaji] for more details.
  */
-fun Char.isRomaji(): Boolean =
+public fun Char.isRomaji(): Boolean =
     dev.esnault.wanakana.core.isRomaji(this)
 
 /**
  * Returns `true` if this is Japanese.
  *
- * See [dev.esnault.wanakana.Wanakana.isJapanese] for more details.
+ * See [dev.esnault.wanakana.core.Wanakana.isJapanese] for more details.
  */
-fun Char.isJapanese(): Boolean =
+public fun Char.isJapanese(): Boolean =
     dev.esnault.wanakana.core.isJapanese(this)

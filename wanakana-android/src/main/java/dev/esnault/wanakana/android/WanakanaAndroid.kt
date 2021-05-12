@@ -11,7 +11,7 @@ import dev.esnault.wanakana.core.utils.ImeText
 /**
  * Wanakana bindings for Android.
  */
-object WanakanaAndroid {
+public object WanakanaAndroid {
 
     /**
      * Binds Wanakana to an [editText] to automagically convert the typed text to kana.
@@ -22,7 +22,7 @@ object WanakanaAndroid {
      */
     @JvmStatic
     @JvmOverloads
-    fun bind(editText: EditText, config: Config = Config.DEFAULT_IME): Binding {
+    public fun bind(editText: EditText, config: Config = Config.DEFAULT_IME): Binding {
         editText.inputType = InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
         return Binding(editText, config)
     }
@@ -33,25 +33,25 @@ object WanakanaAndroid {
      * Compared to adding a [TextWatcher] to the [EditText] manually, this listener will only be
      * called once for each text update, after conversion (or lack of).
      */
-    fun interface Listener {
+    public fun interface Listener {
 
         /**
          * This method is called after the text has been changed and converted.
          */
-        fun afterTextChanged(text: String?)
+        public fun afterTextChanged(text: String?)
     }
 
     /**
      * Wanakana binding to an [EditText].
      */
-    class Binding(
+    public class Binding(
         private val editText: EditText,
         config: Config
     ) {
         /**
          * The [Config] of [toKanaIme], the conversion applied to the text.
          */
-        var config: Config = config
+        public var config: Config = config
             set(value) {
                 if (value != field) {
                     field = value
@@ -77,7 +77,7 @@ object WanakanaAndroid {
          * @param initialize if `true`, the [listener] will be called with the current value.
          */
         @JvmOverloads
-        fun addListener(initialize: Boolean = false, listener: Listener) {
+        public fun addListener(initialize: Boolean = false, listener: Listener) {
             listeners.add(listener)
             if (initialize) listener.afterTextChanged(editText.text?.toString())
         }
@@ -85,17 +85,19 @@ object WanakanaAndroid {
         /**
          * Removes a previously added [listener], it won't be notified of text changes anymore.
          */
-        fun removeListener(listener: Listener) = listeners.remove(listener)
+        public fun removeListener(listener: Listener) {
+            listeners.remove(listener)
+        }
 
         /**
          * Removes all [Listener]s.
          */
-        fun clearListeners() = listeners.clear()
+        public fun clearListeners(): Unit = listeners.clear()
 
         /**
          * Clears the binding, the text will not be converted automagically anymore.
          */
-        fun clear() {
+        public fun clear() {
             textWatcher?.let { editText.removeTextChangedListener(it) }
             textWatcher = null
         }

@@ -6,7 +6,7 @@ import dev.esnault.wanakana.core.utils.ImeText
 /**
  * Core Wanakana functions.
  */
-object Wanakana {
+public object Wanakana {
     // region Writing system checks (String + Char)
 
     /**
@@ -27,7 +27,7 @@ object Wanakana {
      */
     @JvmStatic
     @JvmOverloads
-    fun isRomaji(input: String, allowed: Regex? = null): Boolean =
+    public fun isRomaji(input: String, allowed: Regex? = null): Boolean =
         dev.esnault.wanakana.core.isRomaji(input, allowed)
 
     /**
@@ -44,7 +44,7 @@ object Wanakana {
      * - `isRomaji('願')` => `false`
      */
     @JvmStatic
-    fun isRomaji(input: Char): Boolean =
+    public fun isRomaji(input: Char): Boolean =
         dev.esnault.wanakana.core.isRomaji(input)
 
     /**
@@ -67,7 +67,7 @@ object Wanakana {
      */
     @JvmStatic
     @JvmOverloads
-    fun isJapanese(input: String, allowed: Regex? = null): Boolean =
+    public fun isJapanese(input: String, allowed: Regex? = null): Boolean =
         dev.esnault.wanakana.core.isJapanese(input, allowed)
 
     /**
@@ -87,7 +87,7 @@ object Wanakana {
      * - `isJapanese('A')` => `false`
      */
     @JvmStatic
-    fun isJapanese(input: Char): Boolean =
+    public fun isJapanese(input: Char): Boolean =
         dev.esnault.wanakana.core.isJapanese(input)
 
     /**
@@ -101,7 +101,7 @@ object Wanakana {
      * - `isKana("あAア")` => `false`
      */
     @JvmStatic
-    fun isKana(input: String): Boolean =
+    public fun isKana(input: String): Boolean =
         dev.esnault.wanakana.core.isKana(input)
 
     /**
@@ -113,7 +113,7 @@ object Wanakana {
      * - `isKana('A')` => `false`
      */
     @JvmStatic
-    fun isKana(input: Char): Boolean =
+    public fun isKana(input: Char): Boolean =
         dev.esnault.wanakana.core.isKana(input)
 
     /**
@@ -125,7 +125,7 @@ object Wanakana {
      * - `isHiragana("あア")` => `false`
      */
     @JvmStatic
-    fun isHiragana(input: String): Boolean =
+    public fun isHiragana(input: String): Boolean =
         dev.esnault.wanakana.core.isHiragana(input)
 
     /**
@@ -137,7 +137,7 @@ object Wanakana {
      * - `isHiragana('ア')` => `false`
      */
     @JvmStatic
-    fun isHiragana(input: Char): Boolean =
+    public fun isHiragana(input: Char): Boolean =
         dev.esnault.wanakana.core.isHiragana(input)
 
     /**
@@ -150,7 +150,7 @@ object Wanakana {
      * - `isKatakana("あア")` => `false`
      */
     @JvmStatic
-    fun isKatakana(input: String): Boolean =
+    public fun isKatakana(input: String): Boolean =
         dev.esnault.wanakana.core.isKatakana(input)
 
     /**
@@ -162,7 +162,7 @@ object Wanakana {
      * - `isKatakana('A')` => `false`
      */
     @JvmStatic
-    fun isKatakana(input: Char): Boolean =
+    public fun isKatakana(input: Char): Boolean =
         dev.esnault.wanakana.core.isKatakana(input)
 
     /**
@@ -184,7 +184,7 @@ object Wanakana {
      */
     @JvmStatic
     @JvmOverloads
-    fun isMixed(input: String, passKanji: Boolean = true): Boolean =
+    public fun isMixed(input: String, passKanji: Boolean = true): Boolean =
         dev.esnault.wanakana.core.isMixed(input, passKanji)
 
     /**
@@ -199,7 +199,7 @@ object Wanakana {
      * - `isKanji("")` => `true`
      */
     @JvmStatic
-    fun isKanji(input: String): Boolean =
+    public fun isKanji(input: String): Boolean =
         dev.esnault.wanakana.core.isKanji(input)
 
     /**
@@ -213,7 +213,7 @@ object Wanakana {
      * - `isKanji('A')` => `false`
      */
     @JvmStatic
-    fun isKanji(input: Char): Boolean =
+    public fun isKanji(input: Char): Boolean =
         dev.esnault.wanakana.core.isKanji(input)
 
     // endregion
@@ -240,7 +240,7 @@ object Wanakana {
      */
     @JvmStatic
     @JvmOverloads
-    fun toRomaji(
+    public fun toRomaji(
         input: String,
         imeMode: IMEMode = IMEMode.DISABLED,
         upcaseKatakana: Boolean = false
@@ -256,7 +256,7 @@ object Wanakana {
      * See [toRomaji] for more details.
      */
     @JvmStatic
-    fun toRomaji(input: String, config: Config = Config.DEFAULT): String =
+    public fun toRomaji(input: String, config: Config = Config.DEFAULT): String =
         dev.esnault.wanakana.core.toRomaji(input, config)
 
     /**
@@ -276,7 +276,7 @@ object Wanakana {
      */
     @JvmStatic
     @JvmOverloads
-    fun toRomajiIme(
+    public fun toRomajiIme(
         input: ImeText,
         imeMode: IMEMode = IMEMode.ENABLED,
         upcaseKatakana: Boolean = false
@@ -292,7 +292,7 @@ object Wanakana {
      * See [toRomaji] for more details.
      */
     @JvmStatic
-    fun toRomajiIme(input: ImeText, config: Config = Config.DEFAULT_IME): ImeText =
+    public fun toRomajiIme(input: ImeText, config: Config = Config.DEFAULT_IME): ImeText =
         dev.esnault.wanakana.core.toRomajiIme(input, config)
 
     /**
@@ -319,7 +319,7 @@ object Wanakana {
      */
     @JvmStatic
     @JvmOverloads
-    fun toKana(
+    public fun toKana(
         input: String,
         imeMode: IMEMode = IMEMode.DISABLED,
         useObsoleteKana: Boolean = false
@@ -336,7 +336,7 @@ object Wanakana {
      * See [toKana] for more details and examples.
      */
     @JvmStatic
-    fun toKana(input: String, config: Config = Config.DEFAULT): String =
+    public fun toKana(input: String, config: Config = Config.DEFAULT): String =
         dev.esnault.wanakana.core.toKana(input, config)
 
     /**
@@ -353,7 +353,7 @@ object Wanakana {
      */
     @JvmStatic
     @JvmOverloads
-    fun toKanaIme(
+    public fun toKanaIme(
         input: ImeText,
         imeMode: IMEMode = IMEMode.ENABLED,
         useObsoleteKana: Boolean = false
@@ -370,7 +370,7 @@ object Wanakana {
      * See [toKana] for more details and examples.
      */
     @JvmStatic
-    fun toKanaIme(input: ImeText, config: Config = Config.DEFAULT_IME): ImeText =
+    public fun toKanaIme(input: ImeText, config: Config = Config.DEFAULT_IME): ImeText =
         dev.esnault.wanakana.core.toKanaIme(input, config)
 
     /**
@@ -391,7 +391,7 @@ object Wanakana {
      */
     @JvmStatic
     @JvmOverloads
-    fun toHiragana(
+    public fun toHiragana(
         input: String,
         imeMode: IMEMode = IMEMode.DISABLED,
         passRomaji: Boolean = false,
@@ -408,7 +408,7 @@ object Wanakana {
      * See [toHiragana] for more details.
      */
     @JvmStatic
-    fun toHiragana(input: String, config: Config = Config.DEFAULT): String =
+    public fun toHiragana(input: String, config: Config = Config.DEFAULT): String =
         dev.esnault.wanakana.core.toHiragana(input, config)
 
     /**
@@ -429,7 +429,7 @@ object Wanakana {
      */
     @JvmStatic
     @JvmOverloads
-    fun toKatakana(
+    public fun toKatakana(
         input: String,
         imeMode: IMEMode = IMEMode.DISABLED,
         passRomaji: Boolean = false,
@@ -446,7 +446,7 @@ object Wanakana {
      * See [toKatakana] for more details.
      */
     @JvmStatic
-    fun toKatakana(input: String, config: Config = Config.DEFAULT): String =
+    public fun toKatakana(input: String, config: Config = Config.DEFAULT): String =
         dev.esnault.wanakana.core.toKatakana(input, config)
 
     // endregion
@@ -472,7 +472,7 @@ object Wanakana {
      */
     @JvmStatic
     @JvmOverloads
-    fun stripOkurigana(
+    public fun stripOkurigana(
         input: String,
         leading: Boolean = false,
         matchKanji: String? = null
@@ -497,7 +497,7 @@ object Wanakana {
      */
     @JvmStatic
     @JvmOverloads
-    fun tokenize(input: String, compact: Boolean = false): List<String> =
+    public fun tokenize(input: String, compact: Boolean = false): List<String> =
         dev.esnault.wanakana.core.tokenize(input, compact)
 
     /**
@@ -547,7 +547,7 @@ object Wanakana {
      */
     @JvmStatic
     @JvmOverloads
-    fun tokenizeWithType(input: String, compact: Boolean = false): List<TypedToken> =
+    public fun tokenizeWithType(input: String, compact: Boolean = false): List<TypedToken> =
         dev.esnault.wanakana.core.tokenizeWithType(input, compact)
 
     // endregion
