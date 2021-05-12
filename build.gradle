@@ -34,5 +34,5 @@ task clean(type: Delete) {
 }
 
 dokkaHtmlMultiModule.configure {
-    outputDirectory = new File("${projectDir}/build/docs")
+    outputDirectory = new File("${projectDir}/docs")
 }

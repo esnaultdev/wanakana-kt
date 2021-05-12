@@ -1,0 +1,1 @@
+sourceset_dependencies = '{":wanakana-android:dokkaHtmlPartial/androidTestRelease":[],":wanakana-android:dokkaHtmlPartial/debug":[],":wanakana-android:dokkaHtmlPartial/main":[],":wanakana-android:dokkaHtmlPartial/release":[],":wanakana-core:dokkaHtmlPartial/main":[]}'

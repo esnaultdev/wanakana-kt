@@ -1,0 +1,16 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:dev.esnault.wanakana.android////PointingToDeclaration/wanakana-android/dev.esnault.wanakana.android/index.html
+$dokka.location:dev.esnault.wanakana.android/WanakanaAndroid.Binding///PointingToDeclaration/wanakana-android/dev.esnault.wanakana.android/-wanakana-android/-binding/index.html
+$dokka.location:dev.esnault.wanakana.android/WanakanaAndroid.Binding/Binding/#android.widget.EditText#dev.esnault.wanakana.core.Config/PointingToDeclaration/wanakana-android/dev.esnault.wanakana.android/-wanakana-android/-binding/-binding.html
+$dokka.location:dev.esnault.wanakana.android/WanakanaAndroid.Binding/addListener/#kotlin.Boolean#dev.esnault.wanakana.android.WanakanaAndroid.Listener/PointingToDeclaration/wanakana-android/dev.esnault.wanakana.android/-wanakana-android/-binding/add-listener.html
+$dokka.location:dev.esnault.wanakana.android/WanakanaAndroid.Binding/clear/#/PointingToDeclaration/wanakana-android/dev.esnault.wanakana.android/-wanakana-android/-binding/clear.html
+$dokka.location:dev.esnault.wanakana.android/WanakanaAndroid.Binding/clearListeners/#/PointingToDeclaration/wanakana-android/dev.esnault.wanakana.android/-wanakana-android/-binding/clear-listeners.html
+$dokka.location:dev.esnault.wanakana.android/WanakanaAndroid.Binding/config/#/PointingToDeclaration/wanakana-android/dev.esnault.wanakana.android/-wanakana-android/-binding/config.html
+$dokka.location:dev.esnault.wanakana.android/WanakanaAndroid.Binding/removeListener/#dev.esnault.wanakana.android.WanakanaAndroid.Listener/PointingToDeclaration/wanakana-android/dev.esnault.wanakana.android/-wanakana-android/-binding/remove-listener.html
+$dokka.location:dev.esnault.wanakana.android/WanakanaAndroid.Listener///PointingToDeclaration/wanakana-android/dev.esnault.wanakana.android/-wanakana-android/-listener/index.html
+$dokka.location:dev.esnault.wanakana.android/WanakanaAndroid.Listener/afterTextChanged/#kotlin.String?/PointingToDeclaration/wanakana-android/dev.esnault.wanakana.android/-wanakana-android/-listener/after-text-changed.html
+$dokka.location:dev.esnault.wanakana.android/WanakanaAndroid///PointingToDeclaration/wanakana-android/dev.esnault.wanakana.android/-wanakana-android/index.html
+$dokka.location:dev.esnault.wanakana.android/WanakanaAndroid/bind/#android.widget.EditText#dev.esnault.wanakana.core.Config/PointingToDeclaration/wanakana-android/dev.esnault.wanakana.android/-wanakana-android/bind.html
+dev.esnault.wanakana.android
+
