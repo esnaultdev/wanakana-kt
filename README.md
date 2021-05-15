@@ -11,6 +11,8 @@ This library is written in Kotlin, but it can be used from Java.
 
 Visit the [website][wanakana-website] to see WanaKana in action (JS version).
 
+Or use the demo Android app included in this repository: `./gradlew demo:installDebug`.
+
 ## Usage
 
 ```
@@ -32,40 +34,23 @@ The artifacts are available on mavenCentral, make sure that your buildscript rep
 
 ## Quick Reference
 
+### Android bindings
+
 ```kotlin
-/*** ANDROID BINDINGS ***/
 // Automatically converts text using a TextWatcher.
 // Uses `toKanaIme()` as converter by default
 val binding = WanakanaAndroid.bind(editText)
 
-// Removes the TextWatcher.
+// Adds a listener for text updates.
+binding.addListener(initialize = true) { convertedText -> /* Do something. */ }
+
+// Turns off the conversion.
+// Not needed for cleanup, you can ignore the binding safely.
 binding.clear()
+```
 
-/*** TEXT CHECKING UTILITIES ***/
-// Available for both Char and String.
-// Extensions functions are also available.
-
-Wanakana.isJapanese("泣き虫。！〜２￥ｚｅｎｋａｋｕ")
-// => true
-
-Wanakana.isKana("あーア")
-// => true
-
-Wanakana.isHiragana("すげー")
-// => true
-
-Wanakana.isKatakana("ゲーム")
-// => true
-
-Wanakana.isKanji("切腹")
-// => true
-Wanakana.isKanji("勢い")
-// => false
-
-Wanakana.isRomaji("Tōkyō and Ōsaka")
-// => true
-
-/*** TEXT CONVERSION ***/
+### Text conversion
+```kotlin
 Wanakana.toKana("ONAJI buttsuuji")
 // => "オナジ ぶっつうじ"
 Wanakana.toKana("座禅‘zazen’スタイル")
@@ -91,8 +76,37 @@ Wanakana.toRomaji("ひらがな　カタカナ")
 // => "hiragana katakana"
 Wanakana.toRomaji("ひらがな　カタカナ", upcaseKatakana = true)
 // => "hiragana KATAKANA"
+```
 
-/*** EXTRA UTILITIES ***/
+### Text checking utilities
+
+```kotlin
+// Available for both Char and String.
+// Extensions functions are also available.
+
+Wanakana.isJapanese("泣き虫。！〜２￥ｚｅｎｋａｋｕ")
+// => true
+
+Wanakana.isKana("あーア")
+// => true
+
+Wanakana.isHiragana("すげー")
+// => true
+
+Wanakana.isKatakana("ゲーム")
+// => true
+
+Wanakana.isKanji("切腹")
+// => true
+Wanakana.isKanji("勢い")
+// => false
+
+Wanakana.isRomaji("Tōkyō and Ōsaka")
+// => true
+```
+
+### Extra utilities
+```kotlin
 Wanakana.stripOkurigana("お祝い")
 // => "お祝"
 Wanakana.stripOkurigana("踏み込む")
