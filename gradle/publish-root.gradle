@@ -1,0 +1,39 @@
+ext {
+    artifactVersion = '1.1.1'
+    publishGroupId = 'dev.esnault.wanakana'
+    githubRepoName = 'esnaultdev/wanakana-kt'
+    githubRepoUrl = "https://github.com/$githubRepoName"
+}
+
+// Create secret variables with empty default values
+ext["signing.keyId"] = ''
+ext["signing.password"] = ''
+ext["signing.secretKeyRingFile"] = ''
+ext["ossrhUsername"] = ''
+ext["ossrhPassword"] = ''
+ext["sonatypeStagingProfileId"] = ''
+
+File localPropsFile = project.rootProject.file('local.properties')
+if (localPropsFile.exists()) {
+    Properties properties = new Properties()
+    new FileInputStream(localPropsFile).withCloseable { is -> properties.load(is) }
+    ext["signing.keyId"] = properties.getProperty('signing.keyId', '')
+    ext["signing.password"] = properties.getProperty('signing.password', '')
+    ext["signing.secretKeyRingFile"] = properties.getProperty('signing.secretKeyRingFile', '')
+    ext["ossrhUsername"] = properties.getProperty('ossrhUsername', '')
+    ext["ossrhPassword"] = properties.getProperty('ossrhPassword', '')
+    ext["sonatypeStagingProfileId"] = properties.getProperty('sonatypeStagingProfileId', '')
+}
+
+// Set up Sonatype repository
+nexusPublishing {
+    repositories {
+        sonatype {
+            username = ossrhUsername
+            password = ossrhPassword
+            stagingProfileId = sonatypeStagingProfileId
+            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
+            snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
+        }
+    }
+}

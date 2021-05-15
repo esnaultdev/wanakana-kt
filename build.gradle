@@ -20,6 +20,7 @@ buildscript {
 
 plugins {
     id("org.jetbrains.dokka") version "$dokka_version"
+    id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
 }
 
 allprojects {
@@ -36,3 +37,5 @@ task clean(type: Delete) {
 dokkaHtmlMultiModule.configure {
     outputDirectory = new File("${projectDir}/docs")
 }
+
+apply from: "${rootDir}/gradle/publish-root.gradle"

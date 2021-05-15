@@ -6,6 +6,8 @@ plugins {
     id("com.jfrog.bintray") version "1.8.5"
 }
 
+version = rootProject.ext.artifactVersion
+
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
@@ -41,4 +43,11 @@ dependencies {
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.7.0"
 }
 
-apply from: "publishing.gradle"
+ext {
+    PUBLISH_GROUP_ID = rootProject.ext.publishGroupId
+    PUBLISH_VERSION = rootProject.ext.artifactVersion
+    PUBLISH_ARTIFACT_ID = 'wanakana-core'
+    PUBLISH_DESCRIPTION = 'Kotlin port of WanaKana, a library for detecting and transliterating Hiragana, Katakana and Romaji.'
+}
+
+apply from: "${rootProject.projectDir}/gradle/publish-module.gradle"
